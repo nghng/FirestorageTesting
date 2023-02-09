@@ -26,34 +26,35 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        Map<String, Object> user = new HashMap<>();
-//        user.put("first", "Ada");
-//        user.put("last", "Lovelace");
-//        user.put("born", 1815);
-        User user = new User("qwd","123");
-
-// Add a new document with a generated ID
+//        user.put("first", "hung");
+//        user.put("last", "Lovelace123");
+//        user.put("born", 1815123);
+//        User user = new User("tài xỉu","9999");
+//        DocumentReference documentReference = db.collection("users").
+//                document("akdjnqwkjdn");
+//        documentReference.set(user);
+//
+//// Add a new document with a generated ID
 //        db.collection("users")
-//                .add(user)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//                    }
-//                })
+//                .document("akdjnqwkjdn")
+//                .set(user)
 //                .addOnFailureListener(new OnFailureListener() {
 //                    @Override
 //                    public void onFailure(@NonNull Exception e) {
 //                        Log.w(TAG, "Error adding document", e);
 //                    }
 //                });
+
+
+
+
         db.collection("users")
-                .whereEqualTo("username", "hun2eeg")
+                .whereEqualTo("username", "qwdqwd")
                 .whereEqualTo("password", "123")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

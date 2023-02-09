@@ -1,5 +1,7 @@
 package com.example.demodatabase;
 
+
+
 public class User {
     private String username;
     private String password;
