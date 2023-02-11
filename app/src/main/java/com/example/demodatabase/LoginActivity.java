@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
         init();
         bindingEvents();
@@ -78,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         editText_gmail = findViewById(R.id.edt_gmail);
         editText_password = findViewById(R.id.edt_password);
         btn_login = findViewById(R.id.btn_signUp);
-        textView_signUpLink = findViewById(R.id.textView_display);
+        textView_signUpLink = findViewById(R.id.textView_signup);
         btn_googleLogin = findViewById(R.id.btn_googleLogIn);
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
