@@ -84,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
         tv_forgotPassword = findViewById(R.id.tv_forgotPassword);
+        btn_googleLogin.setSize(SignInButton.SIZE_WIDE);
     }
 
 
