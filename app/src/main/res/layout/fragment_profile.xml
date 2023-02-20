@@ -31,7 +31,7 @@
             app:menu="@menu/bottom_nav_profile"
             />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_profileImage"
             android:layout_width="92dp"
             android:layout_height="84dp"
