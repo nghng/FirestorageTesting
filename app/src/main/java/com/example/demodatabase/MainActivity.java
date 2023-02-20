@@ -1,79 +1,57 @@
 package com.example.demodatabase;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.example.demodatabase.databinding.ActivityMainBinding;
+import com.example.demodatabase.fragments.AddStudySetFragment;
+import com.example.demodatabase.fragments.HomeFragment;
+import com.example.demodatabase.fragments.ProfileFragment;
+import com.example.demodatabase.fragments.SearchFragment;
 
 public class MainActivity extends AppCompatActivity {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
+    ActivityMainBinding activityMainBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
-//        Map<String, Object> user = new HashMap<>();
-//        user.put("first", "hung");
-//        user.put("last", "Lovelace123");
-//        user.put("born", 1815123);
-//        User user = new User("tài xỉu","9999");
-//        DocumentReference documentReference = db.collection("users").
-//                document("akdjnqwkjdn");
-//        documentReference.set(user);
-//
-//// Add a new document with a generated ID
-//        db.collection("users")
-//                .document("akdjnqwkjdn")
-//                .set(user)
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error adding document", e);
-//                    }
-//                });
+        activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(activityMainBinding.getRoot());
+        replaceFragment(new HomeFragment());
+
+        activityMainBinding.bottomNavigation.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.home:
+                    replaceFragment(new HomeFragment());
+                    break;
+
+                case R.id.addStudySet:
+                    replaceFragment(new AddStudySetFragment());
+                    break;
+
+                case R.id.search:
+                    replaceFragment(new SearchFragment());
+                    break;
+
+                case R.id.profile:
+                    replaceFragment(new ProfileFragment());
+                    break;
+            }
+
+            return  true;
+        });
 
 
-
-
-        db.collection("users")
-                .whereEqualTo("username", "qwdqwd")
-                .whereEqualTo("password", "123")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if(task.getResult().isEmpty()){
-                                Toast.makeText(getApplicationContext(),"Username or password is incorrect", Toast.LENGTH_SHORT).show();
-                            }else{
-                                Toast.makeText(getApplicationContext(),"OK", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-
+    }
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout,fragment);
+        fragmentTransaction.commit();
     }
 }
