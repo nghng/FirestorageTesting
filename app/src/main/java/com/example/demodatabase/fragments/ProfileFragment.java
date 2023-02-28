@@ -1,5 +1,6 @@
 package com.example.demodatabase.fragments;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,8 +17,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.example.demodatabase.ProfileSettingActivity;
 import com.example.demodatabase.R;
-import com.example.demodatabase.databinding.FragmentProfileBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +29,7 @@ public class ProfileFragment extends Fragment {
     ImageView imageViewProfileImage;
     FirebaseUser currentUser;
     BottomNavigationView bottomNavigationView;
+    ImageView settingButton;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -38,6 +40,7 @@ public class ProfileFragment extends Fragment {
         imageViewProfileImage = view.findViewById(R.id.iv_profileImage);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         bottomNavigationView = view.findViewById(R.id.bottomNavProfile);
+        settingButton = view.findViewById(R.id.iv_settingButton);
 
     }
 
@@ -71,6 +74,11 @@ public class ProfileFragment extends Fragment {
                     break;
             }
             return true;
+        });
+
+        settingButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), ProfileSettingActivity.class);
+            startActivity(intent);
         });
     }
 
