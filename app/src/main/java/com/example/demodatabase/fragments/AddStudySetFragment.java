@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import com.example.demodatabase.R;
 
 public class AddStudySetFragment extends Fragment {
-    RelativeLayout header;
 
 
     public AddStudySetFragment() {
@@ -21,11 +20,10 @@ public class AddStudySetFragment extends Fragment {
 
 
     void initUI(){
-        header = getActivity().findViewById(R.id.rl_header);
+
     }
 
     void initData(){
-        header.setVisibility(View.VISIBLE);
     }
 
     void bindingAction(){
