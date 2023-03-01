@@ -13,7 +13,6 @@ import com.example.demodatabase.R;
 
 
 public class SearchFragment extends Fragment {
-    RelativeLayout header;
 
 
     public SearchFragment() {
@@ -21,11 +20,11 @@ public class SearchFragment extends Fragment {
     }
 
     void initUI(){
-        header = getActivity().findViewById(R.id.rl_header);
+
     }
 
     void initData(){
-        header.setVisibility(View.VISIBLE);
+
     }
 
     void bindingAction(){

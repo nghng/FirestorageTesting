@@ -6,10 +6,25 @@
     tools:context=".fragments.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:background="#FC9"
+        android:gravity="center" >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Fixed Header"
+            android:textColor="#000"
+            android:textSize="20sp" />
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-
+        android:layout_marginTop=""
         android:id="@+id/rv_studySetsHome"
         android:layout_width="match_parent"
         android:layout_height="200dp"

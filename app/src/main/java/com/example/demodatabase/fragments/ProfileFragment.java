@@ -44,11 +44,9 @@ public class ProfileFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         bottomNavigationView = view.findViewById(R.id.bottomNavProfile);
         settingButton = view.findViewById(R.id.iv_settingButton);
-        header = getActivity().findViewById(R.id.rl_header);
     }
 
     void initData() {
-        header.setVisibility(View.INVISIBLE);
         if(currentUser == null){
             return;
         }
