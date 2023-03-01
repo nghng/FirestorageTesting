@@ -46,12 +46,14 @@ public class HomeFragment extends Fragment {
     private void initUI(View view) {
         recyclerView = view.findViewById(R.id.rv_studySetsHome);
         database = FirebaseFirestore.getInstance();
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
     }
 
     private void initData() {
         String email = currentUser.getEmail();
         CollectionReference collectionReference = database.collection("studySets");
+
+
         collectionReference.whereEqualTo("user", email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.demodatabase.ProfileSettingActivity;
@@ -30,6 +32,7 @@ public class ProfileFragment extends Fragment {
     FirebaseUser currentUser;
     BottomNavigationView bottomNavigationView;
     ImageView settingButton;
+    RelativeLayout header;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -41,10 +44,11 @@ public class ProfileFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         bottomNavigationView = view.findViewById(R.id.bottomNavProfile);
         settingButton = view.findViewById(R.id.iv_settingButton);
-
+        header = getActivity().findViewById(R.id.rl_header);
     }
 
     void initData() {
+        header.setVisibility(View.INVISIBLE);
         if(currentUser == null){
             return;
         }
@@ -91,6 +95,7 @@ public class ProfileFragment extends Fragment {
         init(view);
         initData();
         bindingAction();
+
         return view;
     }
 
