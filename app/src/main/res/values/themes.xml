@@ -22,4 +22,9 @@
     <style name="Theme.DemoDatabase.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.DemoDatabase.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_slashscreen</item>
+        <item name="android:statusBarColor" xmlns:tools="http://schemas.android.com/tools">?attr/colorPrimary</item>
+    </style>
 </resources>

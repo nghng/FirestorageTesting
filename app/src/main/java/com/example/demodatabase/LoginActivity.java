@@ -84,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
         tv_forgotPassword = findViewById(R.id.tv_forgotPassword);
+        btn_googleLogin.setSize(SignInButton.SIZE_WIDE);
     }
 
 
@@ -113,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                             if(firebaseUser.isEmailVerified()){
-                                Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finishAffinity();
                             }else{
@@ -131,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
         IdpResponse response = result.getIdpResponse();
 
         if (result.getResultCode() == RESULT_OK) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             finishAffinity();
             startActivity(intent);
         } else {
