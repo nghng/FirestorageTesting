@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout wrapper, addingOption;
     TextView textViewCreateStudySet, createFolder;
     BottomNavigationView bottomNavigationView;
+    int previousSelectedMenu ;
 
 
 
@@ -33,7 +35,12 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding.conLayOptOut.setOnClickListener(view -> {
             activityMainBinding.bottomNavigation.setVisibility(View.VISIBLE);
             activityMainBinding.wrapper.setVisibility(View.GONE);
+            activityMainBinding.bottomNavigation.setSelectedItemId(previousSelectedMenu);
+        });
 
+        activityMainBinding.tvCreateStudySets.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, CreateStudySetActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -54,20 +61,23 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.home:
                     replaceFragment(new HomeFragment());
+                    previousSelectedMenu = R.id.home;
                     break;
 
                 case R.id.addStudySet:
+                    // show adding selections
                     activityMainBinding.wrapper.setVisibility(View.VISIBLE);
                     activityMainBinding.bottomNavigation.setVisibility(View.GONE);
                     activityMainBinding.wrapper.bringToFront();
                     break;
 
                 case R.id.search:
-
+                    previousSelectedMenu = R.id.search;
                     replaceFragment(new SearchFragment());
                     break;
 
                 case R.id.profile:
+                    previousSelectedMenu = R.id.profile;
                     replaceFragment(new ProfileFragment());
                     break;
             }
