@@ -14,7 +14,7 @@
         android:layout_marginEnd="84dp"
         android:layout_marginBottom="61dp"
         android:gravity="center"
-        android:text="Check your mail "
+        android:text="Check your mail 234"
         app:layout_constraintBottom_toTopOf="@+id/tv_toLoginFromCheckingMail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
