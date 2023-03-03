@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demodatabase.R;
+import com.example.demodatabase.clickinterface.OnItemClickedListener;
 import com.example.demodatabase.model.StudySet;
 import com.squareup.picasso.Picasso;
 
