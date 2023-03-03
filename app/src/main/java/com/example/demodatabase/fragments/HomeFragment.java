@@ -1,5 +1,6 @@
 package com.example.demodatabase.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment {
     FirebaseUser currentUser;
     FirebaseFirestore database;
     ArrayList<StudySet> studySets = new ArrayList<>();
+    ProgressDialog progressDialog;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -47,13 +49,14 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rv_studySetsHome);
         database = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
+        progressDialog = new ProgressDialog(getContext());
     }
 
     private void initData() {
         String email = currentUser.getEmail();
         CollectionReference collectionReference = database.collection("studySets");
 
-
+        progressDialog.show();
         collectionReference.whereEqualTo("user", email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -81,6 +84,7 @@ public class HomeFragment extends Fragment {
 
                             Log.d("INFO", d.getData().toString());
                         }
+                        progressDialog.dismiss();
                         onDataLoaded();
 
                     }
