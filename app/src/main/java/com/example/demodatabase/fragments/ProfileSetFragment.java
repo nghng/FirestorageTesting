@@ -1,66 +1,118 @@
 package com.example.demodatabase.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.demodatabase.R;
+import com.example.demodatabase.adapter.OnItemClickedListener;
+import com.example.demodatabase.adapter.StudySetAdapter;
+import com.example.demodatabase.model.StudySet;
+import com.example.demodatabase.model.Term;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileSetFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
+
 public class ProfileSetFragment extends Fragment {
+    RecyclerView recyclerView;
+    StudySetAdapter studySetAdapter;
+    FirebaseUser currentUser;
+    FirebaseFirestore database;
+    ArrayList<StudySet> studySets = new ArrayList<>();
+    ProgressDialog progressDialog;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ProfileSetFragment() {
-        // Required empty public constructor
+    public ProfileSetFragment(){
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileSetFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileSetFragment newInstance(String param1, String param2) {
-        ProfileSetFragment fragment = new ProfileSetFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private void initUI(View view) {
+        recyclerView = view.findViewById(R.id.rv_studySetsProfile);
+        database = FirebaseFirestore.getInstance();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
+        progressDialog = new ProgressDialog(getContext());
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    private void initData(ViewGroup container) {
+        String email = currentUser.getEmail();
+        CollectionReference collectionReference = database.collection("studySets");
+
+        progressDialog.show();
+        collectionReference.whereEqualTo("user", email)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot d : task.getResult()
+                        ) {
+                            StudySet studySet = d.toObject(StudySet.class);
+                            studySets.add(studySet);
+                            database.collection("studySets")
+                                    .document(d.getId())
+                                    .collection("terms")
+                                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            ArrayList<Term> terms = new ArrayList<>();
+                                            for (DocumentSnapshot d: task.getResult()
+                                            ) {
+                                                Term term = d.toObject(Term.class);
+                                                terms.add(term);
+                                            }
+                                            studySet.setTerms(terms);
+
+                                        }
+                                    });
+
+                            Log.d("INFO", d.getData().toString());
+                        }
+                        progressDialog.dismiss();
+                        onDataLoaded(container);
+
+                    }
+                });
+    }
+
+
+    void onDataLoaded(ViewGroup vg) {
+        studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
+            @Override
+            public void onItemClick(Object item, int pos) {
+
+            }
+        });
+
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        studySetAdapter.createViewHolder(vg, 1);
+        recyclerView.setAdapter(studySetAdapter);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_set, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_set, container, false);
+        initUI(view);
+        initData(container);
+
+        return view;
+
     }
 }

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demodatabase.R;
+import com.example.demodatabase.fragments.ProfileSetFragment;
 import com.example.demodatabase.model.StudySet;
 import com.squareup.picasso.Picasso;
 
@@ -29,13 +30,17 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
         this.mContext = mContext;
         this.onItemClickedListener = onItemClickedListener;
 
-
     }
 
     @NonNull
     @Override
     public StudySetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_studyset, parent, false);
+
+        if(viewType==1){
+            view.findViewById(R.id.cv_studyset).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
+        System.out.println(viewType);
         return new StudySetViewHolder(view);
     }
 
