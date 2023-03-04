@@ -88,6 +88,7 @@ public class ProfileSetFragment extends Fragment {
     }
 
 
+
     void onDataLoaded(ViewGroup vg) {
         studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
@@ -99,7 +100,8 @@ public class ProfileSetFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        studySetAdapter.createViewHolder(vg, 1);
+//        System.out.println("study set fragment");
+//       studySetAdapter.getItemViewType(1);
         recyclerView.setAdapter(studySetAdapter);
 
     }

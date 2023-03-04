@@ -32,15 +32,23 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
 
     }
 
+//    @Override
+//    public int getItemViewType(int type) {
+//        return type;
+//    }
+
+
+
     @NonNull
     @Override
     public StudySetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_studyset, parent, false);
 
-        if(viewType==1){
+        if(viewType!=0){
             view.findViewById(R.id.cv_studyset).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
-        System.out.println(viewType);
+
+        System.out.println("item "+ viewType );
         return new StudySetViewHolder(view);
     }
 
