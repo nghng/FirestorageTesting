@@ -41,4 +41,13 @@ public class Term {
     public void setImage(Uri image) {
         this.image = image;
     }
+
+    @Override
+    public String toString() {
+        return "Term{" +
+                "term='" + term + '\'' +
+                ", definition='" + definition + '\'' +
+                ", image=" + image +
+                '}';
+    }
 }
