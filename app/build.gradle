@@ -60,4 +60,6 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
     // load image from url 2
     implementation 'com.squareup.picasso:picasso:2.8'
+    // custom toast
+    implementation 'io.github.shashank02051997:FancyToast:2.0.2'
 }

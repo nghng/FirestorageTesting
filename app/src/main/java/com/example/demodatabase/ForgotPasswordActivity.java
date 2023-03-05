@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     EditText et_resetGmail;
@@ -66,7 +67,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     Intent intent = new Intent(ForgotPasswordActivity.this, CheckMailActivity.class);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(ForgotPasswordActivity.this, "Try again", Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(ForgotPasswordActivity.this, "Try again", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
             }
         });

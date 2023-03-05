@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -120,7 +121,7 @@ public class SignUpActivity extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(SignUpActivity.this, "Duplicate gmail", Toast.LENGTH_SHORT).show();
+                        FancyToast.makeText(this, "Duplicate gmail", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                         progressDialog.dismiss();
 
                     }
