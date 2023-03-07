@@ -3,6 +3,7 @@ package com.example.demodatabase;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -15,9 +16,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class ChangePasswordActivity extends AppCompatActivity {
 
 
-    ImageView imvBackButton, imvFinishChangePassword;
+    ImageView imvBackButton;
     EditText etCurrentPassword, etPassword, reTypePassword;
     FirebaseUser currentUser;
+    Button imvFinishChangePassword;
 
     void initUI(){
         imvBackButton = findViewById(R.id.imv_back);
@@ -34,14 +36,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
         imvBackButton.setOnClickListener(view -> {
             onBackPressed();
         });
-
-
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_change_password);
         initUI();
         initData();

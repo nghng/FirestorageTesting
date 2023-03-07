@@ -29,6 +29,8 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="16dp"
             android:text="Settings"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/iv_backButton"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,61 +42,71 @@
         android:id="@+id/tv_emailProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/cl_profileHeader"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_margin="20dp"
-        android:textSize="20dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="45dp"
         android:text="Email"
-        />
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_profileHeader" />
 
     <TextView
         android:id="@+id/tv_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_emailProfile"
-        android:layout_margin="20dp"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_shape"
+        android:paddingStart="15dp"
         android:textSize="20dp"
-        />
+        app:layout_constraintStart_toStartOf="@+id/tv_emailProfile"
+        app:layout_constraintTop_toBottomOf="@+id/tv_emailProfile" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_email"
-        android:layout_margin="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:textSize="20dp"
+        android:layout_marginTop="20dp"
         android:text="Username"
-       />
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_emailProfile"
+        app:layout_constraintTop_toBottomOf="@id/tv_email" />
 
     <TextView
         android:id="@+id/tv_usernameInSetting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/textView8"
-        app:layout_constraintRight_toLeftOf="parent"
-        android:layout_margin="20dp"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edit_text_shape"
+        android:paddingStart="15dp"
         android:textSize="20dp"
-
-        />
+        app:layout_constraintStart_toStartOf="@id/textView8"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <Button
         android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="340dp"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="420dp"
+        android:drawableLeft="@drawable/logout"
         android:text="Log out"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_changePassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="276dp"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/rounded_button"
         android:text="Change password"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_usernameInSetting" />
 </androidx.constraintlayout.widget.ConstraintLayout>
