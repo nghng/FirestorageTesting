@@ -62,4 +62,8 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.8'
     // custom toast
     implementation 'io.github.shashank02051997:FancyToast:2.0.2'
+    // alert diaglog
+    implementation 'com.github.f0ris.sweetalert:library:1.6.2'
+
+
 }
