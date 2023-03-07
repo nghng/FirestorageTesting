@@ -12,22 +12,24 @@
         android:layout_height="match_parent"
         android:background="#30000000"
         >
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conLay_optOut"
             android:layout_width="match_parent"
-            android:layout_height="700dp"
+            android:layout_height="590dp"
             app:layout_constraintBottom_toTopOf="@+id/conLay_addOption"
-            >
+            tools:layout_editor_absoluteX="0dp">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conLay_addOption"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/wrapper">
+            app:layout_constraintBottom_toBottomOf="@+id/wrapper"
+            >
 
             <TextView
                 android:id="@+id/tv_createStudySets"
@@ -63,7 +65,7 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="680dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
     </FrameLayout>

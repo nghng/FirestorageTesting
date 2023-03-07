@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -118,11 +119,10 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finishAffinity();
                             }else{
-                                Toast.makeText(LoginActivity.this, "Your account has not been verified !", Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(getApplicationContext(), "Your account has not been verified !", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Wrong gmail or password",
-                                    Toast.LENGTH_SHORT).show();
+                            FancyToast.makeText(getApplicationContext(), "Wrong gmail or password", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                         }
                     }
                 });
@@ -136,8 +136,7 @@ public class LoginActivity extends AppCompatActivity {
             finishAffinity();
             startActivity(intent);
         } else {
-            Toast.makeText(this, "Can't sign in", Toast.LENGTH_SHORT).show();
-
+            FancyToast.makeText(this, "Can't sign in", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
         }
 
     }
