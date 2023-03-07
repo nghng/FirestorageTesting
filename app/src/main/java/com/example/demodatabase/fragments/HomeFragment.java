@@ -98,7 +98,8 @@ public class HomeFragment extends Fragment {
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-
+//        System.out.println("home fragment");
+//        studySetAdapter.getItemViewType(0);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(studySetAdapter);
     }
