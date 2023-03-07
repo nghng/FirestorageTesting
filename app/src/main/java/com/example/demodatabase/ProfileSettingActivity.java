@@ -49,7 +49,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
         });
 
         btnChangePassword.setOnClickListener(view -> {
-            Intent intent = new Intent(ProfileSettingActivity.this, ForgotPasswordActivity.class);
+            Intent intent = new Intent(ProfileSettingActivity.this, ChangePasswordActivity.class);
             startActivity(intent);
         });
 

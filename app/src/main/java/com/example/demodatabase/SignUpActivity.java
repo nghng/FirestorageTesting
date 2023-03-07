@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.demodatabase.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -111,7 +112,13 @@ public class SignUpActivity extends AppCompatActivity {
                                 FirebaseUser user = auth.getCurrentUser();
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(edt_Username.getText().toString().trim()).build();
+                                User userInFirestore = new User();
+                                userInFirestore.setDisplayName(edt_Username.getText().toString().trim());
+                                userInFirestore.setPassword(strPassword);
+                                userInFirestore.setGoogleAccount(false);
+                                userInFirestore.setEmail(strEmail);
 
+                                database.collection("users").document(strEmail).set(user);
 
                                 if (user != null) {
                                     user.updateProfile(profileUpdates)
