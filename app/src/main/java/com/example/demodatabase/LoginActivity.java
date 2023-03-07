@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -145,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                     .document(currentUser.getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                        @Override
                        public void onComplete( Task<DocumentSnapshot> task) {
-                           if (task == null) {
+                           if (task.getResult().getData() == null) {
                                User userFireStorage = new User();
                                userFireStorage.setEmail(currentUser.getEmail());
                                userFireStorage.setGoogleAccount(true);
