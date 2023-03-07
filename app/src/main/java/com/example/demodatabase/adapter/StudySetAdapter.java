@@ -79,7 +79,7 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
             Uri photoURL = Uri.parse(studySet.getImageUri());
             Picasso.get().load(photoURL).into(imvAccountImage);
             if(studySet.getTerms() != null){
-                tvNumberOfTerms.setText(studySet.getTerms().size() + " ");
+                tvNumberOfTerms.setText(studySet.getTerms().size() + " terms");
             }else {
                 tvNumberOfTerms.setText("No terms created yet");
 

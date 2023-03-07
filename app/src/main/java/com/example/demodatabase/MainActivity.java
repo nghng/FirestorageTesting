@@ -24,9 +24,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
-    ConstraintLayout wrapper, addingOption;
-    TextView textViewCreateStudySet, createFolder;
-    BottomNavigationView bottomNavigationView;
     int previousSelectedMenu ;
 
 

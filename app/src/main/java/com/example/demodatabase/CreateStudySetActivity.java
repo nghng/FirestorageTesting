@@ -91,27 +91,27 @@ public class CreateStudySetActivity extends AppCompatActivity {
     void bindingAction() {
 
         // when scroll down/up the header disappears/appears ( don't how to make the drawer effect yet)
-        rc_createStudyTerms.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mTouchPosition = event.getY();
-                }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    mReleasePosition = event.getY();
-
-                    if (mTouchPosition - mReleasePosition > 0) {
-                        Log.d("scroll", "up");
-                        header.setVisibility(View.GONE);
-
-                    } else {
-                        Log.d("scroll", "down");
-                        header.setVisibility(View.VISIBLE);
-                    }
-                }
-                return CreateStudySetActivity.super.onTouchEvent(event);
-            }
-        });
+//        rc_createStudyTerms.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    mTouchPosition = event.getY();
+//                }
+//                if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    mReleasePosition = event.getY();
+//
+//                    if (mTouchPosition - mReleasePosition > 0) {
+//                        Log.d("scroll", "up");
+//                        header.setVisibility(View.GONE);
+//
+//                    } else {
+//                        Log.d("scroll", "down");
+//                        header.setVisibility(View.VISIBLE);
+//                    }
+//                }
+//                return CreateStudySetActivity.super.onTouchEvent(event);
+//            }
+//        });
 
         // Set back icon to back
         backView.setOnClickListener(view -> {
