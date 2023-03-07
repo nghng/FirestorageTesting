@@ -1,5 +1,7 @@
 package com.example.demodatabase.model;
 
+import com.google.firebase.firestore.Exclude;
+
 public class User {
     private String displayName;
     private String password;
@@ -22,6 +24,7 @@ public class User {
         this.password = password;
     }
 
+    @Exclude
     public String getEmail() {
         return email;
     }

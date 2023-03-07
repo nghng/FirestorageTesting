@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.demodatabase.model.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
@@ -23,6 +24,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -39,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     ProgressDialog progressDialog;
     TextView tv_forgotPassword;
+    FirebaseUser currentUser;
+    FirebaseFirestore database;
     private static final String TAG = "GoogleActivity";
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -49,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
     );
-
 
 
     @Override
@@ -63,7 +69,8 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void bindingEvents(){
+    private void bindingEvents() {
+
         btn_login.setOnClickListener(view -> login());
         textView_signUpLink.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
@@ -86,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         tv_forgotPassword = findViewById(R.id.tv_forgotPassword);
         btn_googleLogin.setSize(SignInButton.SIZE_WIDE);
+        database = FirebaseFirestore.getInstance();
     }
 
 
@@ -95,14 +103,14 @@ public class LoginActivity extends AppCompatActivity {
 
         boolean validGmail = true,
                 validPassword = true;
-        if(gmail.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(gmail).matches()){
+        if (gmail.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(gmail).matches()) {
             editText_gmail.setError("Please enter valid email");
             validGmail = false;
-        }else if(password.isEmpty()){
+        } else if (password.isEmpty()) {
             editText_password.setError("Please enter valid password");
             validPassword = false;
         }
-        if (!validGmail || !validPassword )
+        if (!validGmail || !validPassword)
             return;
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -114,11 +122,11 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                            if(firebaseUser.isEmailVerified()){
+                            if (firebaseUser.isEmailVerified()) {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finishAffinity();
-                            }else{
+                            } else {
                                 FancyToast.makeText(getApplicationContext(), "Your account has not been verified !", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                             }
                         } else {
@@ -132,6 +140,24 @@ public class LoginActivity extends AppCompatActivity {
         IdpResponse response = result.getIdpResponse();
 
         if (result.getResultCode() == RESULT_OK) {
+            currentUser = FirebaseAuth.getInstance().getCurrentUser();
+           database.collection("users")
+                    .document(currentUser.getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                       @Override
+                       public void onComplete( Task<DocumentSnapshot> task) {
+                           if (task == null) {
+                               User userFireStorage = new User();
+                               userFireStorage.setEmail(currentUser.getEmail());
+                               userFireStorage.setGoogleAccount(true);
+                               userFireStorage.setDisplayName(currentUser.getEmail());
+                               userFireStorage.setPassword("");
+                               database.collection("users").document(currentUser.getEmail()).set(userFireStorage);
+                           }
+                       }
+                   });
+
+
+
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             finishAffinity();
             startActivity(intent);
@@ -140,8 +166,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
     private void signInWithGoogle() {
-        List<AuthUI.IdpConfig> providers = Arrays.asList(  new AuthUI.IdpConfig.GoogleBuilder().build());
+        List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build());
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
