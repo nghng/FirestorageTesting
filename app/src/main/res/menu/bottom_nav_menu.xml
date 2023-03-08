@@ -10,7 +10,7 @@
         />
     <item
         android:id="@+id/addStudySet"
-        android:icon="@drawable/ic_baseline_alarm_add_24"
+        android:icon="@drawable/add"
         />
     <item
         android:id="@+id/profile"

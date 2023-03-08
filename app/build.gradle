@@ -62,4 +62,6 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.8'
     // custom toast
     implementation 'io.github.shashank02051997:FancyToast:2.0.2'
+    // swipe to reveal
+
 }
