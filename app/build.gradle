@@ -65,6 +65,12 @@ dependencies {
     implementation 'io.github.shashank02051997:FancyToast:2.0.2'
     // alert diaglog
     implementation 'com.github.f0ris.sweetalert:library:1.6.2'
+    // flip terms
+    implementation 'com.wajahatkarim:EasyFlipView:3.0.3'
+    //slider
+//    implementation 'com.github.smarteist:autoimageslider:1.4.0-appcompat'
 
+
+    implementation 'me.relex:circleindicator:2.1.6'
 
 }

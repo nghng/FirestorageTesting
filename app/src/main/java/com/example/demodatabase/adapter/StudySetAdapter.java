@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demodatabase.R;
@@ -58,14 +59,14 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
     @Override
     public void onBindViewHolder(@NonNull StudySetViewHolder holder, int position) {
         holder.bind(studySets.get(position), onItemClickedListener);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickedListener.onItemClick(studySets.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+            }
+        });
 
 
-//        holder.cart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                listener.onItemClick(guests.get(position), position);
-//            }
-//        });
     }
 
     @Override
@@ -150,6 +151,7 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
         TextView tvNumberOfTerms;
         ImageView imvAccountImage;
         TextView tvAccountName;
+        CardView cardView;
 
         public StudySetViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -157,6 +159,7 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
             imvAccountImage = itemView.findViewById(R.id.imv_accountImage);
             tvNumberOfTerms = itemView.findViewById(R.id.tv_numberOfTerms);
             tvStudySetName = itemView.findViewById(R.id.tv_studySetName);
+            cardView = itemView.findViewById(R.id.cv_studyset);
         }
 
         public void bind(StudySet studySet, OnItemClickedListener listener) {
@@ -164,6 +167,7 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
             tvAccountName.setText(studySet.getDisplayName());
             Uri photoURL = Uri.parse(studySet.getImageUri());
             Picasso.get().load(photoURL).into(imvAccountImage);
+
             if (studySet.getTerms() != null) {
                 tvNumberOfTerms.setText(studySet.getTerms().size() + " terms");
             } else {

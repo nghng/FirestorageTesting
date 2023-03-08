@@ -24,8 +24,6 @@ import com.example.demodatabase.adapter.StudySetAdapter;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
 import com.example.demodatabase.model.StudySet;
 import com.example.demodatabase.model.Term;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -129,7 +127,7 @@ public class SearchFragment extends Fragment {
     void onDataLoaded() {
         studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
-            public void onItemClick(Object item, int pos) {
+            public void onItemClick(StudySet item, int pos) {
 
             }
         });
@@ -196,6 +194,7 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 currentSearch=query;
+
                 studySetAdapter.getFilter(filter).filter(query);
                 return false;
             }

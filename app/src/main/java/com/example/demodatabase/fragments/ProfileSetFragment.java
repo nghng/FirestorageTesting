@@ -54,7 +54,7 @@ public class ProfileSetFragment extends Fragment {
         CollectionReference collectionReference = database.collection("studySets");
 
         progressDialog.show();
-        collectionReference.whereIn("studySetName", Arrays.asList(new String[] {"Test 3"}))
+        collectionReference.orderBy("studySetName").startAt("te").endAt("te" + '\uf8ff')
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -93,7 +93,7 @@ public class ProfileSetFragment extends Fragment {
     void onDataLoaded() {
         studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
-            public void onItemClick(Object item, int pos) {
+            public void onItemClick(StudySet item, int pos) {
 
             }
         });
