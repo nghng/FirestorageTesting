@@ -33,7 +33,6 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
         this.studySetsOld = studySets;
         this.mContext = mContext;
         this.onItemClickedListener = onItemClickedListener;
-
     }
 
 //    @Override
@@ -57,7 +56,8 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
 
     @Override
     public void onBindViewHolder(@NonNull StudySetViewHolder holder, int position) {
-        holder.bind(studySets.get(position), onItemClickedListener);
+        if (position < studySets.size())
+            holder.bind(studySets.get(position), onItemClickedListener);
 
 
 //        holder.cart.setOnClickListener(new View.OnClickListener() {
@@ -73,37 +73,52 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
         return studySets.size();
     }
 
-    public ArrayList<StudySet> getResult(String search, List<String> listfilter){
+    public ArrayList<StudySet> getResult(String search, String listfilter) {
         ArrayList<StudySet> list = new ArrayList<>();
         if (!search.isEmpty()) {
-            for (String range: listfilter){
-                if (range.equalsIgnoreCase("set")){
-                    for (StudySet studySet : studySetsOld) {
-                        if (studySet.getStudySetName().toLowerCase().contains(search.toLowerCase())) {
-                            list.add(studySet);
-                        }
+            if (listfilter.equalsIgnoreCase("set")) {
+                for (StudySet studySet : studySetsOld) {
+                    if (studySet.getStudySetName().toLowerCase().contains(search.toLowerCase())) {
+                        list.add(studySet);
                     }
                 }
-                if (range.equalsIgnoreCase("user")){
-                    for (StudySet studySet : studySetsOld) {
-                        if (studySet.getUser().toLowerCase().contains(search.toLowerCase())) {
+            } else if (listfilter.equalsIgnoreCase("user")) {
+
+                for (StudySet studySet : studySetsOld) {
+                    if (studySet.getDisplayName() != null) {
+                        if (studySet.getDisplayName().toLowerCase().contains(search.toLowerCase())) {
                             list.add(studySet);
                         }
                     }
+
+                }
+            } else {
+
+                for (StudySet studySet : studySetsOld) {
+                    if (studySet.getDisplayName() != null) {
+                        if (studySet.getDisplayName().toLowerCase().contains(search.toLowerCase())
+                                || studySet.getStudySetName().toLowerCase().contains(search.toLowerCase())) {
+                            list.add(studySet);
+                        }
+                    }
+
                 }
             }
+
             studySets = list;
+
             notifyDataSetChanged();
         }
+
         return studySets;
     }
 
-    public Filter getFilter(List<String> listfilter){
+    public Filter getFilter(String filter) {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String search = constraint.toString();
-              studySets= getResult(search, listfilter);
+                studySets = getResult(search, filter);
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = studySets;
                 return filterResults;
@@ -115,7 +130,10 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
                 notifyDataSetChanged();
             }
         };
-    };
+    }
+
+    ;
+
     @Override
     public Filter getFilter() {
         return new Filter() {
