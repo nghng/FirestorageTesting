@@ -46,8 +46,8 @@ public class SearchFragment extends Fragment {
     ProgressDialog progressDialog;
     SearchView searchView;
     Button btn_all, btn_set, btn_user;
-    String currentSearch="";
-
+    String currentSearch = "";
+    String filter="all";
     int white, blue, black;
 
     public SearchFragment() {
@@ -75,7 +75,7 @@ public class SearchFragment extends Fragment {
         clickedButton.setTextColor(black);
     }
 
-    void unselectAll(){
+    void unselectAll() {
         lookUnselected(btn_all);
         lookUnselected(btn_set);
         lookUnselected(btn_user);
@@ -141,20 +141,33 @@ public class SearchFragment extends Fragment {
 
     }
 
-    void event(){
-        List<String> filter=new ArrayList<>();
-        filter.add("user");
-        filter.add("set");
-
-        btn_set.setOnClickListener(new View.OnClickListener() {
+    void event() {
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                studySetAdapter.getFilter(filter).filter(query);
+                currentSearch = query;
+                return false;
+            }
 
             @Override
+            public boolean onQueryTextChange(String newText) {
+                studySetAdapter.getFilter(filter).filter(newText);
+                currentSearch = newText;
+                return false;
+            }
+
+        });
+
+        btn_set.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
+                System.out.println("button click set");
                 unselectAll();
                 lookSelected(btn_set);
-                filter.clear();
-                filter.add("set");
-                search(filter);
+                filter="set";
                 studySetAdapter.getResult(currentSearch, filter);
             }
 
@@ -163,49 +176,28 @@ public class SearchFragment extends Fragment {
         btn_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("button click user");
                 unselectAll();
                 lookSelected(btn_user);
-                filter.clear();
-                filter.add("user");
-                search(filter);
+                filter="user";
                 studySetAdapter.getResult(currentSearch, filter);
             }
+
         });
 
         btn_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("button click all");
                 unselectAll();
                 lookSelected(btn_all);
-                filter.clear();
-                filter.add("set");
-                filter.add("user");
-                search(filter);
+                filter="all";
                 studySetAdapter.getResult(currentSearch, filter);
             }
         });
 
     }
 
-    void search(List<String> filter) {
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                currentSearch=query;
-
-                studySetAdapter.getFilter(filter).filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                studySetAdapter.getFilter(filter).filter(newText);
-                return false;
-            }
-        });
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -214,7 +206,6 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         initUI(view);
         initData();
-        search(Arrays.asList("user","set"));
         event();
         return view;
 

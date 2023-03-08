@@ -54,7 +54,7 @@ public class ProfileSetFragment extends Fragment {
         CollectionReference collectionReference = database.collection("studySets");
 
         progressDialog.show();
-        collectionReference.orderBy("studySetName").startAt("te").endAt("te" + '\uf8ff')
+        collectionReference.whereEqualTo("user",email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
