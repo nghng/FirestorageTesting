@@ -4,7 +4,9 @@ import android.net.Uri;
 
 import com.google.firebase.firestore.Exclude;
 
-public class Term {
+import java.io.Serializable;
+
+public class Term implements Serializable {
     private String termID;
     private String term;
     private String definition;
