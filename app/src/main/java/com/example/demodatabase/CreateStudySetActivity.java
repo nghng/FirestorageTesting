@@ -154,9 +154,7 @@ public class CreateStudySetActivity extends AppCompatActivity {
         // begin the adding process
         checkFinish.setOnClickListener(view -> {
             isFilled = true;
-
-
-            if(terms.size() < 2){
+            if (terms.size() < 2) {
                 new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                         .setContentText("Your set must contains at least 2 terms")
                         .show();
@@ -171,13 +169,12 @@ public class CreateStudySetActivity extends AppCompatActivity {
                 }
             }
             // checking if all the terms has been filled if not show a popup dialog
-
             if (!isFilled) {
-                if(terms.size() == 2){
+                if (terms.size() == 2) {
                     new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                             .setContentText("You must fill in two terms and definitions to publish your set")
                             .show();
-                }else{
+                } else {
                     new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                             .setContentText("You must fill all your terms and definitions to publish your set")
                             .show();
@@ -208,14 +205,6 @@ public class CreateStudySetActivity extends AppCompatActivity {
                     ) {
                         task.getResult().collection("terms").add(t);
                     }
-//                    alertDialog.setMessage("Create successfully");
-//                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.cancel();
-//                        }
-//                    });
-//                    alertDialog.create().show();
                     new SweetAlertDialog(CreateStudySetActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("Good job!")
                             .setContentText("Created successfully")
@@ -228,7 +217,6 @@ public class CreateStudySetActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
-
 
 
                 }
