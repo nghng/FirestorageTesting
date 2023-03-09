@@ -1,6 +1,7 @@
 package com.example.demodatabase.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demodatabase.R;
+import com.example.demodatabase.StudySetDetailActivity;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
 import com.example.demodatabase.adapter.StudySetAdapter;
 import com.example.demodatabase.model.StudySet;
@@ -60,6 +62,7 @@ public class HomeFragment extends Fragment {
                         for (DocumentSnapshot d : task.getResult()
                         ) {
                             StudySet studySet = d.toObject(StudySet.class);
+                            studySet.setStudySetID(d.getId());
                             studySets.add(studySet);
                             database.collection("studySets")
                                             .document(d.getId())
@@ -91,15 +94,15 @@ public class HomeFragment extends Fragment {
     void onDataLoaded() {
         studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
-            public void onItemClick(Object item, int pos) {
-
+            public void onItemClick(StudySet item, int pos) {
+                Intent intent = new Intent(getContext(), StudySetDetailActivity.class);
+                intent.putExtra("studySetID", item.getStudySetID());
+                startActivity(intent);
             }
         });
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-//        System.out.println("home fragment");
-//        studySetAdapter.getItemViewType(0);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(studySetAdapter);
     }

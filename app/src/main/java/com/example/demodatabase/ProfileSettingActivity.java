@@ -16,18 +16,20 @@ public class ProfileSettingActivity extends AppCompatActivity {
     TextView tvEmail;
     TextView tvUsernameInSetting;
     ImageView ivBackButton;
-    Button btnLogout;
+    Button btnLogout, btnChangePassword;
     private FirebaseAuth firebaseAuth;
 
 
 
     void init(){
+        getSupportActionBar().hide();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         tvEmail = findViewById(R.id.tv_email);
         tvUsernameInSetting = findViewById(R.id.tv_usernameInSetting);
         ivBackButton= findViewById(R.id.iv_backButton);
         btnLogout = findViewById(R.id.btn_logout);
+        btnChangePassword = findViewById(R.id.btn_changePassword);
     }
 
     void initData(){
@@ -45,6 +47,12 @@ public class ProfileSettingActivity extends AppCompatActivity {
         ivBackButton.setOnClickListener(view -> {
             finish();
         });
+
+        btnChangePassword.setOnClickListener(view -> {
+            Intent intent = new Intent(ProfileSettingActivity.this, ChangePasswordActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     @Override
