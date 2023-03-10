@@ -48,6 +48,7 @@ public class CreateStudySetActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     private ArrayList<Term> terms = new ArrayList<>();
     SweetAlertDialog sweetAlertDialog;
+    String folderID;
 
     private boolean isFilled;
 
@@ -78,6 +79,8 @@ public class CreateStudySetActivity extends AppCompatActivity {
     }
 
     void initData() {
+        Bundle extras = getIntent().getExtras();
+        folderID= extras.getString("folderID");
         // To input a description to a set is optional
         etDescription.setVisibility(View.GONE);
         tvDescription.setVisibility(View.GONE);
@@ -185,6 +188,7 @@ public class CreateStudySetActivity extends AppCompatActivity {
             }
 
             StudySet studySet = new StudySet();
+
             studySet.setStudySetName(etTitle.getText().toString());
             studySet.setDate(new Date());
             studySet.setDescription(etDescription.getText().toString());
@@ -192,9 +196,14 @@ public class CreateStudySetActivity extends AppCompatActivity {
             studySet.setDisplayName(currentUser.getDisplayName());
             studySet.setImageUri(String.valueOf(currentUser.getPhotoUrl()));
 
+            if(folderID!=null){
+                studySet.setFolder(folderID);
+            }
+
             database.collection("studySets").add(studySet).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
+
                     for (Term t : terms
                     ) {
                         task.getResult().collection("terms").add(t);

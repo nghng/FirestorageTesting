@@ -1,31 +1,39 @@
 package com.example.demodatabase;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 
 import com.example.demodatabase.databinding.ActivityMainBinding;
-import com.example.demodatabase.fragments.AddStudySetFragment;
 import com.example.demodatabase.fragments.HomeFragment;
 import com.example.demodatabase.fragments.ProfileFragment;
 import com.example.demodatabase.fragments.SearchFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.demodatabase.model.Folder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
     int previousSelectedMenu;
-
+    FirebaseFirestore database;
 
     private void initData() {
         activityMainBinding.wrapper.setVisibility(View.GONE);
@@ -43,6 +51,80 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding.tvCreateStudySets.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, CreateStudySetActivity.class);
             startActivity(intent);
+        });
+
+        activityMainBinding.tvCreateFolder.setOnClickListener(view -> {
+            slideDown(activityMainBinding.wrapper);
+            // inflate the layout of the popup window
+            LayoutInflater inflater = (LayoutInflater)
+                    getSystemService(LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.popup_create_folder, null);
+
+            // create the popup window
+            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            boolean focusable = true; // lets taps outside the popup also dismiss it
+            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+            // show the popup window
+            // which view you pass in doesn't matter, it is only used for the window tolken
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            Button btn_ok, btn_cancel;
+            btn_ok = popupView.findViewById(R.id.btn_ok);
+            btn_cancel = popupView.findViewById(R.id.btn_cancel);
+            EditText edt_folderName, edt_folderDescription;
+            edt_folderName = popupView.findViewById(R.id.edt_foldername);
+            edt_folderDescription = popupView.findViewById(R.id.edt_description);
+
+
+            btn_ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String folderName = edt_folderName.getText().toString();
+                    String folderDescription = edt_folderDescription.getText().toString();
+                    if (folderName.trim().length() == 0) {
+                        new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                .setContentText("Your folder must have a name!")
+                                .show();
+                        return;
+                    }
+                    Intent intent = new Intent(MainActivity.this, CreateFolderActivity.class);
+                                            intent.putExtra("folderName", folderName);
+                    intent.putExtra("folderDescription", folderDescription);
+                                            startActivity(intent);
+//                    database.collection("folders").add(folder).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentReference> task) {
+//                            new SweetAlertDialog(MainActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+//                                    .setTitleText("Good job!")
+//                                    .setContentText("Created successfully")
+//                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                                        @Override
+//                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                                            Intent intent = new Intent(MainActivity.this, FolderDetailActivity.class);
+//                                            intent.putExtra("folderID", task.getResult().getId());
+//                                            startActivity(intent);
+//                                        }
+//                                    })
+//                                    .show();
+//
+//
+//                        }
+//                    });
+
+
+                }
+            });
+
+            btn_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindow.dismiss();
+                    slideUp(activityMainBinding.bottomNavigation);
+                }
+            });
+
         });
     }
 
