@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
         }
         String username = currentUser.getDisplayName();
         Uri photoURL = currentUser.getPhotoUrl();
-        Glide.with(this).load(photoURL).error(R.drawable.ic_baseline_alarm_add_24)
+        Glide.with(this).load(photoURL).error(R.drawable.default_user_image)
                 .into(imageViewProfileImage);
         textViewUsername.setText(username);
 

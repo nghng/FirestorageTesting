@@ -24,15 +24,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
-    int previousSelectedMenu ;
-
+    int previousSelectedMenu;
 
 
     private void initData() {
         activityMainBinding.wrapper.setVisibility(View.GONE);
     }
 
-    void bindingAction(){
+    void bindingAction() {
         activityMainBinding.conLayOptOut.setOnClickListener(view -> {
 //            slideUp(activityMainBinding.bottomNavigation);
             slideDown(activityMainBinding.wrapper);
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         replaceFragment(new HomeFragment());
         initData();
         bindingAction();
-
 
 
         activityMainBinding.bottomNavigation.setOnItemSelectedListener(item -> {
@@ -99,21 +97,21 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-//    Animation
-public void slideUp(View view){
-    view.setVisibility(View.VISIBLE);
-    TranslateAnimation animate = new TranslateAnimation(
-            0,                 // fromXDelta
-            0,                 // toXDelta
-            view.getHeight(),  // fromYDelta
-            0);                // toYDelta
-    animate.setDuration(300);
-    animate.setFillAfter(true);
-    view.startAnimation(animate);
-}
+    //    Animation
+    public void slideUp(View view) {
+        view.setVisibility(View.VISIBLE);
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                0,                 // toXDelta
+                view.getHeight(),  // fromYDelta
+                0);                // toYDelta
+        animate.setDuration(300);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
 
     // slide the view from its current position to below itself
-    public void slideDown(View view){
+    public void slideDown(View view) {
         view.setVisibility(view.GONE);
         TranslateAnimation animate = new TranslateAnimation(
                 0,                 // fromXDelta
