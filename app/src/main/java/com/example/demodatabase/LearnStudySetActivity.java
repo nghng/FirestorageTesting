@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +36,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class LearnStudySetActivity extends AppCompatActivity {
     ConstraintLayout clQuestion;
     TextView tvTermInQuestion;
@@ -44,15 +48,18 @@ public class LearnStudySetActivity extends AppCompatActivity {
     String studySetID;
     Intent intent;
     ItemAnswerAdapter itemAnswerAdapter;
-    List<Question> questions = new ArrayList<>();
+    List<Question> questions = new ArrayList<>(); // question root
     List<Question> unAnswerQuestion = new ArrayList<>();
     CollectionReference learnRef, termRef;
     Question currentQuestion;
     List<Answer> currentAnswer = new ArrayList<>();
+    List<Answer> answerRoot = new ArrayList<>();
     String learnID;
     int currentIndex;
     int numberOfQuestion;
     boolean isStudied;
+    Answer currentRightAnswer;
+    Learn currentLearn;
 
 
     void initUI() {
@@ -81,7 +88,48 @@ public class LearnStudySetActivity extends AppCompatActivity {
 
         itemAnswerAdapter = new ItemAnswerAdapter(this, (ArrayList<Answer>) currentAnswer, new AnswerItemClickedListener() {
             @Override
-            public void onItemClick(Answer item, int pos) {
+            public void onRightAnswerClick(Answer item, int pos) {
+
+
+                SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(LearnStudySetActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setContentText("Nicely done");
+                sweetAlertDialog.show();
+                sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setVisibility(View.GONE);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        sweetAlertDialog.cancel();
+                        learnRef.document(learnID).collection("questions")
+                                .document(currentQuestion.getQuestionID())
+                                .update("answerRight", true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        currentAnswer.clear();
+
+                                        isStudied(currentLearn);
+
+                                    }
+                                });
+                    }
+                }, 1000);
+
+            }
+
+            @Override
+            public void onWrongAnswerClick(Answer item, int pos) {
+                SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(LearnStudySetActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setContentText("Correct answer is: " + currentRightAnswer.getAnswer()  )
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                currentAnswer.clear();
+                                isStudied(currentLearn);
+                                sweetAlertDialog.cancel();
+                            }
+                        });
+                sweetAlertDialog.show();
+
 
             }
         });
@@ -96,12 +144,17 @@ public class LearnStudySetActivity extends AppCompatActivity {
         termRef = database.collection("studySets").document(studySetID).collection("terms");
         if (unAnswerQuestion.size() < 4) {
             numberOfQuestion = unAnswerQuestion.size();
-        }else {
+        } else {
             numberOfQuestion = 4;
         }
         termRef.document(currentQuestion.getTermID()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+
+
+
+                // Get true answer
                 Answer answer = new Answer();
                 answer.setRight(true);
                 Term term = task.getResult().toObject(Term.class);
@@ -109,6 +162,7 @@ public class LearnStudySetActivity extends AppCompatActivity {
                 currentQuestion.setTerm(term);
                 answer.setAnswer(term.getDefinition());
                 currentAnswer.add(answer);
+                currentRightAnswer = answer;
                 itemAnswerAdapter.notifyDataSetChanged();
                 int numberOfWrongAnswers = 0;
 
@@ -117,7 +171,6 @@ public class LearnStudySetActivity extends AppCompatActivity {
                     int index = (int) (Math.random() * unAnswerQuestion.size());
                     String termID = unAnswerQuestion.get(index).getTermID();
                     unAnswerQuestion.remove(index);
-
                     if (termID.equals(currentQuestion.getTermID())) {
                         continue;
                     }
@@ -144,7 +197,6 @@ public class LearnStudySetActivity extends AppCompatActivity {
         });
 
 
-
     }
 
     void getQuestion(String learnID) {
@@ -157,15 +209,24 @@ public class LearnStudySetActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot d : task.getResult()
                         ) {
                             Question question = new Question();
+
                             question = d.toObject(Question.class);
+                            question.setQuestionID(d.getId());
                             unAnswerQuestion.add(question);
                         }
                         Log.d("array", unAnswerQuestion.toString());
+                        if(unAnswerQuestion.size() == 0){
+                            new SweetAlertDialog(LearnStudySetActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                    .setContentText("You have completed")
+                                    .show();
+                            return;
+                        }
                         dataLoaded();
 
 
                     }
                 });
+
     }
 
     void initiateLearnDataForTheFirstTime(Learn learn) {
@@ -210,24 +271,23 @@ public class LearnStudySetActivity extends AppCompatActivity {
     }
 
     void initData() {
+
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseFirestore.getInstance();
         learnRef = database.collection("learn");
+        // Get question from question detail
         intent = getIntent();
         Bundle args = intent.getBundleExtra("bundle");
         ArrayList<Term> terms = (ArrayList<Term>) args.getSerializable("terms");
         studySetID = getIntent().getStringExtra("studySetID");
         questions = Question.createQuestions(terms);
-
-
         Learn learn = new Learn();
         learn.setStudySetID(studySetID);
         learn.setTerms(terms);
         learn.setUserEmail(currentUser.getEmail());
+        currentLearn = learn;
         loadDataToAnswerRecycleView();
         isStudied(learn);
-
-
 
 
     }

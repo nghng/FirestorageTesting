@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Question {
+    private String questionID;
     private Term term;
     private String termID;
     private Boolean isAnswerRight;
@@ -21,6 +22,15 @@ public class Question {
         }
         return questions;
     }
+    @Exclude
+    public String getQuestionID() {
+        return questionID;
+    }
+
+    public void setQuestionID(String questionID) {
+        this.questionID = questionID;
+    }
+
     @Exclude
     public Term getTerm() {
         return term;

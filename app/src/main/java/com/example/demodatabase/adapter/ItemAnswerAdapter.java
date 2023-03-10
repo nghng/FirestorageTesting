@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.demodatabase.R;
 import com.example.demodatabase.clickinterface.AnswerItemClickedListener;
 import com.example.demodatabase.model.Answer;
@@ -37,12 +39,22 @@ public class ItemAnswerAdapter extends RecyclerView.Adapter<ItemAnswerAdapter.It
     public void onBindViewHolder(@NonNull ItermAnswerViewHolder holder, int position) {
         int pos = holder.getAdapterPosition();
         holder.bind(answers.get(pos));
-        holder.cardAnswer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(answers.get(pos), pos);
-            }
-        });
+        Answer answer = answers.get(pos);
+        if (answer.isRight()) {
+            holder.cardAnswer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onRightAnswerClick(answer,pos);
+                }
+            });
+        }else {
+            holder.cardAnswer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onWrongAnswerClick(answer,pos);
+                }
+            });
+        }
 
     }
 
