@@ -113,6 +113,26 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity android:name=".FolderDetailActivity"
+            android:exported="false"
+            >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity android:name=".CreateFolderActivity"
+        android:exported="false">
+        <meta-data
+            android:name="android.app.lib_name"
+            android:value="" />
+    </activity>
+<!--        <activity android:name=".AddSetToFolderActivity"-->
+<!--            android:exported="false">-->
+<!--            <meta-data-->
+<!--                android:name="android.app.lib_name"-->
+<!--                android:value="" />-->
+<!--        </activity>-->
+
     </application>
 
 </manifest>

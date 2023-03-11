@@ -104,7 +104,7 @@ public class StudySetDetailActivity extends AppCompatActivity {
             studySetID = extras.getString("studySetID");
             database = FirebaseFirestore.getInstance();
             CollectionReference studySetsRef = database.collection("studySets");
-
+            System.out.println(studySetID);
             studySetsRef.document(studySetID)
                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
