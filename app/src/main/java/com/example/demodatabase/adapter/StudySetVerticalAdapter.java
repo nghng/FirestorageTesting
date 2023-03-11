@@ -22,14 +22,14 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudySetViewHolder> implements Filterable {
+public class StudySetVerticalAdapter extends RecyclerView.Adapter<StudySetVerticalAdapter.StudySetViewHolder> implements Filterable {
     private ArrayList<StudySet> studySets;
     private ArrayList<StudySet> studySetsOld;
     public Context mContext;
     private final OnItemClickedListener onItemClickedListener;
 
 
-    public StudySetAdapter(ArrayList<StudySet> studySets, Context mContext, OnItemClickedListener onItemClickedListener) {
+    public StudySetVerticalAdapter(ArrayList<StudySet> studySets, Context mContext, OnItemClickedListener onItemClickedListener) {
         this.studySets = studySets;
         this.studySetsOld = studySets;
         this.mContext = mContext;
@@ -45,10 +45,10 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
     @NonNull
     @Override
     public StudySetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_studyset, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_studyset_vertical, parent, false);
 
         if (viewType != 0) {
-            view.findViewById(R.id.cv_studyset).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            view.findViewById(R.id.cv_studyset_v).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
 
         System.out.println("item " + viewType);
@@ -64,8 +64,8 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
                 onItemClickedListener.onItemClick(studySets.get(holder.getAdapterPosition()), holder.getAdapterPosition());
             }
         });
-         if (position < studySets.size())
-             holder.bind(studySets.get(position), onItemClickedListener);
+        if (position < studySets.size())
+            holder.bind(studySets.get(position), onItemClickedListener);
 
 
     }
@@ -174,11 +174,11 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
 
         public StudySetViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvAccountName = itemView.findViewById(R.id.tv_accountName);
-            imvAccountImage = itemView.findViewById(R.id.imv_accountImage);
-            tvNumberOfTerms = itemView.findViewById(R.id.tv_numberOfTerms);
-            tvStudySetName = itemView.findViewById(R.id.tv_studySetName);
-            cardView = itemView.findViewById(R.id.cv_studyset);
+            tvAccountName = itemView.findViewById(R.id.tv_accountName_v);
+            imvAccountImage = itemView.findViewById(R.id.imv_accountImage_v);
+            tvNumberOfTerms =itemView.findViewById(R.id.tv_numberOfTerms_v);
+            tvStudySetName = itemView.findViewById(R.id.tv_studySetName_v);
+            cardView = itemView.findViewById(R.id.cv_studyset_v);
         }
 
         public void bind(StudySet studySet, OnItemClickedListener listener) {

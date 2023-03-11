@@ -1,6 +1,8 @@
 package com.example.demodatabase;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,11 +27,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class CreateStudySetActivity extends AppCompatActivity {
     ScrollView scrollView;
@@ -39,10 +44,10 @@ public class CreateStudySetActivity extends AppCompatActivity {
     EditText etTitle, etDescription;
     TextView tvShowDes, tvDescription;
     CreateTermAdapter createTermAdapter;
-    AlertDialog.Builder alertDialog;
     FirebaseFirestore database;
     FirebaseUser currentUser;
     private ArrayList<Term> terms = new ArrayList<>();
+    SweetAlertDialog sweetAlertDialog;
 
     private boolean isFilled;
 
@@ -50,6 +55,7 @@ public class CreateStudySetActivity extends AppCompatActivity {
     private float mReleasePosition;
 
     void init() {
+        getSupportActionBar().hide();
         scrollView = findViewById(R.id.scrollView);
         rc_createStudyTerms = findViewById(R.id.rc_createStudyTerms);
         header = findViewById(R.id.rl_header);
@@ -60,10 +66,9 @@ public class CreateStudySetActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tv_description);
         addingTerm = findViewById(R.id.imv_addingTerm);
         checkFinish = findViewById(R.id.img_checkFinish);
-        alertDialog = new AlertDialog.Builder(CreateStudySetActivity.this);
-        getSupportActionBar().hide();
         database = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        sweetAlertDialog = new SweetAlertDialog(this);
         createTermAdapter = new CreateTermAdapter(terms, this, new TermItemClickListener() {
             @Override
             public void onItemClick(Term item, int pos) {
@@ -87,6 +92,7 @@ public class CreateStudySetActivity extends AppCompatActivity {
         rc_createStudyTerms.setAdapter(createTermAdapter);
 
     }
+
 
     void bindingAction() {
 
@@ -136,10 +142,25 @@ public class CreateStudySetActivity extends AppCompatActivity {
             Term addingTerm = new Term("", "");
             terms.add(addingTerm);
             createTermAdapter.notifyDataSetChanged();
+            scrollView.post(new Runnable() {
+                @Override
+                public void run() {
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                }
+            });
         });
 
+
+        // begin the adding process
         checkFinish.setOnClickListener(view -> {
             isFilled = true;
+            if (terms.size() < 2) {
+                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                        .setContentText("Your set must contains at least 2 terms")
+                        .show();
+                return;
+            }
+
             // Checking whether the all the terms has been filled
             for (Term t : terms
             ) {
@@ -148,24 +169,24 @@ public class CreateStudySetActivity extends AppCompatActivity {
                 }
             }
             // checking if all the terms has been filled if not show a popup dialog
-
             if (!isFilled) {
-                alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                alertDialog.setMessage("You must fill in two terms and definitions to publish your set");
-                alertDialog.create().show();
+                if (terms.size() == 2) {
+                    new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                            .setContentText("You must fill in two terms and definitions to publish your set")
+                            .show();
+                } else {
+                    new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                            .setContentText("You must fill all your terms and definitions to publish your set")
+                            .show();
+                }
                 return;
             }
 
-
             // checking if the title is not filled if not show a dialog
             if (etTitle.getText().toString().trim().equals("")) {
-                alertDialog.setMessage("Add a title to finish creating your set");
-                alertDialog.create().show();
+                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                        .setContentText("Add a title to finish creating your set")
+                        .show();
                 return;
             }
 
@@ -184,14 +205,20 @@ public class CreateStudySetActivity extends AppCompatActivity {
                     ) {
                         task.getResult().collection("terms").add(t);
                     }
-                    alertDialog.setMessage("Create successfully");
-                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    alertDialog.create().show();
+                    new SweetAlertDialog(CreateStudySetActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("Good job!")
+                            .setContentText("Created successfully")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    Intent intent = new Intent(CreateStudySetActivity.this, StudySetDetailActivity.class);
+                                    intent.putExtra("studySetID", task.getResult().getId());
+                                    startActivity(intent);
+                                }
+                            })
+                            .show();
+
+
                 }
             });
 

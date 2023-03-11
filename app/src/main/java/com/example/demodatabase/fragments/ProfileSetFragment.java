@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class ProfileSetFragment extends Fragment {
@@ -48,12 +49,12 @@ public class ProfileSetFragment extends Fragment {
         progressDialog = new ProgressDialog(getContext());
     }
 
-    private void initData(ViewGroup container) {
+    private void initData() {
         String email = currentUser.getEmail();
         CollectionReference collectionReference = database.collection("studySets");
 
         progressDialog.show();
-        collectionReference.whereEqualTo("user", email)
+        collectionReference.whereEqualTo("user",email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -81,7 +82,7 @@ public class ProfileSetFragment extends Fragment {
                             Log.d("INFO", d.getData().toString());
                         }
                         progressDialog.dismiss();
-                        onDataLoaded(container);
+                        onDataLoaded();
 
                     }
                 });
@@ -89,10 +90,10 @@ public class ProfileSetFragment extends Fragment {
 
 
 
-    void onDataLoaded(ViewGroup vg) {
+    void onDataLoaded() {
         studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
-            public void onItemClick(Object item, int pos) {
+            public void onItemClick(StudySet item, int pos) {
 
             }
         });
@@ -112,7 +113,7 @@ public class ProfileSetFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_set, container, false);
         initUI(view);
-        initData(container);
+        initData();
 
         return view;
 

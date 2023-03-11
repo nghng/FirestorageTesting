@@ -11,11 +11,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.demodatabase.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -34,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
     private static final String PASSWORD_PATTERN =
             "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
     private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+    private FirebaseFirestore database;
     public static boolean isValid(final String password) {
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
@@ -58,6 +61,7 @@ public class SignUpActivity extends AppCompatActivity {
         edt_ConfirmPassword = findViewById(R.id.edt_rePassword);
         edt_Username = findViewById(R.id.edt_username);
         progressDialog = new ProgressDialog(this);
+        database = FirebaseFirestore.getInstance();
     }
 
     private void bindingAction() {
@@ -108,6 +112,14 @@ public class SignUpActivity extends AppCompatActivity {
                                 FirebaseUser user = auth.getCurrentUser();
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(edt_Username.getText().toString().trim()).build();
+                                User userInFirestore = new User();
+                                userInFirestore.setDisplayName(edt_Username.getText().toString().trim());
+                                userInFirestore.setPassword(strPassword);
+                                userInFirestore.setGoogleAccount(false);
+                                userInFirestore.setEmail(strEmail);
+
+                                database.collection("users").document(strEmail).set(user);
+
                                 if (user != null) {
                                     user.updateProfile(profileUpdates)
                                             .addOnCompleteListener(task1 -> {

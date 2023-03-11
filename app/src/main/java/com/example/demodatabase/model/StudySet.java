@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class StudySet {
+    private String studySetID;
     private Date date;
     private String user;
     private String description;
@@ -17,6 +18,15 @@ public class StudySet {
     private String displayName;
     private String imageUri;
     private ArrayList<Term> terms;
+
+    @Exclude
+    public String getStudySetID() {
+        return studySetID;
+    }
+
+    public void setStudySetID(String studySetID) {
+        this.studySetID = studySetID;
+    }
 
     @Exclude
     public ArrayList<Term> getTerms() {

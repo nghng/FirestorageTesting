@@ -15,17 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demodatabase.R;
+import com.example.demodatabase.clickinterface.EditTermClickedListener;
 import com.example.demodatabase.clickinterface.TermItemClickListener;
 import com.example.demodatabase.model.Term;
 
 import java.util.ArrayList;
 
-public class CreateTermAdapter extends RecyclerView.Adapter<CreateTermAdapter.CreateStudySetViewHolder> {
+public class EditTermAdapter extends RecyclerView.Adapter<EditTermAdapter.CreateStudySetViewHolder> {
     private ArrayList<Term> terms;
     public Context mContext;
-    private final TermItemClickListener listener;
+    private final EditTermClickedListener listener;
 
-    public CreateTermAdapter(ArrayList<Term> terms, Context context, TermItemClickListener listener) {
+    public EditTermAdapter(ArrayList<Term> terms, Context context, EditTermClickedListener listener) {
         this.terms = terms;
         this.listener = listener;
         this.mContext = context;
@@ -81,12 +82,15 @@ public class CreateTermAdapter extends RecyclerView.Adapter<CreateTermAdapter.Cr
 
 
 //        holder.addTerm.setOnClickListener(view -> {
+//            listener.onAddingClick(terms.get(pos), pos);
 //            Term newTerm = new Term("","");
 //            terms.add(pos, newTerm);
 //            notifyDataSetChanged();
 //        });
 
         holder.removeTerm.setOnClickListener(view ->{
+
+            listener.onDeleteClick(terms.get(pos), pos);
             terms.remove(pos);
             notifyDataSetChanged();
         });
@@ -100,7 +104,7 @@ public class CreateTermAdapter extends RecyclerView.Adapter<CreateTermAdapter.Cr
 
     public class CreateStudySetViewHolder extends RecyclerView.ViewHolder {
         EditText etTerm, etDefinition;
-        ImageView removeTerm;
+        ImageView removeTerm, addTerm;
 
 
         public CreateStudySetViewHolder(@NonNull View itemView) {
@@ -111,7 +115,7 @@ public class CreateTermAdapter extends RecyclerView.Adapter<CreateTermAdapter.Cr
 //            addTerm = itemView.findViewById(R.id.imv_addTerm);
 
         }
-        public void bind(Term term, TermItemClickListener listener) {
+        public void bind(Term term, EditTermClickedListener listener) {
             etTerm.setText(term.getTerm());
             etDefinition.setText(term.getDefinition());
         }
