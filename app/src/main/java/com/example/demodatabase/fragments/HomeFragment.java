@@ -97,8 +97,9 @@ public class HomeFragment extends Fragment {
             public void onItemClick(StudySet item, int pos) {
                 Intent intent = new Intent(getContext(), StudySetDetailActivity.class);
                 intent.putExtra("studySetID", item.getStudySetID());
-                startActivity(intent);
+                startActivity(intent);;
             }
+
         });
 
         LinearLayoutManager layoutManager

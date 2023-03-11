@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.demodatabase.model.Folder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -19,11 +21,13 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class CreateFolderActivity extends AppCompatActivity {
     Folder folder;
     FirebaseFirestore database;
+    FirebaseUser currentUser;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        folder=new Folder(extras.getString("folderName"), extras.getString("folderDescription"));
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        folder=new Folder(extras.getString("folderName"), extras.getString("folderDescription"),currentUser.getEmail(), currentUser.getDisplayName());
         database = FirebaseFirestore.getInstance();
         database.collection("folders").add(folder).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override

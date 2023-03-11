@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import com.example.demodatabase.R;
 import com.example.demodatabase.adapter.StudySetAdapter;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
+import com.example.demodatabase.model.Folder;
 import com.example.demodatabase.model.StudySet;
 import com.example.demodatabase.model.Term;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -130,6 +131,7 @@ public class SearchFragment extends Fragment {
             public void onItemClick(StudySet item, int pos) {
 
             }
+
         });
 
         LinearLayoutManager layoutManager

@@ -6,58 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".CreateStudySetActivity">
 
-    <RelativeLayout
-        android:id="@+id/rl_header"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imv_back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/ic_baseline_arrow_back_24" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="20dp"
-            android:text="Create folder" />
-
-        <ImageView
-            android:id="@+id/img_kebab_menu"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/kebab_menu" />
-
-
-    </RelativeLayout>
-
-
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="409dp"
-        android:layout_height="569dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rl_header"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp"
+        app:layout_constraintVertical_bias="0.7">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/sv_createFoldersView"
-            android:layout_width="409dp"
-            android:layout_height="669dp"
-
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/rl_header"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent">
 
@@ -122,6 +87,7 @@
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
                 app:contentPadding="10dp"
+                app:layout_constraintVertical_bias="0.2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -162,8 +128,8 @@
             <androidx.recyclerview.widget.RecyclerView
 
                 android:id="@+id/rv_studySets"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"

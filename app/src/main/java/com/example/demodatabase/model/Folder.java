@@ -7,6 +7,24 @@ import java.util.ArrayList;
 public class Folder {
     private String folderID, folderName, folderDescription;
     private ArrayList<StudySet> studysets;
+    private String user;
+    private String displayName;
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 
     @Exclude
     public String getFolderID() {
@@ -42,9 +60,11 @@ public class Folder {
         this.folderDescription = folderDescription;
     }
 
-    public Folder( String folderName, String folderDescription) {
+    public Folder(String folderName, String folderDescription, String user, String displayName) {
         this.folderName = folderName;
         this.folderDescription = folderDescription;
+        this.user = user;
+        this.displayName=displayName;
     }
 
     public Folder() {

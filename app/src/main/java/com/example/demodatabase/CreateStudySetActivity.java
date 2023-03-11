@@ -33,6 +33,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -188,7 +190,6 @@ public class CreateStudySetActivity extends AppCompatActivity {
             }
 
             StudySet studySet = new StudySet();
-
             studySet.setStudySetName(etTitle.getText().toString());
             studySet.setDate(new Date());
             studySet.setDescription(etDescription.getText().toString());
@@ -196,9 +197,7 @@ public class CreateStudySetActivity extends AppCompatActivity {
             studySet.setDisplayName(currentUser.getDisplayName());
             studySet.setImageUri(String.valueOf(currentUser.getPhotoUrl()));
 
-            if(folderID!=null){
-                studySet.setFolder(folderID);
-            }
+
 
             database.collection("studySets").add(studySet).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
@@ -207,6 +206,12 @@ public class CreateStudySetActivity extends AppCompatActivity {
                     for (Term t : terms
                     ) {
                         task.getResult().collection("terms").add(t);
+                    }
+                    if(folderID!=null){
+                        database.collection("folders").document(folderID).collection("studySets").add(studySet);
+                        Intent intent = new Intent(CreateStudySetActivity.this, FolderDetailActivity.class);
+                        intent.putExtra("folderID", folderID);
+                        startActivity(intent);
                     }
                     new SweetAlertDialog(CreateStudySetActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("Good job!")

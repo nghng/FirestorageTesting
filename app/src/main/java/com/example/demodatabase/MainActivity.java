@@ -93,27 +93,6 @@ public class MainActivity extends AppCompatActivity {
                                             intent.putExtra("folderName", folderName);
                     intent.putExtra("folderDescription", folderDescription);
                                             startActivity(intent);
-//                    database.collection("folders").add(folder).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DocumentReference> task) {
-//                            new SweetAlertDialog(MainActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-//                                    .setTitleText("Good job!")
-//                                    .setContentText("Created successfully")
-//                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                                        @Override
-//                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-//                                            Intent intent = new Intent(MainActivity.this, FolderDetailActivity.class);
-//                                            intent.putExtra("folderID", task.getResult().getId());
-//                                            startActivity(intent);
-//                                        }
-//                                    })
-//                                    .show();
-//
-//
-//                        }
-//                    });
-
-
                 }
             });
 
