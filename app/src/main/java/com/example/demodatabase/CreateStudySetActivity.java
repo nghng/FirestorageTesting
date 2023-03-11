@@ -142,6 +142,12 @@ public class CreateStudySetActivity extends AppCompatActivity {
             Term addingTerm = new Term("", "");
             terms.add(addingTerm);
             createTermAdapter.notifyDataSetChanged();
+            scrollView.post(new Runnable() {
+                @Override
+                public void run() {
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                }
+            });
         });
 
 

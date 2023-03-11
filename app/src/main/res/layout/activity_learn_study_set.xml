@@ -20,7 +20,9 @@
             android:layout_margin="10dp"
             android:src="@drawable/x_icon"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/grey_m"
+            />
 
         <ImageView
             android:id="@+id/imv_setting"
@@ -29,7 +31,8 @@
             android:layout_margin="10dp"
             android:src="@drawable/ic_baseline_settings_24"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/grey_m"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     
   \
@@ -40,7 +43,8 @@
         app:layout_constraintTop_toBottomOf="@+id/header"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:progressTint="@color/primary_1"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_question"
@@ -56,7 +60,10 @@
             android:layout_marginTop="40dp"
             android:text="Question "
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rc_answers"

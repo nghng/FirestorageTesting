@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -101,6 +102,7 @@ public class LearnStudySetActivity extends AppCompatActivity {
                         .setContentText("Nicely done");
                 sweetAlertDialog.show();
                 sweetAlertDialog.getButton(SweetAlertDialog.BUTTON_CONFIRM).setVisibility(View.GONE);
+
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override

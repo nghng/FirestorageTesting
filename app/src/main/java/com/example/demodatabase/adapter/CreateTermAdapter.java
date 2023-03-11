@@ -80,11 +80,11 @@ public class CreateTermAdapter extends RecyclerView.Adapter<CreateTermAdapter.Cr
         });
 
 
-        holder.addTerm.setOnClickListener(view -> {
-            Term newTerm = new Term("","");
-            terms.add(pos, newTerm);
-            notifyDataSetChanged();
-        });
+//        holder.addTerm.setOnClickListener(view -> {
+//            Term newTerm = new Term("","");
+//            terms.add(pos, newTerm);
+//            notifyDataSetChanged();
+//        });
 
         holder.removeTerm.setOnClickListener(view ->{
             terms.remove(pos);
@@ -100,7 +100,7 @@ public class CreateTermAdapter extends RecyclerView.Adapter<CreateTermAdapter.Cr
 
     public class CreateStudySetViewHolder extends RecyclerView.ViewHolder {
         EditText etTerm, etDefinition;
-        ImageView removeTerm, addTerm;
+        ImageView removeTerm;
 
 
         public CreateStudySetViewHolder(@NonNull View itemView) {
@@ -108,7 +108,7 @@ public class CreateTermAdapter extends RecyclerView.Adapter<CreateTermAdapter.Cr
             etTerm = itemView.findViewById(R.id.et_term);
             etDefinition = itemView.findViewById(R.id.et_definition);
             removeTerm = itemView.findViewById(R.id.imv_removeTerm);
-            addTerm = itemView.findViewById(R.id.imv_addTerm);
+//            addTerm = itemView.findViewById(R.id.imv_addTerm);
 
         }
         public void bind(Term term, TermItemClickListener listener) {

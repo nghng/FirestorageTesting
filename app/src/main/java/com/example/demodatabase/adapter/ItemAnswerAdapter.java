@@ -71,6 +71,7 @@ public class ItemAnswerAdapter extends RecyclerView.Adapter<ItemAnswerAdapter.It
             super(itemView);
             tvAnswer = itemView.findViewById(R.id.tv_answer);
             cardAnswer = itemView.findViewById(R.id.card_answer);
+            cardAnswer.setForeground(null);
         }
 
         public void bind(Answer answer) {
