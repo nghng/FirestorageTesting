@@ -176,7 +176,7 @@ public class EditStudySetActivity extends AppCompatActivity {
             Term addingTerm = new Term("", "");
             terms.add(addingTerm);
             editAddingTerm.add(addingTerm);
-            createTermAdapter.notifyDataSetChanged();
+            createTermAdapter.notifyItemInserted(terms.size() - 1);
         });
 
 
@@ -248,6 +248,9 @@ public class EditStudySetActivity extends AppCompatActivity {
 
                                             for (Term t: deleteTerm
                                                  ) {
+                                                if(editAddingTerm.contains(t)){
+                                                    continue;
+                                                }
                                                 studySetRef.collection("terms")
                                                         .document(t.getTermID())
                                                         .delete();
@@ -273,6 +276,9 @@ public class EditStudySetActivity extends AppCompatActivity {
                                             }
 
                                             for (Term term : editAddingTerm){
+                                                if(deleteTerm.contains(term)){
+                                                    continue;
+                                                }
                                                 studySetRef.collection("terms").add(term).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<DocumentReference> task) {

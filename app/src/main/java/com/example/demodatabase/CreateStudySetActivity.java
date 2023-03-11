@@ -33,6 +33,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -48,6 +50,7 @@ public class CreateStudySetActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     private ArrayList<Term> terms = new ArrayList<>();
     SweetAlertDialog sweetAlertDialog;
+    String folderID;
 
     private boolean isFilled;
 
@@ -78,6 +81,8 @@ public class CreateStudySetActivity extends AppCompatActivity {
     }
 
     void initData() {
+        Bundle extras = getIntent().getExtras();
+        folderID= extras.getString("folderID");
         // To input a description to a set is optional
         etDescription.setVisibility(View.GONE);
         tvDescription.setVisibility(View.GONE);
@@ -198,12 +203,21 @@ public class CreateStudySetActivity extends AppCompatActivity {
             studySet.setDisplayName(currentUser.getDisplayName());
             studySet.setImageUri(String.valueOf(currentUser.getPhotoUrl()));
 
+
+
             database.collection("studySets").add(studySet).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
+
                     for (Term t : terms
                     ) {
                         task.getResult().collection("terms").add(t);
+                    }
+                    if(folderID!=null){
+                        database.collection("folders").document(folderID).collection("studySets").add(studySet);
+                        Intent intent = new Intent(CreateStudySetActivity.this, FolderDetailActivity.class);
+                        intent.putExtra("folderID", folderID);
+                        startActivity(intent);
                     }
                     new SweetAlertDialog(CreateStudySetActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("Good job!")

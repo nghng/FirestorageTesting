@@ -18,6 +18,12 @@ public class StudySet {
     private String displayName;
     private String imageUri;
     private ArrayList<Term> terms;
+//    private String folder;
+
+//    @Exclude
+//    public String getFolder(){return folder; }
+//
+//    public void setFolder(String folder){this.folder=folder;}
 
     @Exclude
     public String getStudySetID() {
