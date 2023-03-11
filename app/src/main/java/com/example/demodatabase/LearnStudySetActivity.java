@@ -261,6 +261,11 @@ public class LearnStudySetActivity extends AppCompatActivity {
 
                                                     });
                                         }
+                                    }).setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            onBackPressed();
+                                        }
                                     })
                                     .show();
                             progressBar.setProgress(progressBar.getMax());
