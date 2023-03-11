@@ -3,6 +3,7 @@ package com.example.demodatabase;
 import android.content.Intent;
 import android.os.Bundle;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -34,6 +35,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.relex.circleindicator.CircleIndicator;
 
 public class StudySetDetailActivity extends AppCompatActivity {
@@ -46,6 +48,7 @@ public class StudySetDetailActivity extends AppCompatActivity {
     StudySet currentStudySet;
     FlipTermAdapter flipTermAdapter;
     FirebaseFirestore database;
+
     String studySetID;
     CircleIndicator circleIndicator;
     FirebaseUser currentUser;
@@ -107,6 +110,8 @@ public class StudySetDetailActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             currentStudySet = task.getResult().toObject(StudySet.class);
+
+
                             studySetsRef.document(studySetID)
                                     .collection("terms")
                                     .get()
@@ -135,6 +140,9 @@ public class StudySetDetailActivity extends AppCompatActivity {
     }
 
     void bindingAction() {
+
+
+
         imvBack.setOnClickListener(view -> {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -222,12 +230,22 @@ public class StudySetDetailActivity extends AppCompatActivity {
         });
 
         imvSetting.setOnClickListener(view ->{
-            Intent intent = new Intent(this, StudySetSettingActivity.class);
-            intent.putExtra("studySetID", studySetID);
-            Bundle args = new Bundle();
-            args.putSerializable("terms", (Serializable) currentStudySet.getTerms());
-            intent.putExtra("bundle", args);
-            startActivity(intent);
+            Log.d("test", "bindingAction: " + currentStudySet.getUser().equals(currentUser.getEmail().toString()));
+            if(!currentStudySet.getUser().equals(currentUser.getEmail().toString())){
+                new SweetAlertDialog(StudySetDetailActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setContentText("You do not have permission to do this")
+                        .show();
+
+            }else {
+                Intent intent = new Intent(this, StudySetSettingActivity.class);
+                intent.putExtra("studySetID", studySetID);
+                Bundle args = new Bundle();
+                args.putSerializable("terms", (Serializable) currentStudySet.getTerms());
+                intent.putExtra("bundle", args);
+                startActivity(intent);
+            }
+
+
         });
 
     }
