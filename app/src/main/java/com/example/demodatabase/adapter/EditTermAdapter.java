@@ -81,12 +81,12 @@ public class EditTermAdapter extends RecyclerView.Adapter<EditTermAdapter.Create
         });
 
 
-        holder.addTerm.setOnClickListener(view -> {
-            listener.onAddingClick(terms.get(pos), pos);
-            Term newTerm = new Term("","");
-            terms.add(pos, newTerm);
-            notifyDataSetChanged();
-        });
+//        holder.addTerm.setOnClickListener(view -> {
+//            listener.onAddingClick(terms.get(pos), pos);
+//            Term newTerm = new Term("","");
+//            terms.add(pos, newTerm);
+//            notifyDataSetChanged();
+//        });
 
         holder.removeTerm.setOnClickListener(view ->{
 
@@ -112,7 +112,7 @@ public class EditTermAdapter extends RecyclerView.Adapter<EditTermAdapter.Create
             etTerm = itemView.findViewById(R.id.et_term);
             etDefinition = itemView.findViewById(R.id.et_definition);
             removeTerm = itemView.findViewById(R.id.imv_removeTerm);
-            addTerm = itemView.findViewById(R.id.imv_addTerm);
+//            addTerm = itemView.findViewById(R.id.imv_addTerm);
 
         }
         public void bind(Term term, EditTermClickedListener listener) {
