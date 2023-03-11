@@ -136,7 +136,8 @@ public class StudySetDetailActivity extends AppCompatActivity {
 
     void bindingAction() {
         imvBack.setOnClickListener(view -> {
-            onBackPressed();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
 
         imvFilerCardTerm.setOnClickListener(view -> {
