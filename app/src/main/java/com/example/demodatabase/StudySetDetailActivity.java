@@ -1,6 +1,8 @@
 package com.example.demodatabase;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.transition.Slide;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -28,12 +30,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
 
 public class StudySetDetailActivity extends AppCompatActivity {
-    CardView originalCard, alphaCard;
+    CardView originalCard, alphaCard, cardLearn;
     ConstraintLayout wrapper, clTapOut;
     RecyclerView rcCardTerm, optionSort;
     TextView tvStudySetName, tvDisplayName, numberOfTerms;
@@ -46,7 +50,6 @@ public class StudySetDetailActivity extends AppCompatActivity {
     CircleIndicator circleIndicator;
     FirebaseUser currentUser;
     ItemTermCardAdapter itemTermCardAdapter;
-
 
 
     void initUI() {
@@ -67,6 +70,7 @@ public class StudySetDetailActivity extends AppCompatActivity {
         oriTick = findViewById(R.id.originalTick);
         originalCard = findViewById(R.id.card_originalOrder);
         alphaCard = findViewById(R.id.card_alphaOrder);
+        cardLearn = findViewById(R.id.card_learn);
         // Option sort will be not visible when first load
         wrapper.setVisibility(View.INVISIBLE);
 
@@ -143,7 +147,7 @@ public class StudySetDetailActivity extends AppCompatActivity {
         });
         CollectionReference studySetsRef = database.collection("studySets");
 
-        originalCard.setOnClickListener(view ->{
+        originalCard.setOnClickListener(view -> {
             oriTick.setVisibility(View.VISIBLE);
             alphaTick.setVisibility(View.INVISIBLE);
             studySetsRef.document(studySetID)
@@ -204,6 +208,15 @@ public class StudySetDetailActivity extends AppCompatActivity {
                                     });
                         }
                     });
+        });
+
+        cardLearn.setOnClickListener(view -> {
+            Intent intent = new Intent(this, LearnStudySetActivity.class);
+            intent.putExtra("studySetID", studySetID);
+            Bundle args = new Bundle();
+            args.putSerializable("terms", (Serializable) currentStudySet.getTerms());
+            intent.putExtra("bundle", args);
+            startActivity(intent);
         });
 
     }
