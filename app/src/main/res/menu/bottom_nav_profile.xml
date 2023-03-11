@@ -4,12 +4,12 @@
 
     <item android:title="Sets"
         android:icon="@drawable/ic_baseline_view_list_24"
-
         android:id="@+id/profileSets"/>
     <item android:title="Classes"
+        android:icon="@drawable/ic_baseline_assignment_24"
         android:id="@+id/profileClass"/>
     <item android:title="Folders"
+        android:icon="@drawable/ic_baseline_folder_24"
         android:id="@+id/profileFolders"/>
-
 
 </menu>
