@@ -41,7 +41,7 @@ public class StudySetDetailActivity extends AppCompatActivity {
     ConstraintLayout wrapper, clTapOut;
     RecyclerView rcCardTerm, optionSort;
     TextView tvStudySetName, tvDisplayName, numberOfTerms;
-    ImageView imvBack, imvSetting, imvAccountImage, imvFilerCardTerm, alphaTick, oriTick;
+    ImageView imvBack, imvSetting, imvAccountImage, imvFilerCardTerm, alphaTick, oriTick, setting;
     ViewPager rcFlipTerm;
     StudySet currentStudySet;
     FlipTermAdapter flipTermAdapter;
@@ -52,10 +52,11 @@ public class StudySetDetailActivity extends AppCompatActivity {
     ItemTermCardAdapter itemTermCardAdapter;
 
 
+
     void initUI() {
         getSupportActionBar().hide();
         imvBack = findViewById(R.id.imv_back);
-        imvSetting = findViewById(R.id.img_setting);
+        imvSetting = findViewById(R.id.imv_setting);
         rcFlipTerm = findViewById(R.id.rv_flipTerms);
         circleIndicator = findViewById(R.id.ci_circleIndicator);
         tvStudySetName = findViewById(R.id.tv_studySetName);
@@ -212,6 +213,15 @@ public class StudySetDetailActivity extends AppCompatActivity {
 
         cardLearn.setOnClickListener(view -> {
             Intent intent = new Intent(this, LearnStudySetActivity.class);
+            intent.putExtra("studySetID", studySetID);
+            Bundle args = new Bundle();
+            args.putSerializable("terms", (Serializable) currentStudySet.getTerms());
+            intent.putExtra("bundle", args);
+            startActivity(intent);
+        });
+
+        imvSetting.setOnClickListener(view ->{
+            Intent intent = new Intent(this, StudySetSettingActivity.class);
             intent.putExtra("studySetID", studySetID);
             Bundle args = new Bundle();
             args.putSerializable("terms", (Serializable) currentStudySet.getTerms());
