@@ -1,42 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="250dp"
+    android:layout_width="300dp"
     android:layout_height="220dp"
    >
 
 
     <com.wajahatkarim3.easyflipview.EasyFlipView
-        android:background="#E1D7D7"
         android:id="@+id/easyFlip"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:flipDuration="400"
         app:flipEnabled="true"
         app:flipOnTouch="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:contentPadding="10dp"
+            >
             <TextView
                 android:focusable="true"
                 android:id="@+id/tv_frontTerm"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="110dp"
                 android:gravity="center"
                 android:text="front" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:contentPadding="10dp">
+
             <TextView
                 android:id="@+id/tv_backDefinition"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="110dp"
                 android:gravity="center"
                 android:text="back" />
         </androidx.cardview.widget.CardView>

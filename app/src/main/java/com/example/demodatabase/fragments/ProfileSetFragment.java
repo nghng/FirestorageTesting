@@ -1,6 +1,7 @@
 package com.example.demodatabase.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.demodatabase.R;
+import com.example.demodatabase.StudySetDetailActivity;
 import com.example.demodatabase.adapter.StudySetAdapter;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
+import com.example.demodatabase.model.Folder;
 import com.example.demodatabase.model.StudySet;
 import com.example.demodatabase.model.Term;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +41,7 @@ public class ProfileSetFragment extends Fragment {
     FirebaseFirestore database;
     ArrayList<StudySet> studySets = new ArrayList<>();
     ProgressDialog progressDialog;
+    String studySetID;
 
     public ProfileSetFragment(){
     }
@@ -61,6 +65,7 @@ public class ProfileSetFragment extends Fragment {
                         for (DocumentSnapshot d : task.getResult()
                         ) {
                             StudySet studySet = d.toObject(StudySet.class);
+                            studySet.setStudySetID(studySetID=d.getId());
                             studySets.add(studySet);
                             database.collection("studySets")
                                     .document(d.getId())
@@ -94,8 +99,11 @@ public class ProfileSetFragment extends Fragment {
         studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
             public void onItemClick(StudySet item, int pos) {
-
+                Intent intent = new Intent(getContext(), StudySetDetailActivity.class);
+                intent.putExtra("studySetID", item.getStudySetID());
+                startActivity(intent);;
             }
+
         });
 
         LinearLayoutManager layoutManager
@@ -118,4 +126,6 @@ public class ProfileSetFragment extends Fragment {
         return view;
 
     }
+
+
 }

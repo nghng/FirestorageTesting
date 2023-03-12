@@ -94,6 +94,7 @@ public class ProfileFragment extends Fragment {
         initData();
         bindingAction();
 
+
         return view;
     }
 

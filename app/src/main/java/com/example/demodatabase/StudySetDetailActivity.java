@@ -3,6 +3,7 @@ package com.example.demodatabase;
 import android.content.Intent;
 import android.os.Bundle;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -34,6 +35,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.relex.circleindicator.CircleIndicator;
 
 public class StudySetDetailActivity extends AppCompatActivity {
@@ -41,21 +43,23 @@ public class StudySetDetailActivity extends AppCompatActivity {
     ConstraintLayout wrapper, clTapOut;
     RecyclerView rcCardTerm, optionSort;
     TextView tvStudySetName, tvDisplayName, numberOfTerms;
-    ImageView imvBack, imvSetting, imvAccountImage, imvFilerCardTerm, alphaTick, oriTick;
+    ImageView imvBack, imvSetting, imvAccountImage, imvFilerCardTerm, alphaTick, oriTick, setting;
     ViewPager rcFlipTerm;
     StudySet currentStudySet;
     FlipTermAdapter flipTermAdapter;
     FirebaseFirestore database;
+
     String studySetID;
     CircleIndicator circleIndicator;
     FirebaseUser currentUser;
     ItemTermCardAdapter itemTermCardAdapter;
 
 
+
     void initUI() {
         getSupportActionBar().hide();
         imvBack = findViewById(R.id.imv_back);
-        imvSetting = findViewById(R.id.img_setting);
+        imvSetting = findViewById(R.id.imv_setting);
         rcFlipTerm = findViewById(R.id.rv_flipTerms);
         circleIndicator = findViewById(R.id.ci_circleIndicator);
         tvStudySetName = findViewById(R.id.tv_studySetName);
@@ -100,12 +104,14 @@ public class StudySetDetailActivity extends AppCompatActivity {
             studySetID = extras.getString("studySetID");
             database = FirebaseFirestore.getInstance();
             CollectionReference studySetsRef = database.collection("studySets");
-
+            System.out.println(studySetID);
             studySetsRef.document(studySetID)
                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             currentStudySet = task.getResult().toObject(StudySet.class);
+
+
                             studySetsRef.document(studySetID)
                                     .collection("terms")
                                     .get()
@@ -134,8 +140,12 @@ public class StudySetDetailActivity extends AppCompatActivity {
     }
 
     void bindingAction() {
+
+
+
         imvBack.setOnClickListener(view -> {
-            onBackPressed();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
 
         imvFilerCardTerm.setOnClickListener(view -> {
@@ -217,6 +227,25 @@ public class StudySetDetailActivity extends AppCompatActivity {
             args.putSerializable("terms", (Serializable) currentStudySet.getTerms());
             intent.putExtra("bundle", args);
             startActivity(intent);
+        });
+
+        imvSetting.setOnClickListener(view ->{
+            Log.d("test", "bindingAction: " + currentStudySet.getUser().equals(currentUser.getEmail().toString()));
+            if(!currentStudySet.getUser().equals(currentUser.getEmail().toString())){
+                new SweetAlertDialog(StudySetDetailActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setContentText("You do not have permission to do this")
+                        .show();
+
+            }else {
+                Intent intent = new Intent(this, StudySetSettingActivity.class);
+                intent.putExtra("studySetID", studySetID);
+                Bundle args = new Bundle();
+                args.putSerializable("terms", (Serializable) currentStudySet.getTerms());
+                intent.putExtra("bundle", args);
+                startActivity(intent);
+            }
+
+
         });
 
     }

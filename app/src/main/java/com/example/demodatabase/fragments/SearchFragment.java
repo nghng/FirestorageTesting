@@ -21,7 +21,9 @@ import android.widget.RelativeLayout;
 
 import com.example.demodatabase.R;
 import com.example.demodatabase.adapter.StudySetAdapter;
+import com.example.demodatabase.adapter.StudySetVerticalAdapter;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
+import com.example.demodatabase.model.Folder;
 import com.example.demodatabase.model.StudySet;
 import com.example.demodatabase.model.Term;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,7 +41,7 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
     RecyclerView recyclerView;
-    StudySetAdapter studySetAdapter;
+    StudySetVerticalAdapter studySetAdapter;
     FirebaseUser currentUser;
     FirebaseFirestore database;
     ArrayList<StudySet> studySets = new ArrayList<>();
@@ -125,11 +127,12 @@ public class SearchFragment extends Fragment {
     }
 
     void onDataLoaded() {
-        studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
+        studySetAdapter = new StudySetVerticalAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
             public void onItemClick(StudySet item, int pos) {
 
             }
+
         });
 
         LinearLayoutManager layoutManager
