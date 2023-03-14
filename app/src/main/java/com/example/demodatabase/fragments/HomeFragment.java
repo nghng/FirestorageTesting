@@ -77,14 +77,16 @@ public class HomeFragment extends Fragment {
                                                 terms.add(term);
                                             }
                                             studySet.setTerms(terms);
+                                            onDataLoaded();
+                                            progressDialog.dismiss();
+
+
 
                                         }
                                     });
 
                             Log.d("INFO", d.getData().toString());
                         }
-                        progressDialog.dismiss();
-                        onDataLoaded();
 
                     }
                 });

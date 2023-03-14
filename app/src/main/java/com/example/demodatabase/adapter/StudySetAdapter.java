@@ -191,7 +191,6 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
                 tvNumberOfTerms.setText(studySet.getTerms().size() + " terms");
             } else {
                 tvNumberOfTerms.setText("No terms created yet");
-
             }
 
         }
