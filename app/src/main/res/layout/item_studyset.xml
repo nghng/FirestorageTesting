@@ -15,18 +15,35 @@
         android:layout_marginBottom="20dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
-        app:contentPadding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
+            android:scaleType="fitXY"
+            android:src="@drawable/study_set_conner"
+            android:layout_marginStart="80dp"/>
+
+        <ImageView
+            android:layout_marginTop="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_view_list_24"
+            android:layout_marginStart="10dp"/>
+
         <TextView
             android:id="@+id/tv_studySetName"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Studyset name"
+            android:layout_marginStart="40dp"
+            android:text="Study-set name"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -34,7 +51,8 @@
             android:id="@+id/tv_numberOfTerms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="55dp"
             android:text="Number of terms"
             android:textSize="15sp"
 
@@ -44,14 +62,15 @@
             android:id="@+id/imv_accountImage"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginTop="100dp" />
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="90dp" />
 
         <TextView
             android:id="@+id/tv_accountName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="90dp"
             android:text="Account" />
 
 
