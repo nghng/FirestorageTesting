@@ -82,7 +82,9 @@ public class CreateStudySetActivity extends AppCompatActivity {
 
     void initData() {
         Bundle extras = getIntent().getExtras();
-        folderID= extras.getString("folderID");
+        if(extras != null){
+            folderID= extras.getString("folderID") ;
+        }
         // To input a description to a set is optional
         etDescription.setVisibility(View.GONE);
         tvDescription.setVisibility(View.GONE);

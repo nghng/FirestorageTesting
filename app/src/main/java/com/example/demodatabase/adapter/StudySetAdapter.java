@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.demodatabase.R;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
 import com.example.demodatabase.model.StudySet;
@@ -185,13 +186,13 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
             tvStudySetName.setText(studySet.getStudySetName());
             tvAccountName.setText(studySet.getDisplayName());
             Uri photoURL = Uri.parse(studySet.getImageUri());
-            Picasso.get().load(photoURL).into(imvAccountImage);
+            Glide.with(mContext).load(photoURL).error(R.drawable.default_user_image)
+                    .into(imvAccountImage);
 
             if (studySet.getTerms() != null) {
                 tvNumberOfTerms.setText(studySet.getTerms().size() + " terms");
             } else {
                 tvNumberOfTerms.setText("No terms created yet");
-
             }
 
         }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -117,18 +119,26 @@ public class SignUpActivity extends AppCompatActivity {
                                 userInFirestore.setPassword(strPassword);
                                 userInFirestore.setGoogleAccount(false);
                                 userInFirestore.setEmail(strEmail);
+                                userInFirestore.setCreatedDate(new Date());
 
-                                database.collection("users").document(strEmail).set(user);
-
-                                if (user != null) {
-                                    user.updateProfile(profileUpdates)
-                                            .addOnCompleteListener(task1 -> {
-                                                if (task1.isSuccessful()) {
-                                                    Intent intent = new Intent(SignUpActivity.this, CheckMailActivity.class);
-                                                    startActivity(intent);
+                                database.collection("users").document(strEmail).set(userInFirestore)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+                                                if (user != null) {
+                                                    user.updateProfile(profileUpdates)
+                                                            .addOnCompleteListener(task1 -> {
+                                                                if (task1.isSuccessful()) {
+                                                                    Intent intent = new Intent(SignUpActivity.this, CheckMailActivity.class);
+                                                                    startActivity(intent);
+                                                                }
+                                                            });
                                                 }
-                                            });
-                                }
+
+                                            }
+                                        });
+
+
                             }
                         });
 

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.demodatabase.metadata.Role;
 import com.example.demodatabase.model.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -34,6 +35,7 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
@@ -124,6 +126,25 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                             if (firebaseUser.isEmailVerified()) {
+                                database.collection("users")
+                                        .document(firebaseUser.getEmail())
+                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
+                                                User user = task.getResult().toObject(User.class);
+                                                if(user.getRole() == Role.ADMIN_ROLE){
+                                                    Intent intent = new Intent(LoginActivity.this, AdminHomeActivity.class);
+                                                    finishAffinity();
+                                                    startActivity(intent);
+                                                }else if(user.getRole() == Role.USER_ROLE){
+                                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                    finishAffinity();
+                                                    startActivity(intent);
+                                                }
+                                            }
+                                        });
+
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finishAffinity();
@@ -152,16 +173,25 @@ public class LoginActivity extends AppCompatActivity {
                                userFireStorage.setGoogleAccount(true);
                                userFireStorage.setDisplayName(currentUser.getEmail());
                                userFireStorage.setPassword("");
+                               userFireStorage.setCreatedDate(new Date());
                                database.collection("users").document(currentUser.getEmail()).set(userFireStorage);
+                           }else {
+                               User user = task.getResult().toObject(User.class);
+                               if(user.getRole() == Role.USER_ROLE){
+                                   Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                   finishAffinity();
+                                   startActivity(intent);
+                               }else if (user.getRole() == Role.ADMIN_ROLE){
+                                   Intent intent = new Intent(LoginActivity.this, AdminHomeActivity.class);
+                                   finishAffinity();
+                                   startActivity(intent);
+                               }
                            }
                        }
                    });
 
 
 
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            finishAffinity();
-            startActivity(intent);
         } else {
             FancyToast.makeText(this, "Can't sign in", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
         }
