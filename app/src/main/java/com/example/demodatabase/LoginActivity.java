@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                                             public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
                                                 User user = task.getResult().toObject(User.class);
                                                 if(user.getRole() == Role.ADMIN_ROLE){
-                                                    Intent intent = new Intent(LoginActivity.this, AdminHomeActivity.class);
+                                                    Intent intent = new Intent(LoginActivity.this, HomeForAdminActivity.class);
                                                     finishAffinity();
                                                     startActivity(intent);
                                                 }else if(user.getRole() == Role.USER_ROLE){
@@ -145,9 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                                         });
 
 
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finishAffinity();
+
                             } else {
                                 FancyToast.makeText(getApplicationContext(), "Your account has not been verified !", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                             }
@@ -182,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
                                    finishAffinity();
                                    startActivity(intent);
                                }else if (user.getRole() == Role.ADMIN_ROLE){
-                                   Intent intent = new Intent(LoginActivity.this, AdminHomeActivity.class);
+                                   Intent intent = new Intent(LoginActivity.this, HomeForAdminActivity.class);
                                    finishAffinity();
                                    startActivity(intent);
                                }
