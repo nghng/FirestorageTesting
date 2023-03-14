@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_baseline_settings_24"
+            android:src="@mipmap/ic_baseline_settings_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,19 +32,20 @@
             android:id="@+id/bottomNavProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:itemTextColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.79"
-            app:menu="@menu/bottom_nav_profile" />
+            app:menu="@menu/bottom_nav_profile"
+            app:itemIconTint="@null"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_profileImage"
-            android:layout_width="92dp"
-            android:layout_height="84dp"
-            android:layout_marginTop="44dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,6 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Demo"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +71,6 @@
         android:id="@+id/switchMenuProfile"
         android:layout_width="413dp"
         android:layout_height="331dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iconAndSetting"
