@@ -46,6 +46,17 @@ public class AdminHomeActivity extends AppCompatActivity {
         int monthIndex = Integer.parseInt(parts[1]) - 1;
         return year * 12 + monthIndex;
     }
+    String intToMonth(int monthNumber){
+        String[] monthNames = {"January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"};
+        if (monthNumber >= 0 && monthNumber < monthNames.length) {
+            String monthName = monthNames[monthNumber];
+            return monthName;
+        } else {
+            return "Invalid";
+        }
+
+    }
 
     void onDataLoaded() {
         ArrayList<BarEntry> entries = new ArrayList<>();
@@ -69,7 +80,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         ArrayList<String> labels = new ArrayList<>();
         for (String key : countByMonth.keySet()) {
             int count = countByMonth.get(key);
-            labels.add(key + "month");
+            labels.add(intToMonth(Integer.parseInt(key)));
             entries.add(new BarEntry(Float.parseFloat(key), count));
         }
 
