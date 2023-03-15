@@ -1,5 +1,6 @@
 package com.example.demodatabase.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,9 @@ import com.example.demodatabase.R;
 import com.example.demodatabase.StudySetDetailActivity;
 import com.example.demodatabase.adapter.StudySetAdapter;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
+import com.example.demodatabase.model.Learn;
 import com.example.demodatabase.model.StudySet;
+import com.example.demodatabase.model.Term;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +37,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class SearchOwnStudySetFragment extends Fragment {
@@ -45,8 +55,10 @@ public class SearchOwnStudySetFragment extends Fragment {
     ArrayList<StudySet> studySets = new ArrayList<>();
     RecyclerView rcStudySets;
     StudySetAdapter studySetAdapter;
+    ProgressDialog progressDialog;
+    LinkedHashMap<String, StudySet> studySetHashMap = new LinkedHashMap<>();
 
-    void initUI(View view){
+    void initUI(View view) {
         btnBack = view.findViewById(R.id.btn_back);
         btnAddSet = view.findViewById(R.id.btn_addSet);
         btnSearchAll = view.findViewById(R.id.btn_searchAll);
@@ -56,19 +68,28 @@ public class SearchOwnStudySetFragment extends Fragment {
         database = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         rcStudySets = view.findViewById(R.id.rv_studySets);
-    }
-
-    void initData(){
+        progressDialog = new ProgressDialog(getContext());
 
     }
 
-    void onDataLoaded(){
+    void initData() {
+
+    }
+
+
+    void onDataLoaded() {
+        studySets.clear();
+        for (String s : studySetHashMap.keySet()
+        ) {
+            studySets.add(studySetHashMap.get(s));
+        }
         studySetAdapter = new StudySetAdapter(studySets, getContext(), new OnItemClickedListener() {
             @Override
             public void onItemClick(StudySet item, int pos) {
                 Intent intent = new Intent(getContext(), StudySetDetailActivity.class);
                 intent.putExtra("studySetID", item.getStudySetID());
-                startActivity(intent);;
+                startActivity(intent);
+                ;
             }
         });
 
@@ -76,26 +97,200 @@ public class SearchOwnStudySetFragment extends Fragment {
         rcStudySets.setAdapter(studySetAdapter);
     }
 
-    void getAllData(){
-        studySets.clear();
+    void getAllData() {
+        studySetHashMap.clear();
+        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
         database.collection("studySets")
-                .whereEqualTo("user" , currentUser.getEmail())
+                .whereEqualTo("user", currentUser.getEmail())
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot d : task.getResult()
-                             ) {
-                                StudySet studySet = d.toObject(StudySet.class);
-                                studySet.setStudySetID(d.getId());
-                                studySets.add(studySet);
+                        ) {
+                            StudySet studySet = d.toObject(StudySet.class);
+                            studySet.setStudySetID(d.getId());
+                            studySetHashMap.put(d.getId(), studySet);
+                            database.collection("studySets")
+                                    .document(d.getId())
+                                    .collection("terms")
+                                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            ArrayList<Term> terms = new ArrayList<>();
+                                            for (DocumentSnapshot d : task.getResult()
+                                            ) {
+                                                Term term = d.toObject(Term.class);
+                                                terms.add(term);
+                                            }
+                                            studySet.setTerms(terms);
+                                            pDialog.cancel();
+
+                                        }
+                                    });
+                        }
+                        database.collection("learn")
+                                .whereEqualTo("userEmail", currentUser.getEmail())
+                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        for (DocumentSnapshot d : task.getResult()
+                                        ) {
+                                            Learn learn = d.toObject(Learn.class);
+                                            if (!studySetHashMap.containsKey(learn.getStudySetID())) {
+                                                database.collection("studySets")
+                                                        .document(learn.getStudySetID())
+                                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                StudySet studySet = task.getResult().toObject(StudySet.class);
+                                                                studySet.setStudySetID(task.getResult().getId());
+                                                                database.collection("studySets")
+                                                                        .document(task.getResult().getId())
+                                                                        .collection("terms")
+                                                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                                ArrayList<Term> terms = new ArrayList<>();
+                                                                                for (DocumentSnapshot d : task.getResult()
+                                                                                ) {
+                                                                                    Term term = d.toObject(Term.class);
+                                                                                    terms.add(term);
+                                                                                }
+                                                                                studySet.setTerms(terms);
+
+                                                                                pDialog.cancel();
+
+
+                                                                            }
+                                                                        });
+
+                                                            }
+                                                        });
+                                            }
+                                        }
+                                    }
+                                });
+                        onDataLoaded();
+                    }
+                });
+
+
+    }
+
+    void getStudiedSets() {
+        studySetHashMap.clear();
+        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
+        pDialog.show();
+        database.collection("learn")
+                .whereEqualTo("userEmail", currentUser.getEmail())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot d : task.getResult()
+                        ) {
+                            Learn learn = d.toObject(Learn.class);
+                            if (!studySetHashMap.containsKey(learn.getStudySetID())) {
+                                database.collection("studySets")
+                                        .document(learn.getStudySetID())
+                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                StudySet studySet = task.getResult().toObject(StudySet.class);
+                                                studySet.setStudySetID(task.getResult().getId());
+                                                database.collection("studySets")
+                                                        .document(d.getId())
+                                                        .collection("terms")
+                                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                if (task.getResult().isEmpty()) {
+                                                                    return;
+                                                                }
+                                                                ArrayList<Term> terms = new ArrayList<>();
+                                                                for (DocumentSnapshot d : task.getResult()
+                                                                ) {
+                                                                    Term term = d.toObject(Term.class);
+                                                                    terms.add(term);
+                                                                }
+                                                                studySet.setTerms(terms);
+                                                                pDialog.cancel();
+                                                                studySetHashMap.put(learn.getStudySetID(), studySet);
+                                                                onDataLoaded();
+
+                                                            }
+                                                        });
+                                            }
+                                        });
+                            }
+                        }
+                        pDialog.cancel();
+                    }
+                });
+
+
+    }
+
+    void getCreatedStudySets() {
+        studySetHashMap.clear();
+        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+        database.collection("studySets")
+                .whereEqualTo("user", currentUser.getEmail())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot d : task.getResult()
+                        ) {
+                            StudySet studySet = d.toObject(StudySet.class);
+                            studySet.setStudySetID(d.getId());
+                            studySetHashMap.put(d.getId(), studySet);
+                            database.collection("studySets")
+                                    .document(d.getId())
+                                    .collection("terms")
+                                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.getResult().isEmpty()) {
+                                                return;
+                                            }
+                                            ArrayList<Term> terms = new ArrayList<>();
+                                            for (DocumentSnapshot d : task.getResult()
+                                            ) {
+                                                Term term = d.toObject(Term.class);
+                                                terms.add(term);
+                                            }
+                                            studySet.setTerms(terms);
+                                            pDialog.cancel();
+
+                                        }
+                                    });
                         }
                         onDataLoaded();
                     }
                 });
     }
 
-    void bindingAction(){
+    void bindingAction() {
+        etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
 
+                }
+            }
+        });
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -109,6 +304,67 @@ public class SearchOwnStudySetFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                studySetHashMap.clear();
+                database.collection("studySets")
+                        .whereEqualTo("user", currentUser.getEmail())
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                for (DocumentSnapshot d : task.getResult()
+                                ) {
+                                    StudySet studySet = d.toObject(StudySet.class);
+                                    if (studySet.getStudySetName().contains(s.toString())) {
+                                        studySetHashMap.put(d.getId(), studySet);
+                                        database.collection("studySets")
+                                                .document(d.getId())
+                                                .collection("terms")
+                                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if (task.getResult().isEmpty()) {
+                                                            return;
+                                                        }
+                                                        ArrayList<Term> terms = new ArrayList<>();
+                                                        for (DocumentSnapshot d : task.getResult()
+                                                        ) {
+                                                            Term term = d.toObject(Term.class);
+                                                            terms.add(term);
+                                                        }
+                                                        studySet.setTerms(terms);
+                                                    }
+                                                });
+                                    }
+                                }
+                            }
+                        });
+                database.collection("learn")
+                        .whereEqualTo("userEmail", currentUser.getEmail())
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                for (DocumentSnapshot d : task.getResult()
+                                ) {
+                                    Learn learn = d.toObject(Learn.class);
+                                    if (!studySetHashMap.containsKey(learn.getStudySetID())) {
+                                        database.collection("studySets")
+                                                .document(learn.getStudySetID())
+                                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (!task.getResult().exists()) {
+                                                            return;
+                                                        }
+                                                        StudySet studySet = task.getResult().toObject(StudySet.class);
+                                                        if (studySet.getStudySetName().contains(s.toString())) {
+                                                            studySetHashMap.put(learn.getStudySetID(), task.getResult().toObject(StudySet.class));
+                                                        }
+                                                    }
+                                                });
+                                    }
+                                }
+                                onDataLoaded();
+                            }
+                        });
 
             }
         });
@@ -126,6 +382,7 @@ public class SearchOwnStudySetFragment extends Fragment {
             btnSearchStudied.setBackgroundColor(Color.BLACK);
             btnSearchAll.setBackgroundColor(Color.parseColor("#38B6FF"));
             btnSearchCreated.setBackgroundColor(Color.parseColor("#38B6FF"));
+            getStudiedSets();
         });
 
         btnSearchCreated.setOnClickListener(v -> {
@@ -133,13 +390,15 @@ public class SearchOwnStudySetFragment extends Fragment {
             btnSearchCreated.setBackgroundColor(Color.BLACK);
             btnSearchAll.setBackgroundColor(Color.parseColor("#38B6FF"));
             btnSearchStudied.setBackgroundColor(Color.parseColor("#38B6FF"));
+            getCreatedStudySets();
+
         });
 
-        btnBack.setOnClickListener(view ->{
-            ((MainActivity)getActivity()).replaceFragment(new HomeFragment());
+        btnBack.setOnClickListener(view -> {
+            ((MainActivity) getActivity()).replaceFragment(new HomeFragment());
         });
 
-        btnAddSet.setOnClickListener(view ->{
+        btnAddSet.setOnClickListener(view -> {
             startActivity(new Intent(getContext(), CreateStudySetActivity.class));
         });
 
@@ -149,7 +408,6 @@ public class SearchOwnStudySetFragment extends Fragment {
     public SearchOwnStudySetFragment() {
         // Required empty public constructor
     }
-
 
 
     @Override

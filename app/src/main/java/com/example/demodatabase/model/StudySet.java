@@ -18,13 +18,16 @@ public class StudySet {
     private String displayName;
     private String imageUri;
     private ArrayList<Term> terms;
-//    private String folder;
+    private boolean isSelected=false;
 
-//    @Exclude
-//    public String getFolder(){return folder; }
-//
-//    public void setFolder(String folder){this.folder=folder;}
+    @Exclude
+    public boolean isSelected() {
+        return isSelected;
+    }
 
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
     @Exclude
     public String getStudySetID() {
         return studySetID;

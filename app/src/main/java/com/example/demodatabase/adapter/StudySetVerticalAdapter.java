@@ -1,6 +1,7 @@
 package com.example.demodatabase.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demodatabase.R;
@@ -58,12 +60,27 @@ public class StudySetVerticalAdapter extends RecyclerView.Adapter<StudySetVertic
     @Override
     public void onBindViewHolder(@NonNull StudySetViewHolder holder, int position) {
         holder.bind(studySets.get(position), onItemClickedListener);
+        Drawable bg=holder.cardView.getBackground();;
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!studySets.get(holder.getAdapterPosition()).isSelected()){
+
+                    holder.cardView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.my_border));
+                }
+                else{
+                    holder.cardView.setBackground(bg);
+                }
                 onItemClickedListener.onItemClick(studySets.get(holder.getAdapterPosition()), holder.getAdapterPosition());
             }
         });
+//        holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                holder.cardView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.my_border));
+//                return false;
+//            }
+//        });
         if (position < studySets.size())
             holder.bind(studySets.get(position), onItemClickedListener);
 
@@ -193,6 +210,7 @@ public class StudySetVerticalAdapter extends RecyclerView.Adapter<StudySetVertic
                 tvNumberOfTerms.setText("No terms created yet");
 
             }
+
 
         }
     }
