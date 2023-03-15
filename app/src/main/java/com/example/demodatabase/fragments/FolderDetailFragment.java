@@ -94,53 +94,42 @@ public class FolderDetailFragment extends Fragment {
             System.out.println(folderID);
             database = FirebaseFirestore.getInstance();
             CollectionReference folderRef = database.collection("folders");
-
             folderRef.document(folderID)
                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             currentFolder = task.getResult().toObject(Folder.class);
-
                             folderRef.document(folderID)
                                     .collection("studySets")
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            ArrayList<StudySet> studySets = new ArrayList<>();
-
                                             for (DocumentSnapshot d : task.getResult()
                                             ) {
+
                                                 StudySet set = d.toObject(StudySet.class);
                                                 ArrayList<Term> terms = new ArrayList<>();
                                                 set.setStudySetID(d.getId());
                                                 database.collection("studySets")
-                                                                .document(d.getId())
-                                                                        .collection("terms")
-                                                                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        .document(d.getId())
+                                                        .collection("terms")
+                                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                for (DocumentSnapshot d: task.getResult().getDocuments()
-                                                                     ) {
+                                                                for (DocumentSnapshot d : task.getResult().getDocuments()
+                                                                ) {
                                                                     Term t = d.toObject(Term.class);
                                                                     terms.add(t);
                                                                 }
                                                                 set.setTerms(terms);
                                                                 studySets.add(set);
-
+                                                                onDataLoaded();
                                                             }
-
                                                         });
-
-
-
                                             }
-                                            currentFolder.setStudysets(studySets);
-                                            numberOfSets = currentFolder.getStudysets().size();
                                             // load data to UI
-                                            onDataLoaded();
                                         }
-
                                     });
                         }
                     });
@@ -151,6 +140,9 @@ public class FolderDetailFragment extends Fragment {
 
 
     void onDataLoaded() {
+        currentFolder.setStudysets(studySets);
+        numberOfSets = currentFolder.getStudysets().size();
+
         tv_numberOfSets.setText(numberOfSets + (numberOfSets <= 1 ? " set" : " sets"));
         tv_displayName.setText(currentUser.getDisplayName());
         tv_folderName.setText(currentFolder.getFolderName());
