@@ -3,6 +3,8 @@ package com.example.demodatabase.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +98,6 @@ public class ItemUserManageAdapter extends RecyclerView.Adapter<ItemUserManageAd
         }else {
             // set color background for admin
             holder.spinner.setVisibility(View.INVISIBLE);
-            holder.card.setBackgroundColor(Color.GREEN);
         }
 
 
@@ -110,7 +111,7 @@ public class ItemUserManageAdapter extends RecyclerView.Adapter<ItemUserManageAd
     }
 
     public class ItemUserManageViewHolder extends RecyclerView.ViewHolder {
-        TextView tvEmail, tvCreatedDate, tvRole;
+        TextView tvEmail, tvCreatedDate, tvRole,tvRoleContent;
         Spinner spinner;
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         CardView card;
@@ -122,15 +123,18 @@ public class ItemUserManageAdapter extends RecyclerView.Adapter<ItemUserManageAd
             tvCreatedDate = itemView.findViewById(R.id.tv_createdDate);
             spinner = itemView.findViewById(R.id.spinner);
             card = itemView.findViewById(R.id.card);
+            tvRoleContent = itemView.findViewById(R.id.tvRoleContent);
         }
 
         void bind(User user) {
             tvEmail.setText(user.getEmail());
             tvCreatedDate.setText("Created date: " + dateFormat.format(user.getCreatedDate()));
             if (user.getRole() == Role.ADMIN_ROLE) {
-                tvRole.setText("Role: Admin");
+                tvRoleContent.setText("Admin");
+                tvRoleContent.setBackgroundResource(R.drawable.rounded_tv);
             } else if (user.getRole() == Role.USER_ROLE) {
-                tvRole.setText("Role: User");
+                tvRoleContent.setText("User");
+                tvRoleContent.setBackgroundResource(R.drawable.rounded_tv_user);
             }
 
         }
