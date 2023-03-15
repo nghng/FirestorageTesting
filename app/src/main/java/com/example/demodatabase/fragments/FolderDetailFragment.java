@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.demodatabase.AddSetToFolderActivity;
 import com.example.demodatabase.CreateStudySetActivity;
 import com.example.demodatabase.R;
 import com.example.demodatabase.StudySetDetailActivity;
@@ -107,11 +108,32 @@ public class FolderDetailFragment extends Fragment {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             ArrayList<StudySet> studySets = new ArrayList<>();
+
                                             for (DocumentSnapshot d : task.getResult()
                                             ) {
                                                 StudySet set = d.toObject(StudySet.class);
-                                                studySets.add(set);
+                                                ArrayList<Term> terms = new ArrayList<>();
                                                 set.setStudySetID(d.getId());
+                                                database.collection("studySets")
+                                                                .document(d.getId())
+                                                                        .collection("terms")
+                                                                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                for (DocumentSnapshot d: task.getResult().getDocuments()
+                                                                     ) {
+                                                                    Term t = d.toObject(Term.class);
+                                                                    terms.add(t);
+                                                                }
+                                                                set.setTerms(terms);
+                                                                studySets.add(set);
+
+                                                            }
+
+                                                        });
+
+
+
                                             }
                                             currentFolder.setStudysets(studySets);
                                             numberOfSets = currentFolder.getStudysets().size();
@@ -133,7 +155,7 @@ public class FolderDetailFragment extends Fragment {
         tv_displayName.setText(currentUser.getDisplayName());
         tv_folderName.setText(currentFolder.getFolderName());
         tv_folderDescription.setText(currentFolder.getFolderDescription());
-        Glide.with(getActivity()).load(currentUser.getPhotoUrl()).error(R.drawable.default_user_image)
+        Glide.with(getContext()).load(currentUser.getPhotoUrl()).error(R.drawable.default_user_image)
                 .into(img_AccountImage);
         if (numberOfSets == 0) {
             rv_studySets.setVisibility(View.INVISIBLE);
@@ -162,7 +184,11 @@ public class FolderDetailFragment extends Fragment {
         btn_addset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CreateStudySetActivity.class);
+//                Intent intent = new Intent(getActivity(), CreateStudySetActivity.class);
+//                intent.putExtra("folderID", folderID);
+//                startActivity(intent);
+
+                Intent intent = new Intent(getActivity(), AddSetToFolderActivity.class);
                 intent.putExtra("folderID", folderID);
                 startActivity(intent);
             }

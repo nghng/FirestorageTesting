@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateStudySetActivity">
+    tools:context=".AddSetToFolderActivity">
 
     <RelativeLayout
         android:id="@+id/rl_header"
@@ -60,7 +60,7 @@
 
     </RelativeLayout>
     <FrameLayout
-        android:id="@+id/a123dsg"
+        android:id="@+id/create_folder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -115,10 +115,13 @@ public class FolderDetailActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 Toast.makeText(FolderDetailActivity.this, "Deleted Successfully", Toast.LENGTH_LONG).show();
-
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.putExtra("markedTab", "1");
+                                startActivity(intent);
                             }
                         });
                         dialog.dismiss();
+
                     }
                 });
 
@@ -142,6 +145,7 @@ public class FolderDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 System.out.println("click cancel");
                 slideDown(activityFolderDetailKebabMenuBinding.kebabMenu);
+
             }
         });
 
@@ -154,6 +158,8 @@ public class FolderDetailActivity extends AppCompatActivity {
                 editFolder(v);
             }
         });
+
+
 
         img_back.setOnClickListener(view -> {
             onBackPressed();
@@ -282,14 +288,10 @@ public class FolderDetailActivity extends AppCompatActivity {
                         isUpdated = true;
                     }
                 });
-//                Fragment currentFragment = getFragmentManager().findFragmentByTag()
-//
-//                if (currentFragment instanceof "NAME OF YOUR FRAGMENT CLASS") {
-//                    FragmentTransaction fragTransaction =   (getActivity()).getFragmentManager().beginTransaction();
-//                    fragTransaction.detach(currentFragment);
-//                    fragTransaction.attach(currentFragment);
-//                    fragTransaction.commit();
-//                }
+
+                Intent intent = new Intent(getApplicationContext(), FolderDetailActivity.class);
+                intent.putExtra("folderID", folderID);
+                startActivity(intent);
             }
         });
 

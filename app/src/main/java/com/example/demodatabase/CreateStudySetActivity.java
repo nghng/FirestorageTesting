@@ -215,8 +215,12 @@ public class CreateStudySetActivity extends AppCompatActivity {
                     ) {
                         task.getResult().collection("terms").add(t);
                     }
+
+
                     if(folderID!=null){
-                        database.collection("folders").document(folderID).collection("studySets").add(studySet);
+                        database.collection("folders").document(folderID).collection("studySets").
+                                document(task.getResult().getId()).set(studySet);
+
                         Intent intent = new Intent(CreateStudySetActivity.this, FolderDetailActivity.class);
                         intent.putExtra("folderID", folderID);
                         startActivity(intent);
