@@ -18,6 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
+            android:textStyle="bold"
+            android:textSize="20dp"
             android:layout_gravity="center"
             />
 
@@ -30,13 +32,24 @@
         android:layout_height="60dp"
 
         >
-
+        <ImageView
+            android:id="@+id/icon_delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/delete"
+            app:tint="@color/red"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
+            />
         <TextView
-            android:layout_margin="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Delete"
-            android:layout_gravity="left"
+            android:gravity="center"
+            android:layout_marginLeft="80dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
             />
 
     </androidx.cardview.widget.CardView>
@@ -46,17 +59,29 @@
         android:layout_margin="20dp"
         app:layout_constraintBottom_toTopOf="@id/card_deleteSet"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="80dp"
 
         >
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/edit"
+            app:tint="@color/primary_1"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
+            />
+
         <TextView
-            android:layout_margin="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="80dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
             android:text="Edit"
-            android:layout_gravity="left"
-            />
+            android:layout_gravity="center_vertical"/>
 
     </androidx.cardview.widget.CardView>
 

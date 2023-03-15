@@ -13,54 +13,94 @@
 
         >
 
-        <ImageView
-
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imv_accountImage"
-            android:layout_marginTop="100dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_width="150dp"
-            android:layout_height="150dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_email"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/imv_accountImage"
-            android:text="Email: "
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="200dp"
+            android:text="Email"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_email_admin"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_shape"
+            android:paddingStart="15dp"
+            android:textSize="20dp"
+            android:gravity="center_vertical"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/tv_email"
+            app:layout_constraintTop_toBottomOf="@+id/tv_email"/>
 
         <TextView
             android:layout_marginTop="20dp"
             android:id="@+id/tv_displayName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_email"
+            android:text="Display Name"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:text="Display name: "
+            app:layout_constraintStart_toStartOf="@id/tv_email_admin"
+            app:layout_constraintTop_toBottomOf="@id/tv_email_admin"
+            />
+        <TextView
+            android:id="@id/tv_displayName_admin"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edit_text_shape"
+            android:paddingStart="15dp"
+            android:textSize="20dp"
+            android:gravity="center_vertical"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@id/tv_displayName"
+            app:layout_constraintTop_toBottomOf="@+id/tv_displayName"
             />
 
         <Button
             android:id="@+id/btn_changePassword"
-            app:layout_constraintTop_toBottomOf="@+id/tv_displayName"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:text="Change Password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_displayName_admin"
+            android:layout_width="250dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="52dp"
+            android:background="@drawable/rounded_button"
+            android:text="Change password"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            />
         <Button
             android:id="@+id/btn_logout"
-            app:layout_constraintTop_toBottomOf="@+id/btn_changePassword"
-            android:layout_marginLeft="30dp"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="104dp"
+            android:layout_marginTop="596dp"
+            android:background="@drawable/logout_button"
+            android:drawableLeft="@drawable/logout_icon"
             android:text="Log out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColor="#FF0000"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
