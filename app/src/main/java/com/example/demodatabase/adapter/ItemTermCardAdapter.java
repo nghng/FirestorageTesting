@@ -1,9 +1,15 @@
 package com.example.demodatabase.adapter;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,6 +40,13 @@ public class ItemTermCardAdapter extends RecyclerView.Adapter<ItemTermCardAdapte
     @Override
     public void onBindViewHolder(@NonNull ItemTermCardViewHolder holder, int position) {
         holder.bind(terms.get(position));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopup(view, terms.get(holder.getAdapterPosition()).getTerm(),terms.get(holder.getAdapterPosition()).getDefinition());
+            }
+        });
     }
 
     @Override
@@ -42,9 +55,10 @@ public class ItemTermCardAdapter extends RecyclerView.Adapter<ItemTermCardAdapte
     }
 
 
-    public class ItemTermCardViewHolder extends RecyclerView.ViewHolder{
+    public class ItemTermCardViewHolder extends RecyclerView.ViewHolder {
         TextView termInCard, definitionInCard;
         CardView cardTerm;
+
         public ItemTermCardViewHolder(@NonNull View itemView) {
             super(itemView);
             termInCard = itemView.findViewById(R.id.tv_termInCard);
@@ -52,9 +66,39 @@ public class ItemTermCardAdapter extends RecyclerView.Adapter<ItemTermCardAdapte
             cardTerm = itemView.findViewById(R.id.card_term);
         }
 
-        void bind(Term term){
+        void bind(Term term) {
             termInCard.setText(term.getTerm());
             definitionInCard.setText(term.getDefinition());
         }
+
+    }
+
+    public void showPopup(View view, String term, String definition) {
+        TextView popup_card_term, popup_card_definition;
+
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_card_term, null);
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.MATCH_PARENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        popup_card_term = popupView.findViewById(R.id.textView_popup_term);
+        popup_card_definition = popupView.findViewById(R.id.textView_popup_definition);
+
+        popup_card_term.setText(term);
+        popup_card_definition.setText(definition);
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        // dismiss the popup window when touched
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                popupWindow.dismiss();
+                return true;
+            }
+        });
     }
 }
