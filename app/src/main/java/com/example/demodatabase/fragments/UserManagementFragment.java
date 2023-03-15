@@ -1,5 +1,6 @@
 package com.example.demodatabase.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -185,6 +186,12 @@ public class UserManagementFragment extends Fragment {
 
     void initData() {
         users.clear();
+        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -195,6 +202,7 @@ public class UserManagementFragment extends Fragment {
                     users.add(u);
                 }
                 onDataLoaded();
+                pDialog.cancel();
             }
         });
 
@@ -221,6 +229,11 @@ public class UserManagementFragment extends Fragment {
                     isSearch = true;
                     initData();
                 }
+                SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                pDialog.setTitleText("Loading");
+                pDialog.setCancelable(false);
+                pDialog.show();
                 database.collection("users")
                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -236,6 +249,7 @@ public class UserManagementFragment extends Fragment {
                                         users.add(u);
                                     }
                                 }
+                                pDialog.cancel();
                                 onDataLoadedForQuery();
 
                             }

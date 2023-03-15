@@ -215,21 +215,27 @@ public class CreateStudySetActivity extends AppCompatActivity {
                     ) {
                         task.getResult().collection("terms").add(t);
                     }
-                    if(folderID!=null){
-                        database.collection("folders").document(folderID).collection("studySets").add(studySet);
-                        Intent intent = new Intent(CreateStudySetActivity.this, FolderDetailActivity.class);
-                        intent.putExtra("folderID", folderID);
-                        startActivity(intent);
-                    }
+
+
                     new SweetAlertDialog(CreateStudySetActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("Good job!")
                             .setContentText("Created successfully")
                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
                                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                    Intent intent = new Intent(CreateStudySetActivity.this, StudySetDetailActivity.class);
-                                    intent.putExtra("studySetID", task.getResult().getId());
-                                    startActivity(intent);
+                                    if(folderID!=null){
+                                        database.collection("folders").document(folderID).collection("studySets").
+                                                document(task.getResult().getId()).set(studySet);
+
+                                        Intent intent = new Intent(CreateStudySetActivity.this, FolderDetailActivity.class);
+                                        intent.putExtra("folderID", folderID);
+                                        startActivity(intent);
+                                    }else {
+                                        Intent intent = new Intent(CreateStudySetActivity.this, StudySetDetailActivity.class);
+                                        intent.putExtra("studySetID", task.getResult().getId());
+                                        startActivity(intent);
+                                    }
+
                                 }
                             })
                             .show();

@@ -134,6 +134,13 @@ public class LoginActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
                                                 User user = task.getResult().toObject(User.class);
+                                                if (user.getBan()){
+                                                    new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                                            .setTitleText("Banning notification")
+                                                            .setContentText("You have been banned from the system, please contact our admin through: toiyeutaixiuvobeben@gmail.com")
+                                                            .show();
+                                                    return;
+                                                }
                                                 if(user.getRole() == Role.ADMIN_ROLE){
                                                     Intent intent = new Intent(LoginActivity.this, HomeForAdminActivity.class);
                                                     finishAffinity();

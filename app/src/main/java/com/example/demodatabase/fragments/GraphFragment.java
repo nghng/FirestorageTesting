@@ -43,9 +43,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 
 public class GraphFragment extends Fragment {
-    HorizontalBarChart barChart,studySetsBarChart;
+    HorizontalBarChart barChart, studySetsBarChart;
 
     FirebaseFirestore database;
     ArrayList<User> users = new ArrayList<>();
@@ -55,6 +57,7 @@ public class GraphFragment extends Fragment {
     TextView title;
     Spinner spinner;
     private static final String[] paths = {"Study Set", "Users"};
+
 
     void initUI(View view) {
         barChart = view.findViewById(R.id.barChart);
@@ -80,8 +83,6 @@ public class GraphFragment extends Fragment {
                         studySetsBarChart.setVisibility(View.INVISIBLE);
                         barChart.setVisibility(View.VISIBLE);
                         break;
-
-
 
 
                 }
@@ -215,7 +216,7 @@ public class GraphFragment extends Fragment {
 
     }
 
-    void onDataLoadedForStudySets(){
+    void onDataLoadedForStudySets() {
         ArrayList<BarEntry> entries = new ArrayList<>();
         LinkedHashMap<String, Integer> countByMonth = new LinkedHashMap<>();
         countByMonth.put("0", 0);
@@ -312,7 +313,7 @@ public class GraphFragment extends Fragment {
         studySetsBarChart.getLegend().setEnabled(false);
     }
 
-    void initDataForStudySets(Date date){
+    void initDataForStudySets(Date date) {
         studySets.clear();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -322,6 +323,7 @@ public class GraphFragment extends Fragment {
         String endDateStr = cal.get(Calendar.YEAR) + "-12-31";
         Date startDate = parseDate(startDateStr);
         Date endDate = parseDate(endDateStr);
+
         database.collection("studySets")
                 .whereGreaterThanOrEqualTo("date", startDate)
                 .whereLessThanOrEqualTo("date", endDate)
@@ -342,7 +344,6 @@ public class GraphFragment extends Fragment {
     }
 
 
-
     void initData(Date date) {
         users.clear();
         database = FirebaseFirestore.getInstance();
@@ -354,6 +355,7 @@ public class GraphFragment extends Fragment {
         String endDateStr = cal.get(Calendar.YEAR) + "-12-31";
         Date startDate = parseDate(startDateStr);
         Date endDate = parseDate(endDateStr);
+
         database.collection("users")
                 .whereGreaterThanOrEqualTo("createdDate", startDate)
                 .whereLessThanOrEqualTo("createdDate", endDate)
@@ -372,7 +374,6 @@ public class GraphFragment extends Fragment {
                 });
 
 
-
     }
 
     boolean checkEmpty(EditText view) {
@@ -384,7 +385,6 @@ public class GraphFragment extends Fragment {
     }
 
     void bindingAction() {
-
 
 
         etYear.addTextChangedListener(new TextWatcher() {
@@ -401,16 +401,15 @@ public class GraphFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (checkEmpty(etYear)) {
-                    if(barChart.getVisibility() == View.VISIBLE){
+                    if (barChart.getVisibility() == View.VISIBLE) {
                         initData(parseDate(etYear.getText().toString() + "-01-01"));
-                    }else{
+                    } else {
                         initDataForStudySets(parseDate(etYear.getText().toString() + "-01-01"));
                     }
                 }
             }
         });
     }
-
 
 
     public GraphFragment() {
@@ -423,6 +422,7 @@ public class GraphFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_graph, container, false);
+
         initUI(view);
         initData(new Date());
         bindingAction();

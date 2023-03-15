@@ -59,8 +59,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent intent = new Intent(ChangePasswordActivity.this, ProfileSettingActivity.class);
-                        startActivity(intent);
+                       onBackPressed();
                     }
                 });
 
@@ -88,8 +87,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     void bindingAction() {
         imvBackButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ProfileSettingActivity.class);
-            startActivity(intent);
+            onBackPressed();
         });
 
         imvFinishChangePassword.setOnClickListener(view -> {
@@ -159,8 +157,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    pDialog.cancel();
-                                                    sweetAlertDialog.show();
+                                                    database.collection("users")
+                                                            .document(currentUser.getEmail())
+                                                            .update("googleAccount", false, "password", newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    pDialog.cancel();
+                                                                    sweetAlertDialog.show();
+                                                                }
+                                                            });
+                                                  
                                                 }
                                             }
                                         });

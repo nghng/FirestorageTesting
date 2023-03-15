@@ -13,6 +13,17 @@ public class User {
     public Date createdDate;
     public Boolean isBan;
 
+
+    public String imageUri;
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
     public Boolean getBan() {
         return isBan;
     }
