@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menuItemGraph" android:title="Statistics"/>
-    <item android:id="@+id/menuItemManageUser" android:title="User mangagement"/>
+    <item android:id="@+id/menuItemGraph" android:title="Statistics" android:icon="@drawable/trending_up" android:iconTint="@color/black"/>
+    <item android:id="@+id/menuItemManageUser" android:title="User mangagement" android:icon="@drawable/manage_accounts" android:iconTint="@color/black"/>
 
-    <item android:id="@+id/menuItemAdminProfile" android:title="Profile"/>
+    <item android:id="@+id/menuItemAdminProfile" android:title="Profile" android:icon="@drawable/ic_baseline_person_24"/>
 
 </menu>

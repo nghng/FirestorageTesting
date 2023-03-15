@@ -34,7 +34,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class AdminProfileFrament extends Fragment {
     FirebaseUser admin;
     ImageView imvAccountImage;
-    TextView email, displayName;
+    TextView email, displayName, emailAdmin, displayNameAdmin;
     FirebaseFirestore database;
     Button btnChangePassword;
     Button btnLogOut;
@@ -51,6 +51,8 @@ public class AdminProfileFrament extends Fragment {
         btnChangePassword = view.findViewById(R.id.btn_changePassword);
         btnLogOut = view.findViewById(R.id.btn_logout);
         auth = FirebaseAuth.getInstance();
+        emailAdmin = view.findViewById(R.id.tv_email_admin);
+        displayNameAdmin = view.findViewById(R.id.tv_displayName_admin);
     }
 
     void initData(){
@@ -69,8 +71,8 @@ public class AdminProfileFrament extends Fragment {
                         Uri photoURL = Uri.parse(user.getImageUri());
                         Glide.with(getContext()).load(photoURL).error(R.drawable.default_user_image)
                                 .into(imvAccountImage);
-                        email.append(admin.getEmail());
-                        displayName.append(user.getDisplayName());
+                        emailAdmin.append(admin.getEmail());
+                        displayNameAdmin.append(user.getDisplayName());
                         pDialog.cancel();
                     }
                 });
