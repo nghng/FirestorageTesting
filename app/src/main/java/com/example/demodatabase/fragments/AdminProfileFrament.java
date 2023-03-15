@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.demodatabase.ChangePasswordActivity;
+import com.example.demodatabase.LoginActivity;
+import com.example.demodatabase.ProfileSettingActivity;
 import com.example.demodatabase.R;
 import com.example.demodatabase.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,8 +37,8 @@ public class AdminProfileFrament extends Fragment {
     TextView email, displayName;
     FirebaseFirestore database;
     Button btnChangePassword;
-
-
+    Button btnLogOut;
+    FirebaseAuth auth;
 
     public AdminProfileFrament() {
     }
@@ -47,7 +49,8 @@ public class AdminProfileFrament extends Fragment {
         email = view.findViewById(R.id.tv_email);
         displayName = view.findViewById(R.id.tv_displayName);
         btnChangePassword = view.findViewById(R.id.btn_changePassword);
-
+        btnLogOut = view.findViewById(R.id.btn_logout);
+        auth = FirebaseAuth.getInstance();
     }
 
     void initData(){
@@ -77,6 +80,11 @@ public class AdminProfileFrament extends Fragment {
     void bindingAction(){
         btnChangePassword.setOnClickListener(view ->{
             startActivity(new Intent(getContext(), ChangePasswordActivity.class));
+        });
+        btnLogOut.setOnClickListener(view -> {
+            auth.signOut();
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
         });
     }
 
