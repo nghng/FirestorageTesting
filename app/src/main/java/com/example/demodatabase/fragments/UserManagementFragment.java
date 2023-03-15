@@ -85,7 +85,7 @@ public class UserManagementFragment extends Fragment {
                                 });
                             }
                         })
-                        .setContentText("Cancel")
+                        .setCancelText("Cancel")
                         .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {

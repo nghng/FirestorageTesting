@@ -61,6 +61,8 @@ public class ItemUserManageAdapter extends RecyclerView.Adapter<ItemUserManageAd
             holder.card.setBackgroundColor(Color.WHITE);
 
         }
+
+        // Diffrentiate from admin and normal user
         if(users.get(holder.getAdapterPosition()).getRole() != Role.ADMIN_ROLE){
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             holder.spinner.setAdapter(adapter);
@@ -92,6 +94,7 @@ public class ItemUserManageAdapter extends RecyclerView.Adapter<ItemUserManageAd
                 }
             });
         }else {
+            // set color background for admin
             holder.spinner.setVisibility(View.INVISIBLE);
             holder.card.setBackgroundColor(Color.GREEN);
         }

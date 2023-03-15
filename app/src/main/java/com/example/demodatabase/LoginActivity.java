@@ -38,6 +38,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class LoginActivity extends AppCompatActivity {
     EditText editText_gmail;
     EditText editText_password;
@@ -175,6 +177,13 @@ public class LoginActivity extends AppCompatActivity {
                                database.collection("users").document(currentUser.getEmail()).set(userFireStorage);
                            }else {
                                User user = task.getResult().toObject(User.class);
+                               if (user.getBan()){
+                                   new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                           .setTitleText("Banning notification")
+                                           .setContentText("You have been banned from the system, please contact our admin through: toiyeutaixiuvobeben@gmail.com")
+                                           .show();
+                                   return;
+                               }
                                if(user.getRole() == Role.USER_ROLE){
                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                    finishAffinity();
