@@ -11,6 +11,15 @@ public class User {
     private boolean isGoogleAccount;
     private int role;
     public Date createdDate;
+    public Boolean isBan;
+
+    public Boolean getBan() {
+        return isBan;
+    }
+
+    public void setBan(Boolean ban) {
+        isBan = ban;
+    }
 
     public Date getCreatedDate() {
         return createdDate;

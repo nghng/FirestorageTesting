@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 
 import com.example.demodatabase.fragments.GraphFragment;
 import com.example.demodatabase.fragments.HomeFragment;
+import com.example.demodatabase.fragments.UserManagementFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -35,7 +36,7 @@ public class HomeForAdminActivity extends AppCompatActivity {
                         break;
 
                     case R.id.menuItemManageUser:
-
+                        replaceFragment(new UserManagementFragment());
                         break;
                 }
                 return true;
