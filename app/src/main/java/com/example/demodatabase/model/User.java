@@ -2,11 +2,31 @@ package com.example.demodatabase.model;
 
 import com.google.firebase.firestore.Exclude;
 
+import java.util.Date;
+
 public class User {
     private String displayName;
     private String password;
     private String email;
     private boolean isGoogleAccount;
+    private int role;
+    public Date createdDate;
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
 
     public String getDisplayName() {
         return displayName;

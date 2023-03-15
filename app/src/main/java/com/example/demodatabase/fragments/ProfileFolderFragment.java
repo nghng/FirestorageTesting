@@ -1,66 +1,134 @@
 package com.example.demodatabase.fragments;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.demodatabase.FolderDetailActivity;
 import com.example.demodatabase.R;
+import com.example.demodatabase.StudySetDetailActivity;
+import com.example.demodatabase.adapter.FolderAdapter;
+import com.example.demodatabase.adapter.StudySetAdapter;
+import com.example.demodatabase.clickinterface.FolderItemClickListener;
+import com.example.demodatabase.clickinterface.OnItemClickedListener;
+import com.example.demodatabase.model.Folder;
+import com.example.demodatabase.model.StudySet;
+import com.example.demodatabase.model.Term;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFolderFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
 public class ProfileFolderFragment extends Fragment {
+    RecyclerView recyclerView;
+    FolderAdapter folderAdapter;
+    FirebaseUser currentUser;
+    FirebaseFirestore database;
+    ArrayList<Folder> folders = new ArrayList<>();
+    ProgressDialog progressDialog;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ProfileFolderFragment() {
-        // Required empty public constructor
+    public ProfileFolderFragment(){
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFolderFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFolderFragment newInstance(String param1, String param2) {
-        ProfileFolderFragment fragment = new ProfileFolderFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private void initUI(View view) {
+        recyclerView = view.findViewById(R.id.rv_studySetsProfile);
+        database = FirebaseFirestore.getInstance();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
+        progressDialog = new ProgressDialog(getContext());
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    private void initData() {
+        String email = currentUser.getEmail();
+        CollectionReference collectionReference = database.collection("folders");
+
+        progressDialog.show();
+        collectionReference.whereEqualTo("user",email)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot d : task.getResult()
+                        ) {
+                            Folder folder = d.toObject(Folder.class);
+                            folder.setFolderID(d.getId());
+                            System.out.println("id o luc add "+folder.getFolderID());
+                            folders.add(folder);
+                            database.collection("folders")
+                                    .document(d.getId())
+                                    .collection("studySets")
+                                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            ArrayList<StudySet> studySets = new ArrayList<>();
+                                            for (DocumentSnapshot d: task.getResult()
+                                            ) {
+                                                StudySet set = d.toObject(StudySet.class);
+                                                studySets.add(set);
+                                            }
+                                            folder.setStudysets(studySets);
+
+                                        }
+                                    });
+
+                            Log.d("INFO", d.getData().toString());
+                        }
+                        progressDialog.dismiss();
+                        onDataLoaded();
+
+                    }
+                });
+    }
+
+
+
+    void onDataLoaded() {
+        System.out.println("on data loaded");
+        folderAdapter = new FolderAdapter(folders, getActivity(), new FolderItemClickListener() {
+
+            @Override
+            public void onItemFolderClick(Folder item, int pos) {
+                Intent intent = new Intent(getContext(), FolderDetailActivity.class);
+                intent.putExtra("folderID", item.getFolderID());
+                startActivity(intent);
+            }
+        });
+
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+//        System.out.println("study set fragment");
+//       studySetAdapter.getItemViewType(1);
+        recyclerView.setAdapter(folderAdapter);
+        System.out.println("set adapter");
+        for (Folder f:folders){
+            System.out.println(f.getFolderName());
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_folder, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_set, container, false);
+        initUI(view);
+        initData();
+        return view;
+
     }
 }

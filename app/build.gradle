@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation 'com.firebaseui:firebase-ui-firestore:8.0.2'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+
     //Circular image
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     // Add the dependency for the Firebase Authentication library
@@ -67,10 +68,15 @@ dependencies {
     implementation 'com.github.f0ris.sweetalert:library:1.6.2'
     // flip terms
     implementation 'com.wajahatkarim:EasyFlipView:3.0.3'
+    implementation 'com.github.f0ris.sweetalert:library:1.5.6'
     //slider
-//    implementation 'com.github.smarteist:autoimageslider:1.4.0-appcompat'
+    //    implementation 'com.github.smarteist:autoimageslider:1.4.0-appcompat'
 
 
     implementation 'me.relex:circleindicator:2.1.6'
+    // chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //admin
 
 }

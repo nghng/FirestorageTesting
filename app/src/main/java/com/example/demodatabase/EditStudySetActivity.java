@@ -49,7 +49,7 @@ public class EditStudySetActivity extends AppCompatActivity {
     RelativeLayout header;
     ImageView backView, addingTerm, checkFinish;
     EditText etTitle, etDescription;
-    TextView tvShowDes, tvDescription;
+    TextView tvShowDes, tvDescription, tvCreateStudySetText;
     EditTermAdapter createTermAdapter;
     FirebaseFirestore database;
     FirebaseUser currentUser;
@@ -60,6 +60,7 @@ public class EditStudySetActivity extends AppCompatActivity {
     List<Term> deleteTerm = new ArrayList<>();
     List<Term> editAddingTerm = new ArrayList<>();
 
+
     private boolean isFilled;
 
     private float mTouchPosition;
@@ -67,6 +68,7 @@ public class EditStudySetActivity extends AppCompatActivity {
 
     void init() {
         getSupportActionBar().hide();
+        tvCreateStudySetText = findViewById(R.id.tv_createStudySetText);
         scrollView = findViewById(R.id.scrollView);
         rc_createStudyTerms = findViewById(R.id.rc_createStudyTerms);
         header = findViewById(R.id.rl_header);
@@ -95,6 +97,7 @@ public class EditStudySetActivity extends AppCompatActivity {
         // To input a description to a set is optional
         etDescription.setVisibility(View.GONE);
         tvDescription.setVisibility(View.GONE);
+        tvCreateStudySetText.setText("Edit Study Set");
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("bundle");
         terms = (ArrayList<Term>) args.getSerializable("terms");
@@ -176,7 +179,7 @@ public class EditStudySetActivity extends AppCompatActivity {
             Term addingTerm = new Term("", "");
             terms.add(addingTerm);
             editAddingTerm.add(addingTerm);
-            createTermAdapter.notifyDataSetChanged();
+            createTermAdapter.notifyItemInserted(terms.size() - 1);
         });
 
 
@@ -248,6 +251,9 @@ public class EditStudySetActivity extends AppCompatActivity {
 
                                             for (Term t: deleteTerm
                                                  ) {
+                                                if(editAddingTerm.contains(t)){
+                                                    continue;
+                                                }
                                                 studySetRef.collection("terms")
                                                         .document(t.getTermID())
                                                         .delete();
@@ -273,6 +279,9 @@ public class EditStudySetActivity extends AppCompatActivity {
                                             }
 
                                             for (Term term : editAddingTerm){
+                                                if(deleteTerm.contains(term)){
+                                                    continue;
+                                                }
                                                 studySetRef.collection("terms").add(term).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<DocumentReference> task) {

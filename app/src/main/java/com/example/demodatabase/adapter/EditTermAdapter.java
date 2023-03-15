@@ -41,7 +41,7 @@ public class EditTermAdapter extends RecyclerView.Adapter<EditTermAdapter.Create
 
     @Override
     public void onBindViewHolder(@NonNull CreateStudySetViewHolder holder, int position) {
-        int pos = holder.getAdapterPosition();
+        int pos = position;
         holder.bind(terms.get(pos), listener);
         holder.etTerm.addTextChangedListener(new TextWatcher() {
             @Override
@@ -56,8 +56,16 @@ public class EditTermAdapter extends RecyclerView.Adapter<EditTermAdapter.Create
 
             @Override
             public void afterTextChanged(Editable s) {
-                terms.get(pos).setTerm(holder.etTerm.getText().toString());
-                Log.d("textchange", "afterTextChanged: " + terms.get(pos).toString());
+                try {
+
+                        terms.get(pos).setTerm(holder.etTerm.getText().toString());
+                        Log.d("textchange", "afterTextChanged: " + terms.get(pos).toString());
+
+                }catch (Exception e){
+
+                }
+
+
 
             }
         });
@@ -75,8 +83,15 @@ public class EditTermAdapter extends RecyclerView.Adapter<EditTermAdapter.Create
 
             @Override
             public void afterTextChanged(Editable s) {
-                terms.get(pos).setDefinition(holder.etDefinition.getText().toString());
-                Log.d("textchange", "afterTextChanged: " + terms.get(pos).toString());
+                try {
+                    terms.get(pos).setDefinition(holder.etDefinition.getText().toString());
+                    Log.d("textchange", "afterTextChanged: " + terms.get(pos).toString());
+                }catch (Exception e){
+
+                }
+
+
+
             }
         });
 
@@ -89,10 +104,13 @@ public class EditTermAdapter extends RecyclerView.Adapter<EditTermAdapter.Create
 //        });
 
         holder.removeTerm.setOnClickListener(view ->{
-
             listener.onDeleteClick(terms.get(pos), pos);
             terms.remove(pos);
-            notifyDataSetChanged();
+            notifyItemRemoved(pos);
+            notifyItemRangeChanged(0, terms.size());
+
+
+
         });
 
     }
