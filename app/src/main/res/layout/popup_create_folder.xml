@@ -29,7 +29,9 @@
             android:layout_marginTop="10dp"
             android:text="Create folder"
             android:ems="10"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="20sp"
+            />
 
         <EditText
             android:id="@+id/edt_foldername"
