@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.demodatabase.AddSetToFolderActivity;
 import com.example.demodatabase.CreateStudySetActivity;
 import com.example.demodatabase.R;
 import com.example.demodatabase.StudySetDetailActivity;
@@ -133,7 +134,7 @@ public class FolderDetailFragment extends Fragment {
         tv_displayName.setText(currentUser.getDisplayName());
         tv_folderName.setText(currentFolder.getFolderName());
         tv_folderDescription.setText(currentFolder.getFolderDescription());
-        Glide.with(getActivity()).load(currentUser.getPhotoUrl()).error(R.drawable.default_user_image)
+        Glide.with(getContext()).load(currentUser.getPhotoUrl()).error(R.drawable.default_user_image)
                 .into(img_AccountImage);
         if (numberOfSets == 0) {
             rv_studySets.setVisibility(View.INVISIBLE);
@@ -165,6 +166,10 @@ public class FolderDetailFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), CreateStudySetActivity.class);
                 intent.putExtra("folderID", folderID);
                 startActivity(intent);
+
+//                Intent intent = new Intent(getActivity(), AddSetToFolderActivity.class);
+//                intent.putExtra("folderID", folderID);
+//                startActivity(intent);
             }
         });
 

@@ -34,9 +34,11 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
     int previousSelectedMenu;
     FirebaseFirestore database;
+    int markedTab=0;
 
     private void initData() {
         activityMainBinding.wrapper.setVisibility(View.GONE);
+
     }
 
     void bindingAction() {
@@ -114,39 +116,52 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
-        replaceFragment(new HomeFragment());
-        initData();
-        bindingAction();
+        Bundle extra=getIntent().getExtras();
+        if(extra!=null)
+            markedTab=Integer.parseInt(extra.getString("markedTab"));
+        System.out.println("marked tab ne: "+markedTab);
 
+if(markedTab==0){
+    replaceFragment(new HomeFragment());
+    initData();
+    bindingAction();
+    activityMainBinding.bottomNavigation.setOnItemSelectedListener(item -> {
+        switch (item.getItemId()) {
+            case R.id.home:
+                replaceFragment(new HomeFragment());
+                previousSelectedMenu = R.id.home;
+                break;
 
-        activityMainBinding.bottomNavigation.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.home:
-                    replaceFragment(new HomeFragment());
-                    previousSelectedMenu = R.id.home;
-                    break;
-
-                case R.id.addStudySet:
-                    // show adding selections
-                    slideUp(activityMainBinding.wrapper);
+            case R.id.addStudySet:
+                // show adding selections
+                slideUp(activityMainBinding.wrapper);
 //                    activityMainBinding.wrapper.setVisibility(View.VISIBLE);
-                    activityMainBinding.bottomNavigation.setVisibility(View.GONE);
-                    activityMainBinding.wrapper.bringToFront();
-                    break;
+                activityMainBinding.bottomNavigation.setVisibility(View.GONE);
+                activityMainBinding.wrapper.bringToFront();
+                break;
 
-                case R.id.search:
-                    previousSelectedMenu = R.id.search;
-                    replaceFragment(new SearchFragment());
-                    break;
+            case R.id.search:
+                previousSelectedMenu = R.id.search;
+                replaceFragment(new SearchFragment());
+                break;
 
-                case R.id.profile:
-                    previousSelectedMenu = R.id.profile;
-                    replaceFragment(new ProfileFragment());
-                    break;
-            }
+            case R.id.profile:
+                previousSelectedMenu = R.id.profile;
+                replaceFragment(new ProfileFragment());
+                break;
+        }
 
-            return true;
-        });
+        return true;
+    });
+}
+else{
+    activityMainBinding.bottomNavigation.setSelectedItemId(R.id.profile);
+    replaceFragment(new ProfileFragment(markedTab));
+    markedTab=0;
+    initData();
+    bindingAction();
+}
+
 
 
     }

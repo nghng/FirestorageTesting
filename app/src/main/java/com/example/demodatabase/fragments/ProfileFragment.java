@@ -33,9 +33,14 @@ public class ProfileFragment extends Fragment {
     BottomNavigationView bottomNavigationView;
     ImageView settingButton;
     RelativeLayout header;
+    int markedTab = 0;
 
     public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    public ProfileFragment(int markedTab) {
+        this.markedTab = markedTab;
     }
 
     void init(View view) {
@@ -47,7 +52,8 @@ public class ProfileFragment extends Fragment {
     }
 
     void initData() {
-        if(currentUser == null){
+
+        if (currentUser == null) {
             return;
         }
         String username = currentUser.getDisplayName();
@@ -60,23 +66,32 @@ public class ProfileFragment extends Fragment {
 
     void bindingAction() {
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-        replaceFragment(new ProfileSetFragment());
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.profileSets:
-                    replaceFragment(new ProfileSetFragment());
-                    break;
 
-                case R.id.profileClass:
-                    replaceFragment(new ProfileClassFragment());
-                    break;
+        if (markedTab == 0) {
+            replaceFragment(new ProfileSetFragment());
 
-                case R.id.profileFolders:
-                    replaceFragment(new ProfileFolderFragment());
-                    break;
-            }
-            return true;
-        });
+            bottomNavigationView.setOnItemSelectedListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.profileSets:
+                        replaceFragment(new ProfileSetFragment());
+                        break;
+
+                    case R.id.profileClass:
+                        replaceFragment(new ProfileClassFragment());
+                        break;
+
+                    case R.id.profileFolders:
+                        replaceFragment(new ProfileFolderFragment());
+                        break;
+                }
+                return true;
+            });
+        } else {
+            bottomNavigationView.setSelectedItemId(R.id.profileFolders);
+            replaceFragment(new ProfileFolderFragment());
+            markedTab = 0;
+        }
+
 
         settingButton.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), ProfileSettingActivity.class);
@@ -97,7 +112,6 @@ public class ProfileFragment extends Fragment {
 
         return view;
     }
-
 
 
     private void replaceFragment(Fragment fragment) {
