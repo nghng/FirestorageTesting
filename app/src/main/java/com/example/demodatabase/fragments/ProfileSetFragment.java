@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.example.demodatabase.R;
 import com.example.demodatabase.StudySetDetailActivity;
 import com.example.demodatabase.adapter.StudySetAdapter;
+import com.example.demodatabase.adapter.StudySetVerticalAdapter;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
 import com.example.demodatabase.model.Folder;
 import com.example.demodatabase.model.StudySet;
@@ -36,7 +37,7 @@ import java.util.Arrays;
 
 public class ProfileSetFragment extends Fragment {
     RecyclerView recyclerView;
-    StudySetAdapter studySetAdapter;
+    StudySetVerticalAdapter studySetAdapter;
     FirebaseUser currentUser;
     FirebaseFirestore database;
     ArrayList<StudySet> studySets = new ArrayList<>();
@@ -96,7 +97,7 @@ public class ProfileSetFragment extends Fragment {
 
 
     void onDataLoaded() {
-        studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
+        studySetAdapter = new StudySetVerticalAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
             public void onItemClick(StudySet item, int pos) {
                 Intent intent = new Intent(getContext(), StudySetDetailActivity.class);
