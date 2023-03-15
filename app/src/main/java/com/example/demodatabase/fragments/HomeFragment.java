@@ -7,12 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.demodatabase.MainActivity;
 import com.example.demodatabase.R;
 import com.example.demodatabase.StudySetDetailActivity;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
@@ -38,6 +41,7 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore database;
     ArrayList<StudySet> studySets = new ArrayList<>();
     ProgressDialog progressDialog;
+    TextView viewAll;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -48,6 +52,7 @@ public class HomeFragment extends Fragment {
         database = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
         progressDialog = new ProgressDialog(getContext());
+        viewAll = view.findViewById(R.id.tv_viewAllStudySet);
     }
 
     private void initData() {
@@ -93,6 +98,13 @@ public class HomeFragment extends Fragment {
     }
 
 
+
+    void bindingAction(){
+        viewAll.setOnClickListener(view -> {
+            ((MainActivity) getActivity()).replaceFragment(new SearchOwnStudySetFragment());
+        });
+    }
+
     void onDataLoaded() {
         studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
@@ -117,7 +129,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home2, container, false);
         initUI(view);
         initData();
-
+        bindingAction();
         return view;
 
     }

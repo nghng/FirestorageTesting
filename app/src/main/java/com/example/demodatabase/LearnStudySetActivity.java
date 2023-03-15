@@ -168,6 +168,7 @@ public class LearnStudySetActivity extends AppCompatActivity {
                 Term term = task.getResult().toObject(Term.class);
                 tvTermInQuestion.setText(term.getTerm());
                 currentQuestion.setTerm(term);
+
                 answer.setAnswer(term.getDefinition());
                 currentAnswer.add(answer);
                 currentRightAnswer = answer;
