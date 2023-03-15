@@ -45,7 +45,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
         });
 
         ivBackButton.setOnClickListener(view -> {
-            finish();
+           onBackPressed();
         });
 
         btnChangePassword.setOnClickListener(view -> {

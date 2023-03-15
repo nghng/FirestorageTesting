@@ -3,4 +3,6 @@
     <item android:id="@+id/menuItemGraph" android:title="Statistics"/>
     <item android:id="@+id/menuItemManageUser" android:title="User mangagement"/>
 
+    <item android:id="@+id/menuItemAdminProfile" android:title="Profile"/>
+
 </menu>

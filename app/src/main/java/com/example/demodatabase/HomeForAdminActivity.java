@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.example.demodatabase.fragments.AdminProfileFrament;
 import com.example.demodatabase.fragments.GraphFragment;
 import com.example.demodatabase.fragments.HomeFragment;
 import com.example.demodatabase.fragments.UserManagementFragment;
@@ -37,6 +38,10 @@ public class HomeForAdminActivity extends AppCompatActivity {
 
                     case R.id.menuItemManageUser:
                         replaceFragment(new UserManagementFragment());
+                        break;
+
+                    case R.id.menuItemAdminProfile:
+                        replaceFragment(new AdminProfileFrament());
                         break;
                 }
                 return true;

@@ -88,8 +88,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     void bindingAction() {
         imvBackButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ProfileSettingActivity.class);
-            startActivity(intent);
+            onBackPressed();
         });
 
         imvFinishChangePassword.setOnClickListener(view -> {
