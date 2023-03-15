@@ -96,6 +96,9 @@ public class ProfileSetFragment extends Fragment {
 
 
     void onDataLoaded() {
+        for (StudySet s: studySets){
+            System.out.println(s.getStudySetName());
+        }
         studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
             public void onItemClick(StudySet item, int pos) {

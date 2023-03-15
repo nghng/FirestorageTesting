@@ -29,6 +29,16 @@
             android:layout_marginTop="20dp"
             android:text="Add sets" />
 
+
+        <Button
+            android:id="@+id/btn_addnewset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="80dp"
+            android:text="Create Set" />
+
         <ImageView
             android:id="@+id/img_checkFinish"
             android:layout_width="30dp"

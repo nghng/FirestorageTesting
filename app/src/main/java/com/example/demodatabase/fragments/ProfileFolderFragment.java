@@ -111,14 +111,7 @@ public class ProfileFolderFragment extends Fragment {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-//        System.out.println("study set fragment");
-//       studySetAdapter.getItemViewType(1);
         recyclerView.setAdapter(folderAdapter);
-        System.out.println("set adapter");
-        for (Folder f:folders){
-            System.out.println(f.getFolderName());
-        }
-
     }
 
     @Override

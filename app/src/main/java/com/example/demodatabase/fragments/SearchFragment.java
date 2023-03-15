@@ -3,6 +3,7 @@ package com.example.demodatabase.fragments;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,7 +20,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.example.demodatabase.AddSetToFolderActivity;
 import com.example.demodatabase.R;
+import com.example.demodatabase.StudySetDetailActivity;
 import com.example.demodatabase.adapter.StudySetAdapter;
 import com.example.demodatabase.adapter.StudySetVerticalAdapter;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
@@ -38,6 +41,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 public class SearchFragment extends Fragment {
     RecyclerView recyclerView;
@@ -45,12 +49,21 @@ public class SearchFragment extends Fragment {
     FirebaseUser currentUser;
     FirebaseFirestore database;
     ArrayList<StudySet> studySets = new ArrayList<>();
+    ArrayList<StudySet> existedStudySets = new ArrayList<>();
     ProgressDialog progressDialog;
     SearchView searchView;
     Button btn_all, btn_set, btn_user;
     String currentSearch = "";
-    String filter="all";
+    String filter = "all";
     int white, blue, black;
+    String selectType="";
+    String folderID;
+    Folder currentFolder;
+    CollectionReference folderRef;
+
+    public SearchFragment(String selectType) {
+        this.selectType = selectType;
+    }
 
     public SearchFragment() {
         // Required empty public constructor
@@ -65,6 +78,7 @@ public class SearchFragment extends Fragment {
         database = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
         progressDialog = new ProgressDialog(getContext());
+
     }
 
     void lookSelected(Button clickedButton) {
@@ -84,6 +98,10 @@ public class SearchFragment extends Fragment {
     }
 
     void initData() {
+        Bundle extras = getActivity().getIntent().getExtras();
+        folderID = extras.getString("folderID");
+        folderRef = database.collection("folders");
+
         white = ContextCompat.getColor(getContext(), R.color.white);
         blue = ContextCompat.getColor(getContext(), R.color.primary_1);
         black = ContextCompat.getColor(getContext(), R.color.black);
@@ -99,6 +117,7 @@ public class SearchFragment extends Fragment {
                         for (DocumentSnapshot d : task.getResult()
                         ) {
                             StudySet studySet = d.toObject(StudySet.class);
+                            studySet.setStudySetID(d.getId());
                             studySets.add(studySet);
                             database.collection("studySets")
                                     .document(d.getId())
@@ -120,16 +139,77 @@ public class SearchFragment extends Fragment {
                             Log.d("INFO", d.getData().toString());
                         }
                         progressDialog.dismiss();
-                        onDataLoaded();
+
 
                     }
                 });
+
+        if (selectType.equalsIgnoreCase("multipleSelectedItems")) {
+            folderRef.document(folderID)
+                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            currentFolder = task.getResult().toObject(Folder.class);
+                            folderRef.document(folderID)
+                                    .collection("studySets")
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            for (StudySet existedSet: existedStudySets){
+                                                for (int i=0; i<studySets.size();i++){
+                                                    if(studySets.get(i).getStudySetID().equals(existedSet.getStudySetID())){
+                                                        studySets.remove(i);
+                                                        i--;
+                                                    }
+                                                }
+                                            }
+                                            if(existedStudySets.size()!=0){
+                                                ListIterator<StudySet> iter = studySets.listIterator();
+                                                System.out.println("khac 0 nhe");
+                                                for (StudySet existedSet: existedStudySets){
+                                                    while(iter.hasNext()){
+                                                        if(existedSet.getStudySetID().equals(iter.next().getStudySetID())){
+                                                            iter.remove();
+                                                        }
+                                                    }
+                                                }
+                                                System.out.println("studeys setttttttttttt");
+                                                for(StudySet s: studySets){
+                                                    System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
+                                                };
+                                                System.out.println("existed setttt");
+                                                for(StudySet s: existedStudySets){
+                                                    System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
+                                                };
+
+                                            }
+                                            onDataLoaded();
+                                        }
+                                    });
+                        }
+                    });
+
+        }
     }
 
     void onDataLoaded() {
         studySetAdapter = new StudySetVerticalAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
+
             public void onItemClick(StudySet item, int pos) {
+                if (selectType.equalsIgnoreCase("multipleSelectedItems")) {
+                    item.setSelected(!item.isSelected());
+                    if (item.isSelected())
+                        AddSetToFolderActivity.selectedStudySets.add(item);
+                    else
+                        AddSetToFolderActivity.selectedStudySets.remove(item);
+                } else {
+                    Intent intent = new Intent(getContext(), StudySetDetailActivity.class);
+                    intent.putExtra("studySetID", item.getStudySetID());
+                    startActivity(intent);
+                    ;
+                }
 
             }
 
@@ -170,7 +250,7 @@ public class SearchFragment extends Fragment {
                 System.out.println("button click set");
                 unselectAll();
                 lookSelected(btn_set);
-                filter="set";
+                filter = "set";
                 studySetAdapter.getResult(currentSearch, filter);
             }
 
@@ -182,7 +262,7 @@ public class SearchFragment extends Fragment {
                 System.out.println("button click user");
                 unselectAll();
                 lookSelected(btn_user);
-                filter="user";
+                filter = "user";
                 studySetAdapter.getResult(currentSearch, filter);
             }
 
@@ -194,7 +274,7 @@ public class SearchFragment extends Fragment {
                 System.out.println("button click all");
                 unselectAll();
                 lookSelected(btn_all);
-                filter="all";
+                filter = "all";
                 studySetAdapter.getResult(currentSearch, filter);
             }
         });

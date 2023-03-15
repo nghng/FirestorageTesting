@@ -2,6 +2,7 @@ package com.example.demodatabase.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,17 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.demodatabase.FolderDetailActivity;
+import com.example.demodatabase.AddSetToFolderActivity;
 import com.example.demodatabase.R;
 import com.example.demodatabase.StudySetDetailActivity;
-import com.example.demodatabase.adapter.FolderAdapter;
-import com.example.demodatabase.clickinterface.FolderItemClickListener;
-import com.example.demodatabase.clickinterface.OnItemClickedListener;
 import com.example.demodatabase.adapter.StudySetAdapter;
+import com.example.demodatabase.adapter.StudySetVerticalAdapter;
+import com.example.demodatabase.clickinterface.OnItemClickedListener;
 import com.example.demodatabase.model.Folder;
 import com.example.demodatabase.model.StudySet;
 import com.example.demodatabase.model.Term;
@@ -33,37 +34,42 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 
-public class HomeFragment extends Fragment {
+public class AddSetToFolderFragment extends Fragment {
     RecyclerView recyclerView;
-    RecyclerView recyclerViewFolder;
-    StudySetAdapter studySetAdapter;
-    FolderAdapter folderAdapter;
+    StudySetVerticalAdapter studySetAdapter;
     FirebaseUser currentUser;
     FirebaseFirestore database;
     ArrayList<StudySet> studySets = new ArrayList<>();
-    ArrayList<Folder> folders = new ArrayList<>();
+    ArrayList<StudySet> existedStudySets = new ArrayList<>();
     ProgressDialog progressDialog;
+    String folderID;
+    Folder currentFolder;
+    CollectionReference folderRef;
 
-    public HomeFragment() {
-        // Required empty public constructor
+
+    public AddSetToFolderFragment() {
     }
 
     private void initUI(View view) {
-        recyclerView = view.findViewById(R.id.rv_studySetsHome);
-        recyclerViewFolder = view.findViewById(R.id.rv_folderHome);
+        recyclerView = view.findViewById(R.id.rv_studySetsProfile);
         database = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
         progressDialog = new ProgressDialog(getContext());
+
+
     }
 
     private void initData() {
-        String email = currentUser.getEmail();
-        CollectionReference collectionReference = database.collection("studySets");
+        Bundle extras = getActivity().getIntent().getExtras();
+        folderID = extras.getString("folderID");
+        folderRef = database.collection("folders");
 
+        CollectionReference collectionReference = database.collection("studySets");
         progressDialog.show();
-        collectionReference.whereEqualTo("user", email)
+        collectionReference
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -85,67 +91,6 @@ public class HomeFragment extends Fragment {
                                                 terms.add(term);
                                             }
                                             studySet.setTerms(terms);
-                                            onDataLoaded();
-                                            progressDialog.dismiss();
-
-
-                                        }
-                                    });
-
-                            Log.d("INFO", d.getData().toString());
-                        }
-
-                    }
-                });
-    }
-
-
-    void onDataLoaded() {
-        studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
-            @Override
-            public void onItemClick(StudySet item, int pos) {
-                Intent intent = new Intent(getContext(), StudySetDetailActivity.class);
-                intent.putExtra("studySetID", item.getStudySetID());
-                startActivity(intent);
-                ;
-            }
-
-        });
-
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(studySetAdapter);
-    }
-
-    private void initDataFolder() {
-        String email = currentUser.getEmail();
-        CollectionReference collectionReference = database.collection("folders");
-
-        progressDialog.show();
-        collectionReference.whereEqualTo("user", email)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for (DocumentSnapshot d : task.getResult()
-                        ) {
-                            Folder folder = d.toObject(Folder.class);
-                            folder.setFolderID(d.getId());
-                            System.out.println("id o luc add " + folder.getFolderID());
-                            folders.add(folder);
-                            database.collection("folders")
-                                    .document(d.getId())
-                                    .collection("studySets")
-                                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            ArrayList<StudySet> studySets = new ArrayList<>();
-                                            for (DocumentSnapshot d : task.getResult()
-                                            ) {
-                                                StudySet set = d.toObject(StudySet.class);
-                                                studySets.add(set);
-                                            }
-                                            folder.setStudysets(studySets);
 
                                         }
                                     });
@@ -153,41 +98,96 @@ public class HomeFragment extends Fragment {
                             Log.d("INFO", d.getData().toString());
                         }
                         progressDialog.dismiss();
-                        onDataLoadedFolder();
+
 
                     }
                 });
+
+
+            folderRef.document(folderID)
+                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            currentFolder = task.getResult().toObject(Folder.class);
+                            folderRef.document(folderID)
+                                    .collection("studySets")
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            for (DocumentSnapshot d : task.getResult()
+                                            ) {
+
+                                                StudySet set = d.toObject(StudySet.class);
+                                                set.setStudySetID(d.getId());
+                                                existedStudySets.add(set);
+                                            }
+                                            if(existedStudySets.size()!=0){
+                                                System.out.println("khac 0 nhe");
+                                                for (StudySet existedSet: existedStudySets){
+                                                    for (int i=0; i<studySets.size();i++){
+                                                        if(studySets.get(i).getStudySetID().equals(existedSet.getStudySetID())){
+                                                            studySets.remove(i);
+                                                            i--;
+                                                        }
+                                                    }
+                                                }
+                                                System.out.println("studeys setttttttttttt");
+                                                for(StudySet s: studySets){
+                                                    System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
+                                                };
+                                                System.out.println("existed setttt");
+                                                for(StudySet s: existedStudySets){
+                                                    System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
+                                                };
+
+                                            }
+                                            onDataLoaded();
+                                        }
+                                    });
+                        }
+                    });
+
+
     }
 
 
-    void onDataLoadedFolder() {
-        System.out.println("on data loaded");
-        folderAdapter = new FolderAdapter(folders, getActivity(), new FolderItemClickListener() {
+    void onDataLoaded() {
 
+        studySetAdapter = new StudySetVerticalAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
-            public void onItemFolderClick(Folder item, int pos) {
-                Intent intent = new Intent(getContext(), FolderDetailActivity.class);
-                intent.putExtra("folderID", item.getFolderID());
-                startActivity(intent);
+            public void onItemClick(StudySet item, int pos) {
+                item.setSelected(!item.isSelected());
+                System.out.println(item.isSelected());
+                if(item.isSelected()){
+                    AddSetToFolderActivity.selectedStudySets.add(item);
+                }
+
+                else
+                    AddSetToFolderActivity.selectedStudySets.remove(item);
             }
+
         });
 
         LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewFolder.setLayoutManager(layoutManager);
-        recyclerViewFolder.setAdapter(folderAdapter);
-    }
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+//        System.out.println("study set fragment");
+//       studySetAdapter.getItemViewType(1);
+        recyclerView.setAdapter(studySetAdapter);
 
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home2, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_set, container, false);
         initUI(view);
         initData();
-        initDataFolder();
         return view;
 
     }
+
+
 }
