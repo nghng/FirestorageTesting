@@ -159,14 +159,7 @@ public class FolderDetailActivity extends AppCompatActivity {
             }
         });
 
-        activityFolderDetailKebabMenuBinding.tvShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "https://developer.android.com/training/sharing/");
-                startActivity(Intent.createChooser(sendIntent, "Share via"));
-            }
-        });
+
 
         img_back.setOnClickListener(view -> {
             onBackPressed();

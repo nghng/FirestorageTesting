@@ -163,13 +163,13 @@ public class FolderDetailFragment extends Fragment {
         btn_addset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CreateStudySetActivity.class);
-                intent.putExtra("folderID", folderID);
-                startActivity(intent);
-
-//                Intent intent = new Intent(getActivity(), AddSetToFolderActivity.class);
+//                Intent intent = new Intent(getActivity(), CreateStudySetActivity.class);
 //                intent.putExtra("folderID", folderID);
 //                startActivity(intent);
+
+                Intent intent = new Intent(getActivity(), AddSetToFolderActivity.class);
+                intent.putExtra("folderID", folderID);
+                startActivity(intent);
             }
         });
 
