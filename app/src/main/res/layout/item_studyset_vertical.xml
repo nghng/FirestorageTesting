@@ -2,52 +2,72 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="200dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_studyset_v"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
-        app:contentPadding="10dp"
         android:layout_margin="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
+            android:scaleType="fitXY"
+            android:src="@drawable/study_set_conner"
+            android:layout_marginStart="180dp"/>
+
+        <ImageView
+            android:layout_marginTop="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_view_list_24"
+            android:layout_marginStart="15dp"/>
 
         <TextView
             android:id="@+id/tv_studySetName_v"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Studyset name"
+            android:text="Study-set name"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginStart="45dp"/>
 
         <TextView
             android:id="@+id/tv_numberOfTerms_v"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="55dp"
             android:text="Number of terms"
             android:textSize="15sp"
-
+            android:layout_marginStart="15dp"
             />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imv_accountImage_v"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginTop="100dp" />
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="90dp" />
 
         <TextView
             android:id="@+id/tv_accountName_v"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="90dp"
+            android:layout_marginBottom="20dp"
             android:text="Account" />
 
 

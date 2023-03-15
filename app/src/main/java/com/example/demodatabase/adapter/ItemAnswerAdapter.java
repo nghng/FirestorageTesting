@@ -1,6 +1,7 @@
 package com.example.demodatabase.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class ItemAnswerAdapter extends RecyclerView.Adapter<ItemAnswerAdapter.It
     private Context mContext;
     private ArrayList<Answer> answers;
     private AnswerItemClickedListener listener;
+    private int counter = 0;
 
 
     public ItemAnswerAdapter(Context mContext, ArrayList<Answer> answers, AnswerItemClickedListener listener) {
@@ -44,14 +46,14 @@ public class ItemAnswerAdapter extends RecyclerView.Adapter<ItemAnswerAdapter.It
             holder.cardAnswer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onRightAnswerClick(answer,pos);
+                    listener.onRightAnswerClick(answer, pos);
                 }
             });
-        }else {
+        } else {
             holder.cardAnswer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onWrongAnswerClick(answer,pos);
+                    listener.onWrongAnswerClick(answer, pos);
                 }
             });
         }
@@ -64,19 +66,22 @@ public class ItemAnswerAdapter extends RecyclerView.Adapter<ItemAnswerAdapter.It
     }
 
     public class ItermAnswerViewHolder extends RecyclerView.ViewHolder {
-        TextView tvAnswer;
+        TextView tvAnswer, tvChoice;
         CardView cardAnswer;
 
         public ItermAnswerViewHolder(@NonNull View itemView) {
             super(itemView);
             tvAnswer = itemView.findViewById(R.id.tv_answer);
+            tvChoice = itemView.findViewById(R.id.tv_choice);
             cardAnswer = itemView.findViewById(R.id.card_answer);
             cardAnswer.setForeground(null);
         }
 
         public void bind(Answer answer) {
             tvAnswer.setText(answer.getAnswer());
-
+            System.out.println();
+            tvChoice.setText(String.valueOf((char) (counter+64)));
+            counter++;
         }
     }
 

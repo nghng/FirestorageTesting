@@ -23,23 +23,24 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/conLay_addOption"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/white"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@+id/wrapper">
 
             <Button
                 android:id="@+id/tv_createStudySets"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/primary_1"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
+                android:layout_height="60dp"
+                android:background="@drawable/rounded_button"
+                app:backgroundTint="@null"
                 android:padding="10dp"
                 android:text="Create study sets"
                 android:textSize="20dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="15dp"
                 app:layout_constraintRight_toRightOf="@+id/conLay_addOption"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/conLay_addOption" />
@@ -47,19 +48,19 @@
             <Button
                 android:id="@+id/tv_createFolder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/primary_1"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
+                android:layout_height="60dp"
+                android:background="@drawable/rounded_button"
+                app:backgroundTint="@null"
                 android:padding="10dp"
                 android:text="Create folder"
                 android:textSize="20dp"
-
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="@+id/conLay_addOption"
                 app:layout_constraintStart_toStartOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
