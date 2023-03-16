@@ -44,19 +44,19 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class FolderDetailActivity extends AppCompatActivity {
     ActivityFolderDetailKebabMenuBinding activityFolderDetailKebabMenuBinding;
-    RecyclerView rv_studySets;
-    CardView noSet;
+//    RecyclerView rv_studySets;
+//    CardView noSet;
     FirebaseFirestore database;
     FirebaseUser currentUser;
     private ArrayList<StudySet> studySets = new ArrayList<>();
-    SweetAlertDialog sweetAlertDialog;
-    TextView tv_numberOfSets, tv_displayName, tv_folderName, tv_folderDescription;
+//    SweetAlertDialog sweetAlertDialog;
+//    TextView tv_numberOfSets, tv_displayName, tv_folderName, tv_folderDescription;
     ImageView img_AccountImage, img_back, img_kebab_menu;
     String folderID;
     Folder currentFolder;
-    int numberOfSets;
-    Button btn_addset;
-    StudySetAdapter studySetAdapter;
+//    int numberOfSets;
+//    Button btn_addset;
+//    StudySetAdapter studySetAdapter;
     boolean isUpdated = false;
 
 
@@ -73,7 +73,9 @@ public class FolderDetailActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 currentFolder = task.getResult().toObject(Folder.class);
+                currentFolder.setFolderID(task.getResult().getId());
                 System.out.println(currentFolder.getFolderName());
+
             }
         });
 
@@ -166,8 +168,9 @@ public class FolderDetailActivity extends AppCompatActivity {
 
 
         img_back.setOnClickListener(view -> {
-            onBackPressed();
-            onBackPressed();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("markedTab", "1");
+            startActivity(intent);
         });
         img_kebab_menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,7 +243,7 @@ public class FolderDetailActivity extends AppCompatActivity {
     public void editFolder(View view) {
         LayoutInflater inflater = (LayoutInflater)
                 getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.popup_create_folder, null);
+        View popupView = inflater.inflate(R.layout.popup_edit_folder, null);
 
         // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -275,24 +278,25 @@ public class FolderDetailActivity extends AppCompatActivity {
                     return;
                 }
 
-                database.collection("folders").document(folderID).update("folderName", folderName).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Log.d("update folder name", "DocumentSnapshot successfully updated");
-                        isUpdated = true;
-                    }
-
-
-                });
-
-                database.collection("folders").document(folderID).update("folderDescription", folderDescription).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Log.d("udfd", "DocumentSnapshot successfully updted");
-                        isUpdated = true;
-                    }
-                });
-
+                if(!folderName.equals(currentFolder.getFolderName())){
+                    database.collection("folders").document(folderID).update("folderName", folderName).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.d("update folder name", "DocumentSnapshot successfully updated");
+                            isUpdated = true;
+                        }
+                    });
+                }
+                if(!folderDescription.equals(currentFolder.getFolderDescription())){
+                    database.collection("folders").document(folderID).update("folderDescription", folderDescription).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.d("udfd", "DocumentSnapshot successfully updted");
+                            isUpdated = true;
+                        }
+                    });
+                }
+                Toast.makeText(FolderDetailActivity.this, "Edited Successfully", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), FolderDetailActivity.class);
                 intent.putExtra("folderID", folderID);
                 startActivity(intent);

@@ -134,15 +134,7 @@ public class HomeFragment extends Fragment {
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(studySetAdapter);
-        if(studySets.size() == 0){
-            recyclerView.setVisibility(View.GONE);
-            noneStudySet.setVisibility(View.VISIBLE);
-            nonFolder.setVisibility(View.VISIBLE);
-        }else {
-            recyclerView.setVisibility(View.VISIBLE);
-            noneStudySet.setVisibility(View.INVISIBLE);
-            nonFolder.setVisibility(View.INVISIBLE);
-        }
+
     }
 
     private void initDataFolder() {
@@ -215,6 +207,15 @@ public class HomeFragment extends Fragment {
         initData();
         initDataFolder();
         bindingAction();
+        if(studySets.size() == 0){
+            recyclerView.setVisibility(View.INVISIBLE);
+            noneStudySet.setVisibility(View.VISIBLE);
+            nonFolder.setVisibility(View.VISIBLE);
+        }else {
+            recyclerView.setVisibility(View.VISIBLE);
+            noneStudySet.setVisibility(View.GONE);
+            nonFolder.setVisibility(View.GONE);
+        }
         return view;
 
     }
