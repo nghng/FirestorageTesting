@@ -93,6 +93,7 @@ public class FolderDetailFragment extends Fragment {
             folderID = extras.getString("folderID");
             System.out.println(folderID);
             database = FirebaseFirestore.getInstance();
+            CollectionReference studySetRef = database.collection("studySets");
             CollectionReference folderRef = database.collection("folders");
             folderRef.document(folderID)
                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -107,26 +108,32 @@ public class FolderDetailFragment extends Fragment {
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             for (DocumentSnapshot d : task.getResult()
                                             ) {
-
-                                                StudySet set = d.toObject(StudySet.class);
                                                 ArrayList<Term> terms = new ArrayList<>();
-                                                set.setStudySetID(d.getId());
                                                 database.collection("studySets")
-                                                        .document(d.getId())
-                                                        .collection("terms")
-                                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        .document(d.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                             @Override
-                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                for (DocumentSnapshot d : task.getResult().getDocuments()
-                                                                ) {
-                                                                    Term t = d.toObject(Term.class);
-                                                                    terms.add(t);
-                                                                }
-                                                                set.setTerms(terms);
-                                                                studySets.add(set);
-                                                                onDataLoaded();
+                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                                                                StudySet studySet = task.getResult().toObject(StudySet.class);
+                                                                studySet.setStudySetID(task.getResult().getId());
+                                                                studySetRef.document(studySet.getStudySetID()).collection("terms")
+                                                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                                for (DocumentSnapshot d : task.getResult().getDocuments()
+                                                                                ) {
+                                                                                    Term t = d.toObject(Term.class);
+                                                                                    terms.add(t);
+                                                                                }
+
+                                                                                studySet.setTerms(terms);
+                                                                                studySets.add(studySet);
+                                                                                onDataLoaded();
+                                                                            }
+                                                                        });
                                                             }
                                                         });
+
                                             }
                                             // load data to UI
                                         }
