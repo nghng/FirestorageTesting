@@ -91,7 +91,11 @@ public class FolderDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 slideDown(activityFolderDetailKebabMenuBinding.kebabMenu);
-                Intent intent = new Intent(FolderDetailActivity.this, CreateStudySetActivity.class);
+//                Intent intent = new Intent(FolderDetailActivity.this, CreateStudySetActivity.class);
+//                intent.putExtra("folderID", folderID);
+//                startActivity(intent);
+
+                Intent intent = new Intent(FolderDetailActivity.this, AddSetToFolderActivity.class);
                 intent.putExtra("folderID", folderID);
                 startActivity(intent);
             }

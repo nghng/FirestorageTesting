@@ -76,9 +76,7 @@ public class ProfileFragment extends Fragment {
                         replaceFragment(new ProfileSetFragment());
                         break;
 
-                    case R.id.profileClass:
-                        replaceFragment(new ProfileClassFragment());
-                        break;
+
 
                     case R.id.profileFolders:
                         replaceFragment(new ProfileFolderFragment());
