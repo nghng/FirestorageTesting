@@ -102,23 +102,25 @@ public class SearchOwnStudySetFragment extends Fragment {
     void getAllData() {
         studySetHashMap.clear();
         Log.d("hash", "getAllData: " + studySetHashMap.size());
-//        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
-//        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-//        pDialog.setTitleText("Loading");
-//        pDialog.setCancelable(false);
-//        pDialog.show();
+        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
+        pDialog.show();
 
         database.collection("studySets")
                 .whereEqualTo("user", currentUser.getEmail())
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.getResult().isEmpty()){
+                            pDialog.cancel();
+                        }
                         for (DocumentSnapshot d : task.getResult()
                         ) {
                             StudySet studySet = d.toObject(StudySet.class);
                             studySet.setStudySetID(d.getId());
                             studySetHashMap.put(d.getId(), studySet);
-//                            pDialog.cancel();
                             database.collection("studySets")
                                     .document(d.getId())
                                     .collection("terms")
@@ -142,6 +144,9 @@ public class SearchOwnStudySetFragment extends Fragment {
                                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if(task.getResult().isEmpty()){
+                                            pDialog.cancel();
+                                        }
                                         for (DocumentSnapshot d : task.getResult()
                                         ) {
                                             Learn learn = d.toObject(Learn.class);
@@ -151,6 +156,10 @@ public class SearchOwnStudySetFragment extends Fragment {
                                                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                if(!task.getResult().exists()){
+                                                                    pDialog.cancel();
+                                                                    return;
+                                                                }
                                                                 StudySet studySet = task.getResult().toObject(StudySet.class);
                                                                 studySet.setStudySetID(task.getResult().getId());
                                                                 database.collection("studySets")
@@ -167,7 +176,7 @@ public class SearchOwnStudySetFragment extends Fragment {
                                                                                 }
                                                                                 studySet.setTerms(terms);
                                                                                 studySetHashMap.put(studySet.getStudySetID(), studySet);
-//                                                                                pDialog.cancel();
+                                                                                pDialog.cancel();
 
 
                                                                             }
@@ -201,6 +210,9 @@ public class SearchOwnStudySetFragment extends Fragment {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.getResult().isEmpty()){
+                            return;
+                        }
                         for (DocumentSnapshot d : task.getResult()
                         ) {
                             Learn learn = d.toObject(Learn.class);
@@ -210,6 +222,9 @@ public class SearchOwnStudySetFragment extends Fragment {
                                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if(!task.getResult().exists()){
+                                                    return;
+                                                }
                                                 StudySet studySet = task.getResult().toObject(StudySet.class);
                                                 studySet.setStudySetID(task.getResult().getId());
                                                 studySets
@@ -259,6 +274,9 @@ public class SearchOwnStudySetFragment extends Fragment {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.getResult().isEmpty()){
+                            pDialog.cancel();
+                        }
                         for (DocumentSnapshot d : task.getResult()
                         ) {
                             StudySet studySet = d.toObject(StudySet.class);

@@ -78,11 +78,22 @@ public class HomeFragment extends Fragment {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.getResult().isEmpty()){
+                            recyclerView.setVisibility(View.INVISIBLE);
+                            noneStudySet.setVisibility(View.VISIBLE);
+                            return;
+                        }else{
+
+                            recyclerView.setVisibility(View.VISIBLE);
+                            noneStudySet.setVisibility(View.INVISIBLE);
+                        }
                         for (DocumentSnapshot d : task.getResult()
                         ) {
+
                             StudySet studySet = d.toObject(StudySet.class);
                             studySet.setStudySetID(d.getId());
                             studySets.add(studySet);
+
                             database.collection("studySets")
                                     .document(d.getId())
                                     .collection("terms")
@@ -96,8 +107,11 @@ public class HomeFragment extends Fragment {
                                                 terms.add(term);
                                             }
                                             studySet.setTerms(terms);
+
                                             onDataLoaded();
+
                                             progressDialog.dismiss();
+
 
 
                                         }
@@ -119,13 +133,7 @@ public class HomeFragment extends Fragment {
     }
 
     void onDataLoaded() {
-        if(studySets.size() == 0){
-            recyclerView.setVisibility(View.INVISIBLE);
-            noneStudySet.setVisibility(View.VISIBLE);
-        }else {
-            recyclerView.setVisibility(View.VISIBLE);
-            noneStudySet.setVisibility(View.INVISIBLE);
-        }
+
         studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
             public void onItemClick(StudySet item, int pos) {
