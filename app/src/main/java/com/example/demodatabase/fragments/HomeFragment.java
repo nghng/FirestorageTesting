@@ -135,8 +135,13 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(studySetAdapter);
         if(studySets.size() == 0){
+            recyclerView.setVisibility(View.GONE);
             noneStudySet.setVisibility(View.VISIBLE);
             nonFolder.setVisibility(View.VISIBLE);
+        }else {
+            recyclerView.setVisibility(View.VISIBLE);
+            noneStudySet.setVisibility(View.INVISIBLE);
+            nonFolder.setVisibility(View.INVISIBLE);
         }
     }
 

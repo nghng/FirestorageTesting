@@ -120,6 +120,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 userInFirestore.setGoogleAccount(false);
                                 userInFirestore.setEmail(strEmail);
                                 userInFirestore.setCreatedDate(new Date());
+                                userInFirestore.setBan(false);
 
                                 database.collection("users").document(strEmail).set(userInFirestore)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
