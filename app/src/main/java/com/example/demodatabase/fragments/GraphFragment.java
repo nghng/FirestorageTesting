@@ -1,6 +1,10 @@
 package com.example.demodatabase.fragments;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -56,13 +61,17 @@ public class GraphFragment extends Fragment {
     EditText etYear;
     TextView title;
     Spinner spinner;
+    TextView yearPicker;
+    int day;
+    int month;
     private static final String[] paths = {"Study Set", "Users"};
+
 
 
     void initUI(View view) {
         barChart = view.findViewById(R.id.barChart);
         studySetsBarChart = view.findViewById(R.id.studySetBarChat);
-        etYear = view.findViewById(R.id.et_year);
+//        etYear = view.findViewById(R.id.et_year);
         title = view.findViewById(R.id.title);
         spinner = view.findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
@@ -93,7 +102,61 @@ public class GraphFragment extends Fragment {
 
             }
         });
+        yearPicker = view.findViewById(R.id.yearPicker);
 
+        yearPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentDate = Calendar.getInstance();
+                String myFormat = "yyyy";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+                DatePickerDialog monthDatePickerDialog = new DatePickerDialog(getActivity(),
+                        AlertDialog.THEME_HOLO_LIGHT, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        if (barChart.getVisibility() == View.VISIBLE) {
+                            initData(parseDate(year + "-01-01"));
+                        } else {
+                            initDataForStudySets(parseDate(year + "-01-01"));
+                        }
+                        mcurrentDate.set(Calendar.YEAR, year);
+                        yearPicker.setText(sdf.format(mcurrentDate.getTime()));
+                        day = dayOfMonth;
+                        currentYear = year;
+                    }
+                }, currentYear, month, day){
+                    @Override
+                    protected void onCreate(Bundle savedInstanceState) {
+                        super.onCreate(savedInstanceState);
+                        getDatePicker().findViewById(getResources().getIdentifier("month","id","android")).setVisibility(View.GONE);
+                        getDatePicker().findViewById(getResources().getIdentifier("day","id","android")).setVisibility(View.GONE);
+                    }
+                };
+                monthDatePickerDialog.setTitle("Select Year");
+                monthDatePickerDialog.show();
+            }
+        });
+//        yearPicker.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),R.style.Theme_DemoDatabase,
+//                        setListener,
+//                        currentYear, day,month);
+//                datePickerDialog.show();
+//
+//                datePickerDialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
+//
+//
+//            }
+//        });
+//
+//        setListener = new DatePickerDialog.OnDateSetListener(){
+//
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//
+//            }
+//        };
 
     }
 
@@ -387,28 +450,28 @@ public class GraphFragment extends Fragment {
     void bindingAction() {
 
 
-        etYear.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (checkEmpty(etYear)) {
-                    if (barChart.getVisibility() == View.VISIBLE) {
-                        initData(parseDate(etYear.getText().toString() + "-01-01"));
-                    } else {
-                        initDataForStudySets(parseDate(etYear.getText().toString() + "-01-01"));
-                    }
-                }
-            }
-        });
+//        etYear.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                if (checkEmpty(etYear)) {
+//                    if (barChart.getVisibility() == View.VISIBLE) {
+//                        initData(parseDate(etYear.getText().toString() + "-01-01"));
+//                    } else {
+//                        initDataForStudySets(parseDate(etYear.getText().toString() + "-01-01"));
+//                    }
+//                }
+//            }
+//        });
     }
 
 
