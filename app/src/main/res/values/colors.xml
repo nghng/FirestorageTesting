@@ -12,5 +12,5 @@
     <color name="red">#D8FF2727</color>
     <color name="grey_l">#4AD1D1D1</color>
     <color name="grey_m">#7E7E7E</color>
-    <color name="grey_transparent">#4BCCCCCC</color>
+    <color name="selected_item">#a1d3ff</color>
 </resources>

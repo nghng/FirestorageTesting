@@ -1,5 +1,6 @@
 package com.example.demodatabase.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -65,8 +67,8 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
                 onItemClickedListener.onItemClick(studySets.get(holder.getAdapterPosition()), holder.getAdapterPosition());
             }
         });
-         if (position < studySets.size())
-             holder.bind(studySets.get(position), onItemClickedListener);
+        if (position < studySets.size())
+            holder.bind(studySets.get(position), onItemClickedListener);
 
 
     }
@@ -182,7 +184,9 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
             cardView = itemView.findViewById(R.id.cv_studyset);
         }
 
+
         public void bind(StudySet studySet, OnItemClickedListener listener) {
+            System.out.println("o bind "+studySet.isSelected());
             tvStudySetName.setText(studySet.getStudySetName());
             tvAccountName.setText(studySet.getDisplayName());
             Uri photoURL = Uri.parse(studySet.getImageUri());
@@ -194,7 +198,21 @@ public class StudySetAdapter extends RecyclerView.Adapter<StudySetAdapter.StudyS
             } else {
                 tvNumberOfTerms.setText("No terms created yet");
             }
-
+            if (studySet.isSelected()) {
+                cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.selected_item));
+            }
+//            cardView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    studySet.setSelected(!studySet.isSelected());
+//                    if (studySet.isSelected()) {
+//                        cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.selected_item));
+//                    }
+//                    else{
+//                        cardView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+//                    }
+//                }
+//            });
         }
     }
 
