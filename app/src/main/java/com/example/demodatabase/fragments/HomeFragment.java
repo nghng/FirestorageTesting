@@ -119,6 +119,13 @@ public class HomeFragment extends Fragment {
     }
 
     void onDataLoaded() {
+        if(studySets.size() == 0){
+            recyclerView.setVisibility(View.INVISIBLE);
+            noneStudySet.setVisibility(View.VISIBLE);
+        }else {
+            recyclerView.setVisibility(View.VISIBLE);
+            noneStudySet.setVisibility(View.INVISIBLE);
+        }
         studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
             public void onItemClick(StudySet item, int pos) {
@@ -134,15 +141,7 @@ public class HomeFragment extends Fragment {
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(studySetAdapter);
-        if(studySets.size() == 0){
-            recyclerView.setVisibility(View.GONE);
-            noneStudySet.setVisibility(View.VISIBLE);
-            nonFolder.setVisibility(View.VISIBLE);
-        }else {
-            recyclerView.setVisibility(View.VISIBLE);
-            noneStudySet.setVisibility(View.INVISIBLE);
-            nonFolder.setVisibility(View.INVISIBLE);
-        }
+
     }
 
     private void initDataFolder() {
@@ -189,6 +188,13 @@ public class HomeFragment extends Fragment {
 
     void onDataLoadedFolder() {
         System.out.println("on data loaded");
+        if(folders.size() == 0){
+            recyclerViewFolder.setVisibility(View.INVISIBLE);
+            nonFolder.setVisibility(View.VISIBLE);
+        }else {
+            recyclerViewFolder.setVisibility(View.VISIBLE);
+            nonFolder.setVisibility(View.INVISIBLE);
+        }
         folderAdapter = new FolderAdapter(folders, getActivity(), new FolderItemClickListener() {
 
             @Override
@@ -215,6 +221,7 @@ public class HomeFragment extends Fragment {
         initData();
         initDataFolder();
         bindingAction();
+
         return view;
 
     }

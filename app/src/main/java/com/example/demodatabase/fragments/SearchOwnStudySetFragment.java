@@ -102,11 +102,11 @@ public class SearchOwnStudySetFragment extends Fragment {
     void getAllData() {
         studySetHashMap.clear();
         Log.d("hash", "getAllData: " + studySetHashMap.size());
-        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        pDialog.setTitleText("Loading");
-        pDialog.setCancelable(false);
-        pDialog.show();
+//        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+//        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+//        pDialog.setTitleText("Loading");
+//        pDialog.setCancelable(false);
+//        pDialog.show();
 
         database.collection("studySets")
                 .whereEqualTo("user", currentUser.getEmail())
@@ -118,6 +118,7 @@ public class SearchOwnStudySetFragment extends Fragment {
                             StudySet studySet = d.toObject(StudySet.class);
                             studySet.setStudySetID(d.getId());
                             studySetHashMap.put(d.getId(), studySet);
+//                            pDialog.cancel();
                             database.collection("studySets")
                                     .document(d.getId())
                                     .collection("terms")
@@ -131,7 +132,6 @@ public class SearchOwnStudySetFragment extends Fragment {
                                                 terms.add(term);
                                             }
                                             studySet.setTerms(terms);
-                                            pDialog.cancel();
 
                                         }
                                     });
@@ -167,7 +167,7 @@ public class SearchOwnStudySetFragment extends Fragment {
                                                                                 }
                                                                                 studySet.setTerms(terms);
                                                                                 studySetHashMap.put(studySet.getStudySetID(), studySet);
-                                                                                pDialog.cancel();
+//                                                                                pDialog.cancel();
 
 
                                                                             }
