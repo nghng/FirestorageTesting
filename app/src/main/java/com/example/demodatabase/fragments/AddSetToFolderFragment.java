@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -48,6 +49,7 @@ public class AddSetToFolderFragment extends Fragment {
     String folderID;
     Folder currentFolder;
     CollectionReference folderRef;
+    ImageView imv_noneset, imv_nonefolder;
 
 
     public AddSetToFolderFragment() {
@@ -58,19 +60,20 @@ public class AddSetToFolderFragment extends Fragment {
         database = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
         progressDialog = new ProgressDialog(getContext());
-
-
+        imv_noneset = view.findViewById(R.id.noneStudySet);
+        imv_nonefolder=view.findViewById(R.id.nonefolder);
+        imv_nonefolder.setVisibility(View.INVISIBLE);
     }
 
     private void initData() {
         Bundle extras = getActivity().getIntent().getExtras();
         folderID = extras.getString("folderID");
         folderRef = database.collection("folders");
-        String email= currentUser.getEmail();
+        String email = currentUser.getEmail();
 
         CollectionReference collectionReference = database.collection("studySets");
         progressDialog.show();
-        collectionReference.whereEqualTo("user",email)
+        collectionReference.whereEqualTo("user", email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -105,77 +108,84 @@ public class AddSetToFolderFragment extends Fragment {
                 });
 
 
-            folderRef.document(folderID)
-                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            currentFolder = task.getResult().toObject(Folder.class);
-                            folderRef.document(folderID)
-                                    .collection("studySets")
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            for (DocumentSnapshot d : task.getResult()
-                                            ) {
+        folderRef.document(folderID)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        currentFolder = task.getResult().toObject(Folder.class);
+                        folderRef.document(folderID)
+                                .collection("studySets")
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        for (DocumentSnapshot d : task.getResult()
+                                        ) {
 
-                                                StudySet set = d.toObject(StudySet.class);
-                                                set.setStudySetID(d.getId());
-                                                existedStudySets.add(set);
-                                            }
-                                            if(existedStudySets.size()!=0){
-                                                System.out.println("khac 0 nhe");
-                                                for (StudySet existedSet: existedStudySets){
-                                                    for (int i=0; i<studySets.size();i++){
-                                                        if(studySets.get(i).getStudySetID().equals(existedSet.getStudySetID())){
-                                                            studySets.remove(i);
-                                                            i--;
-                                                        }
+                                            StudySet set = d.toObject(StudySet.class);
+                                            set.setStudySetID(d.getId());
+                                            existedStudySets.add(set);
+                                        }
+                                        if (existedStudySets.size() != 0) {
+                                            System.out.println("khac 0 nhe");
+                                            for (StudySet existedSet : existedStudySets) {
+                                                for (int i = 0; i < studySets.size(); i++) {
+                                                    if (studySets.get(i).getStudySetID().equals(existedSet.getStudySetID())) {
+                                                        studySets.remove(i);
+                                                        i--;
                                                     }
                                                 }
-                                                System.out.println("studeys setttttttttttt");
-                                                for(StudySet s: studySets){
-                                                    System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
-                                                };
-                                                System.out.println("existed setttt");
-                                                for(StudySet s: existedStudySets){
-                                                    System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
-                                                };
-
                                             }
-                                            onDataLoaded();
+                                            System.out.println("studeys setttttttttttt");
+                                            for (StudySet s : studySets) {
+                                                System.out.println(s.getStudySetName() + " |id : " + s.getStudySetID());
+                                            }
+                                            ;
+                                            System.out.println("existed setttt");
+                                            for (StudySet s : existedStudySets) {
+                                                System.out.println(s.getStudySetName() + " |id : " + s.getStudySetID());
+                                            }
+                                            ;
+
                                         }
-                                    });
-                        }
-                    });
+                                        onDataLoaded();
+                                    }
+                                });
+                    }
+                });
 
 
     }
 
 
     void onDataLoaded() {
+        if (studySets.size() == 0) {
+            recyclerView.setVisibility(View.INVISIBLE);
+            imv_noneset.setVisibility(View.VISIBLE);
 
-        studySetAdapter = new StudySetVerticalAdapter(studySets, getActivity(), new OnItemClickedListener() {
-            @Override
-            public void onItemClick(StudySet item, int pos) {
-                item.setSelected(!item.isSelected());
-                System.out.println(item.isSelected());
-                if(item.isSelected()){
-                    AddSetToFolderActivity.selectedStudySets.add(item);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            imv_noneset.setVisibility(View.INVISIBLE);
+            studySetAdapter = new StudySetVerticalAdapter(studySets, getActivity(), new OnItemClickedListener() {
+                @Override
+                public void onItemClick(StudySet item, int pos) {
+                    item.setSelected(!item.isSelected());
+                    System.out.println(item.isSelected());
+                    if (item.isSelected()) {
+                        AddSetToFolderActivity.selectedStudySets.add(item);
+                    } else
+                        AddSetToFolderActivity.selectedStudySets.remove(item);
                 }
 
-                else
-                    AddSetToFolderActivity.selectedStudySets.remove(item);
-            }
+            });
 
-        });
-
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+            LinearLayoutManager layoutManager
+                    = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(layoutManager);
 //        System.out.println("study set fragment");
 //       studySetAdapter.getItemViewType(1);
-        recyclerView.setAdapter(studySetAdapter);
+            recyclerView.setAdapter(studySetAdapter);
+        }
 
     }
 

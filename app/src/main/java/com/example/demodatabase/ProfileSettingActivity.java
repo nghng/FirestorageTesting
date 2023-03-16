@@ -25,6 +25,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
+
         tvEmail = findViewById(R.id.tv_email);
         tvUsernameInSetting = findViewById(R.id.tv_usernameInSetting);
         ivBackButton= findViewById(R.id.iv_backButton);

@@ -65,6 +65,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Intent intent = new Intent(ForgotPasswordActivity.this, CheckMailActivity.class);
+                    intent.putExtra("msg","Please check your email to change your password");
                     startActivity(intent);
                 } else {
                     FancyToast.makeText(ForgotPasswordActivity.this, "Try again", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();

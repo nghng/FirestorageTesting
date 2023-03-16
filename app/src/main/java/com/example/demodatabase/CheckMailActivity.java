@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 public class CheckMailActivity extends AppCompatActivity {
-    TextView tv_toLogin;
+    TextView tv_toLogin, tvMessage;
 
 
 
@@ -22,6 +22,7 @@ public class CheckMailActivity extends AppCompatActivity {
 
     void init(){
         tv_toLogin = findViewById(R.id.tv_toLoginFromCheckingMail);
+        tvMessage = findViewById(R.id.tvMessage);
     }
 
     void bindingEvents(){
@@ -29,5 +30,6 @@ public class CheckMailActivity extends AppCompatActivity {
             Intent intent = new Intent(CheckMailActivity.this, LoginActivity.class);
             startActivity(intent);
         });
+       tvMessage.setText(getIntent().getExtras().getString("msg"));
     }
 }

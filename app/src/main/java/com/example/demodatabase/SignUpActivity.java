@@ -39,11 +39,11 @@ public class SignUpActivity extends AppCompatActivity {
             "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
     private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
     private FirebaseFirestore database;
+
     public static boolean isValid(final String password) {
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }
-
 
 
     @Override
@@ -83,20 +83,20 @@ public class SignUpActivity extends AppCompatActivity {
                 validNickname = true;
         String strPassword = edt_Password.getText().toString().trim();
         String strConfirmPassword = edt_ConfirmPassword.getText().toString().trim();
-        if(!strPassword.equals(strConfirmPassword)){
+        if (!strPassword.equals(strConfirmPassword)) {
             edt_ConfirmPassword.setError("Password is not matching");
             validConfirmPassword = false;
         }
-        if(strEmail.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()){
+        if (strEmail.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
             edt_Email.setError("Please enter valid email");
             validEmail = false;
         }
-        if(edt_Password.length() < 8 ){
+        if (edt_Password.length() < 8) {
             edt_Password.setError("Please enter valid password (contains at least 8 characters");
             validPassword = false;
         }
         String nickName = edt_Username.getText().toString().trim();
-        if(nickName.isEmpty() ){
+        if (nickName.isEmpty()) {
             edt_Username.setError("Please enter valid user name");
             validNickname = false;
         }
@@ -131,6 +131,8 @@ public class SignUpActivity extends AppCompatActivity {
                                                             .addOnCompleteListener(task1 -> {
                                                                 if (task1.isSuccessful()) {
                                                                     Intent intent = new Intent(SignUpActivity.this, CheckMailActivity.class);
+                                                                    intent.putExtra("msg", "Thanks for signing up \nPlease check your email for verification");
+
                                                                     startActivity(intent);
                                                                 }
                                                             });
