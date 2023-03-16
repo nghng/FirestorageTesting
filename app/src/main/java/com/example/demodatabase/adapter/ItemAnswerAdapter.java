@@ -82,6 +82,9 @@ public class ItemAnswerAdapter extends RecyclerView.Adapter<ItemAnswerAdapter.It
             System.out.println();
             tvChoice.setText(String.valueOf((char) (counter+64)));
             counter++;
+            if(counter > answers.size()){
+                counter = 1;
+            }
         }
     }
 

@@ -10,8 +10,8 @@ public class User {
     private String email;
     private boolean isGoogleAccount;
     private int role;
-    public Date createdDate;
-    public Boolean isBan;
+    private Date createdDate;
+    private Boolean isBan;
 
 
     public String imageUri;
@@ -24,7 +24,7 @@ public class User {
         this.imageUri = imageUri;
     }
 
-    public Boolean getBan() {
+    public Boolean getIsBan() {
         return isBan;
     }
 

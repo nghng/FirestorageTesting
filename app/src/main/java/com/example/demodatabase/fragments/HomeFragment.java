@@ -229,7 +229,6 @@ public class HomeFragment extends Fragment {
         initData();
         initDataFolder();
         bindingAction();
-
         return view;
 
     }
