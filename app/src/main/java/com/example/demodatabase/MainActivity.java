@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -67,7 +68,14 @@ public class MainActivity extends AppCompatActivity {
             int height = LinearLayout.LayoutParams.WRAP_CONTENT;
             boolean focusable = true; // lets taps outside the popup also dismiss it
             final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
+//            Handle lick outside popup window
+            popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    slideUp(activityMainBinding.bottomNavigation);
+                    activityMainBinding.bottomNavigation.setSelectedItemId(previousSelectedMenu);
+                }
+            });
             // show the popup window
             // which view you pass in doesn't matter, it is only used for the window tolken
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
@@ -103,9 +111,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     popupWindow.dismiss();
                     slideUp(activityMainBinding.bottomNavigation);
+                    activityMainBinding.bottomNavigation.setSelectedItemId(previousSelectedMenu);
                 }
             });
-
         });
     }
 
