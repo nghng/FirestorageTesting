@@ -99,7 +99,10 @@ public class SearchFragment extends Fragment {
 
     void initData() {
         Bundle extras = getActivity().getIntent().getExtras();
-        folderID = extras.getString("folderID");
+        if(extras != null){
+            folderID = extras.getString("folderID");
+
+        }
         folderRef = database.collection("folders");
 
         white = ContextCompat.getColor(getContext(), R.color.white);
@@ -110,87 +113,129 @@ public class SearchFragment extends Fragment {
 
         CollectionReference collectionReference = database.collection("studySets");
         progressDialog.show();
-        collectionReference
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for (DocumentSnapshot d : task.getResult()
-                        ) {
-                            StudySet studySet = d.toObject(StudySet.class);
-                            studySet.setStudySetID(d.getId());
-                            studySets.add(studySet);
-                            database.collection("studySets")
-                                    .document(d.getId())
-                                    .collection("terms")
-                                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            ArrayList<Term> terms = new ArrayList<>();
-                                            for (DocumentSnapshot d : task.getResult()
-                                            ) {
-                                                Term term = d.toObject(Term.class);
-                                                terms.add(term);
-                                            }
-                                            studySet.setTerms(terms);
-
-                                        }
-                                    });
-
-                            Log.d("INFO", d.getData().toString());
-                        }
-                        progressDialog.dismiss();
-
-
-                    }
-                });
-
-        if (selectType.equalsIgnoreCase("multipleSelectedItems")) {
-            folderRef.document(folderID)
-                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        if(folderID != null){
+            collectionReference
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            currentFolder = task.getResult().toObject(Folder.class);
-                            folderRef.document(folderID)
-                                    .collection("studySets")
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            for (StudySet existedSet: existedStudySets){
-                                                for (int i=0; i<studySets.size();i++){
-                                                    if(studySets.get(i).getStudySetID().equals(existedSet.getStudySetID())){
-                                                        studySets.remove(i);
-                                                        i--;
-                                                    }
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (DocumentSnapshot d : task.getResult()
+                            ) {
+                                StudySet studySet = d.toObject(StudySet.class);
+                                studySet.setStudySetID(d.getId());
+                                studySets.add(studySet);
+                                database.collection("studySets")
+                                        .document(d.getId())
+                                        .collection("terms")
+                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                ArrayList<Term> terms = new ArrayList<>();
+                                                for (DocumentSnapshot d : task.getResult()
+                                                ) {
+                                                    Term term = d.toObject(Term.class);
+                                                    terms.add(term);
                                                 }
-                                            }
-                                            if(existedStudySets.size()!=0){
-                                                ListIterator<StudySet> iter = studySets.listIterator();
-                                                System.out.println("khac 0 nhe");
-                                                for (StudySet existedSet: existedStudySets){
-                                                    while(iter.hasNext()){
-                                                        if(existedSet.getStudySetID().equals(iter.next().getStudySetID())){
-                                                            iter.remove();
-                                                        }
-                                                    }
-                                                }
-                                                System.out.println("studeys setttttttttttt");
-                                                for(StudySet s: studySets){
-                                                    System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
-                                                };
-                                                System.out.println("existed setttt");
-                                                for(StudySet s: existedStudySets){
-                                                    System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
-                                                };
+                                                studySet.setTerms(terms);
 
                                             }
-                                            onDataLoaded();
-                                        }
-                                    });
+                                        });
+
+                                Log.d("INFO", d.getData().toString());
+                            }
+                            progressDialog.dismiss();
+
+
                         }
                     });
 
+            if (selectType.equalsIgnoreCase("multipleSelectedItems")) {
+
+                folderRef.document(folderID)
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                currentFolder = task.getResult().toObject(Folder.class);
+                                folderRef.document(folderID)
+                                        .collection("studySets")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                for (StudySet existedSet: existedStudySets){
+                                                    for (int i=0; i<studySets.size();i++){
+                                                        if(studySets.get(i).getStudySetID().equals(existedSet.getStudySetID())){
+                                                            studySets.remove(i);
+                                                            i--;
+                                                        }
+                                                    }
+                                                }
+                                                if(existedStudySets.size()!=0){
+                                                    ListIterator<StudySet> iter = studySets.listIterator();
+                                                    System.out.println("khac 0 nhe");
+                                                    for (StudySet existedSet: existedStudySets){
+                                                        while(iter.hasNext()){
+                                                            if(existedSet.getStudySetID().equals(iter.next().getStudySetID())){
+                                                                iter.remove();
+                                                            }
+                                                        }
+                                                    }
+                                                    System.out.println("studeys setttttttttttt");
+                                                    for(StudySet s: studySets){
+                                                        System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
+                                                    };
+                                                    System.out.println("existed setttt");
+                                                    for(StudySet s: existedStudySets){
+                                                        System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
+                                                    };
+
+                                                }
+                                                onDataLoaded();
+                                            }
+                                        });
+                            }
+                        });
+            }
+
+        }else{
+            collectionReference
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (DocumentSnapshot d : task.getResult()
+                            ) {
+                                StudySet studySet = d.toObject(StudySet.class);
+                                studySet.setStudySetID(d.getId());
+                                database.collection("studySets")
+                                        .document(d.getId())
+                                        .collection("terms")
+                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                ArrayList<Term> terms = new ArrayList<>();
+                                                for (DocumentSnapshot d : task.getResult()
+                                                ) {
+                                                    Term term = d.toObject(Term.class);
+                                                    terms.add(term);
+                                                }
+                                                studySet.setTerms(terms);
+                                                studySets.add(studySet);
+                                                onDataLoaded();
+
+
+                                            }
+                                        });
+
+                                Log.d("INFO", d.getData().toString());
+                            }
+                            progressDialog.dismiss();
+
+                        }
+                    });
         }
+
+
+
+
     }
 
     void onDataLoaded() {

@@ -40,7 +40,7 @@
         app:layout_constraintTop_toBottomOf="@+id/rl_header"
         app:layout_constraintVertical_bias="0.184"
         android:layout_width="match_parent"
-        android:src="@drawable/add_studyset"
+        android:src="@drawable/add_new_studyset"
         android:layout_height="200dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -91,7 +91,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_folder"
         app:layout_constraintVertical_bias="0.184"
-        android:src="@drawable/add_folder"
+        android:src="@drawable/add_new_folder"
         />
     <androidx.recyclerview.widget.RecyclerView
 

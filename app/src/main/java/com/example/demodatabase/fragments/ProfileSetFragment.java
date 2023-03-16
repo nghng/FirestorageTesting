@@ -67,9 +67,8 @@ public class ProfileSetFragment extends Fragment {
                         ) {
                             StudySet studySet = d.toObject(StudySet.class);
                             studySet.setStudySetID(studySetID=d.getId());
-                            studySets.add(studySet);
                             database.collection("studySets")
-                                    .document(d.getId())
+                                    .document(studySet.getStudySetID())
                                     .collection("terms")
                                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
@@ -81,6 +80,10 @@ public class ProfileSetFragment extends Fragment {
                                                 terms.add(term);
                                             }
                                             studySet.setTerms(terms);
+                                            studySets.add(studySet);
+                                            onDataLoaded();
+
+
 
                                         }
                                     });
@@ -88,7 +91,6 @@ public class ProfileSetFragment extends Fragment {
                             Log.d("INFO", d.getData().toString());
                         }
                         progressDialog.dismiss();
-                        onDataLoaded();
 
                     }
                 });
