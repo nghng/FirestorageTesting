@@ -47,8 +47,8 @@ public class AddSetToFolderActivity extends AppCompatActivity {
     SweetAlertDialog sweetAlertDialog;
     String folderID;
     String filter = "created";
-    Button btn_created, btn_searched, btn_addNewSet;
-    ImageView backView, addingTerm, checkFinish;
+    Button btn_created, btn_searched, checkFinish;
+    ImageView backView, addingTerm, btn_addNewSet;
     public static ArrayList<StudySet> selectedStudySets = new ArrayList<>();
 
 
@@ -143,6 +143,7 @@ public class AddSetToFolderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_add_set_to_folder);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

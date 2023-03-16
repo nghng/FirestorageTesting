@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FolderDetailActivity">
+
     <RelativeLayout
-        android:background="@color/white"
         android:id="@+id/rl_header"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="@color/white"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -41,64 +42,63 @@
 
 
     </RelativeLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/kebab_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#30000000"
-        >
-
+        android:background="#B3808080">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conLay_addOption"
             android:layout_width="match_parent"
             android:layout_height="350dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/kebab_menu"
-            >
+            app:layout_constraintBottom_toBottomOf="@+id/kebab_menu">
 
             <Button
-                android:backgroundTint="@color/white"
-                android:textColor="@color/black"
                 android:id="@+id/tv_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
                 android:text="Edit"
                 android:textSize="20dp"
+                android:background="@drawable/rounded_button"
+                app:backgroundTint="@null"
+                android:layout_marginHorizontal="50dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@id/conLay_addOption"
                 app:layout_constraintRight_toRightOf="@+id/conLay_addOption"
                 app:layout_constraintTop_toTopOf="@+id/conLay_addOption"
 
                 />
 
             <Button
-                android:backgroundTint="@color/white"
-                android:textColor="@color/black"
                 android:id="@+id/tv_addset"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="30dp"
                 android:text="Add Sets"
                 android:textSize="20dp"
+                android:background="@drawable/rounded_button"
+                app:backgroundTint="@null"
+                android:layout_marginHorizontal="50dp"
+                app:layout_constraintStart_toStartOf="@id/conLay_addOption"
                 app:layout_constraintRight_toRightOf="@+id/conLay_addOption"
                 app:layout_constraintTop_toBottomOf="@+id/tv_edit"
 
                 />
 
 
-
             <Button
-                android:backgroundTint="@color/white"
-                android:textColor="@color/black"
                 android:id="@+id/tv_delete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="30dp"
                 android:text="Delete"
                 android:textSize="20dp"
-
+                android:background="@drawable/rounded_button"
+                app:backgroundTint="@null"
+                android:layout_marginHorizontal="50dp"
+                app:layout_constraintStart_toStartOf="@id/conLay_addOption"
                 app:layout_constraintRight_toRightOf="@+id/conLay_addOption"
                 app:layout_constraintTop_toBottomOf="@+id/tv_addset"
 
@@ -106,16 +106,17 @@
 
             <Button
                 android:id="@+id/btn_cancel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="30dp"
                 android:text="cancel"
                 android:textSize="20dp"
-                android:backgroundTint="@color/white"
-                android:textColor="@color/black"
+                android:background="@drawable/rounded_button"
+                app:backgroundTint="@null"
+                android:layout_marginHorizontal="50dp"
+                app:layout_constraintStart_toStartOf="@id/conLay_addOption"
                 app:layout_constraintRight_toRightOf="@+id/conLay_addOption"
-                app:layout_constraintTop_toBottomOf="@+id/tv_delete"/>
+                app:layout_constraintTop_toBottomOf="@+id/tv_delete" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/conLay_optOut"
@@ -134,9 +135,7 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="680dp"
-        app:layout_constraintTop_toTopOf="parent"
-       >
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

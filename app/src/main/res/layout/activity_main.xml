@@ -68,7 +68,7 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="680dp"
+        android:layout_height="750dp"
         app:layout_constraintTop_toTopOf="parent"
        >
     </FrameLayout>
