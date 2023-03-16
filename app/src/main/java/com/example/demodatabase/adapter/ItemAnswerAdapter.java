@@ -41,6 +41,7 @@ public class ItemAnswerAdapter extends RecyclerView.Adapter<ItemAnswerAdapter.It
     public void onBindViewHolder(@NonNull ItermAnswerViewHolder holder, int position) {
         int pos = holder.getAdapterPosition();
         holder.bind(answers.get(pos));
+
         Answer answer = answers.get(pos);
         if (answer.isRight()) {
             holder.cardAnswer.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +58,6 @@ public class ItemAnswerAdapter extends RecyclerView.Adapter<ItemAnswerAdapter.It
                 }
             });
         }
-
     }
 
     @Override
@@ -80,8 +80,11 @@ public class ItemAnswerAdapter extends RecyclerView.Adapter<ItemAnswerAdapter.It
         public void bind(Answer answer) {
             tvAnswer.setText(answer.getAnswer());
             System.out.println();
-            tvChoice.setText(String.valueOf((char) (counter+64)));
+            tvChoice.setText(String.valueOf((char) (counter + 64)));
             counter++;
+            if (counter > answers.size()) {
+                counter = 1;
+            }
         }
     }
 

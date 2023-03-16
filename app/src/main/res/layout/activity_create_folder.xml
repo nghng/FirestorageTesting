@@ -45,34 +45,39 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imv_accountImage"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="100dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="25dp"
                     android:src="@drawable/ic_baseline_person_24"
-                    app:layout_constraintLeft_toLeftOf="@id/tv_numberOfSets" />
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:layout_editor_absoluteY="0dp" />
 
                 <TextView
                     android:id="@+id/tv_displayName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_marginTop="28dp"
                     android:text="Display name"
-                    app:layout_constraintLeft_toRightOf="@+id/imv_accountImage" />
+                    app:layout_constraintTop_toBottomOf="@id/imv_accountImage"
+                    tools:layout_editor_absoluteX="282dp" />
 
                 <TextView
                     android:id="@+id/tv_folderName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:layout_marginTop="20dp"
                     android:text="Folder Name"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_numberOfSets" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_numberOfSets"
+                    tools:layout_editor_absoluteX="1dp" />
 
                 <TextView
                     android:id="@+id/tv_folderDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="This is folder description"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintTop_toBottomOf="@id/tv_folderName"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="68dp" />
