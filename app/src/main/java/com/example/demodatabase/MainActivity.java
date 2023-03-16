@@ -2,11 +2,13 @@ package com.example.demodatabase;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
     int previousSelectedMenu;
     FirebaseFirestore database;
-    int markedTab=0;
+    int markedTab = 0;
 
     private void initData() {
         activityMainBinding.wrapper.setVisibility(View.GONE);
@@ -67,7 +69,14 @@ public class MainActivity extends AppCompatActivity {
             int height = LinearLayout.LayoutParams.WRAP_CONTENT;
             boolean focusable = true; // lets taps outside the popup also dismiss it
             final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
+//            Handle lick outside popup window
+            popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    slideUp(activityMainBinding.bottomNavigation);
+                    activityMainBinding.bottomNavigation.setSelectedItemId(previousSelectedMenu);
+                }
+            });
             // show the popup window
             // which view you pass in doesn't matter, it is only used for the window tolken
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
@@ -92,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
                     Intent intent = new Intent(MainActivity.this, CreateFolderActivity.class);
-                                            intent.putExtra("folderName", folderName);
+                    intent.putExtra("folderName", folderName);
                     intent.putExtra("folderDescription", folderDescription);
-                                            startActivity(intent);
+                    startActivity(intent);
                 }
             });
 
@@ -103,9 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     popupWindow.dismiss();
                     slideUp(activityMainBinding.bottomNavigation);
+                    activityMainBinding.bottomNavigation.setSelectedItemId(previousSelectedMenu);
                 }
             });
-
         });
     }
 
@@ -116,55 +125,53 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
-        Bundle extra=getIntent().getExtras();
-        if(extra!=null)
-            markedTab=Integer.parseInt(extra.getString("markedTab"));
-        System.out.println("marked tab ne: "+markedTab);
+        Bundle extra = getIntent().getExtras();
+        if (extra != null)
+            markedTab = Integer.parseInt(extra.getString("markedTab"));
+        System.out.println("marked tab ne: " + markedTab);
 
-if(markedTab==0){
-    replaceFragment(new HomeFragment());
-    initData();
-    bindingAction();
-    activityMainBinding.bottomNavigation.setOnItemSelectedListener(item -> {
-        switch (item.getItemId()) {
-            case R.id.home:
-                replaceFragment(new HomeFragment());
-                previousSelectedMenu = R.id.home;
-                break;
+        if (markedTab == 0) {
+            replaceFragment(new HomeFragment());
+        } else {
+            activityMainBinding.bottomNavigation.setSelectedItemId(R.id.profile);
+            replaceFragment(new ProfileFragment(markedTab));
+            markedTab = 0;}
+            initData();
+            bindingAction();
+            activityMainBinding.bottomNavigation.setOnItemSelectedListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.home:
+                        replaceFragment(new HomeFragment());
+                        previousSelectedMenu = R.id.home;
+                        break;
 
-            case R.id.addStudySet:
-                // show adding selections
-                slideUp(activityMainBinding.wrapper);
+                    case R.id.addStudySet:
+                        // show adding selections
+                        slideUp(activityMainBinding.wrapper);
 //                    activityMainBinding.wrapper.setVisibility(View.VISIBLE);
-                activityMainBinding.bottomNavigation.setVisibility(View.GONE);
-                activityMainBinding.wrapper.bringToFront();
-                break;
+                        activityMainBinding.bottomNavigation.setVisibility(View.GONE);
+                        activityMainBinding.wrapper.bringToFront();
+                        break;
 
-            case R.id.search:
-                previousSelectedMenu = R.id.search;
-                replaceFragment(new SearchFragment());
-                break;
+                    case R.id.search:
+                        previousSelectedMenu = R.id.search;
+                        activityMainBinding.bottomNavigation.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.white));
+                        replaceFragment(new SearchFragment());
 
-            case R.id.profile:
-                previousSelectedMenu = R.id.profile;
-                replaceFragment(new ProfileFragment());
-                break;
+                        break;
+
+                    case R.id.profile:
+                        previousSelectedMenu = R.id.profile;
+                        replaceFragment(new ProfileFragment());
+                        break;
+                }
+
+                return true;
+            });
         }
 
-        return true;
-    });
-}
-else{
-    activityMainBinding.bottomNavigation.setSelectedItemId(R.id.profile);
-    replaceFragment(new ProfileFragment(markedTab));
-    markedTab=0;
-    initData();
-    bindingAction();
-}
 
 
-
-    }
 
     public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

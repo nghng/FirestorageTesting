@@ -113,6 +113,9 @@ public class SearchOwnStudySetFragment extends Fragment {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.getResult().isEmpty()){
+                            pDialog.cancel();
+                        }
                         for (DocumentSnapshot d : task.getResult()
                         ) {
                             StudySet studySet = d.toObject(StudySet.class);
@@ -131,7 +134,6 @@ public class SearchOwnStudySetFragment extends Fragment {
                                                 terms.add(term);
                                             }
                                             studySet.setTerms(terms);
-                                            pDialog.cancel();
 
                                         }
                                     });
@@ -142,6 +144,9 @@ public class SearchOwnStudySetFragment extends Fragment {
                                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if(task.getResult().isEmpty()){
+                                            pDialog.cancel();
+                                        }
                                         for (DocumentSnapshot d : task.getResult()
                                         ) {
                                             Learn learn = d.toObject(Learn.class);
@@ -151,6 +156,10 @@ public class SearchOwnStudySetFragment extends Fragment {
                                                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                if(!task.getResult().exists()){
+                                                                    pDialog.cancel();
+                                                                    return;
+                                                                }
                                                                 StudySet studySet = task.getResult().toObject(StudySet.class);
                                                                 studySet.setStudySetID(task.getResult().getId());
                                                                 database.collection("studySets")
@@ -201,6 +210,9 @@ public class SearchOwnStudySetFragment extends Fragment {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.getResult().isEmpty()){
+                            return;
+                        }
                         for (DocumentSnapshot d : task.getResult()
                         ) {
                             Learn learn = d.toObject(Learn.class);
@@ -210,6 +222,9 @@ public class SearchOwnStudySetFragment extends Fragment {
                                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if(!task.getResult().exists()){
+                                                    return;
+                                                }
                                                 StudySet studySet = task.getResult().toObject(StudySet.class);
                                                 studySet.setStudySetID(task.getResult().getId());
                                                 studySets
@@ -259,6 +274,9 @@ public class SearchOwnStudySetFragment extends Fragment {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.getResult().isEmpty()){
+                            pDialog.cancel();
+                        }
                         for (DocumentSnapshot d : task.getResult()
                         ) {
                             StudySet studySet = d.toObject(StudySet.class);
@@ -379,26 +397,35 @@ public class SearchOwnStudySetFragment extends Fragment {
 
         btnSearchAll.setOnClickListener(v -> {
             etSearch.setVisibility(View.VISIBLE);
-            btnSearchAll.setBackgroundColor(Color.BLACK);
-            btnSearchStudied.setBackgroundColor(Color.parseColor("#38B6FF"));
-            btnSearchCreated.setBackgroundColor(Color.parseColor("#38B6FF"));
+            btnSearchAll.setBackgroundColor(Color.parseColor("#38B6FF"));
+            btnSearchAll.setTextColor(Color.parseColor("#ffffff"));
+            btnSearchCreated.setBackgroundColor(Color.parseColor("#ffffff"));
+            btnSearchCreated.setTextColor(Color.parseColor("#000000"));
+            btnSearchStudied.setBackgroundColor(Color.parseColor("#ffffff"));
+            btnSearchStudied.setTextColor(Color.parseColor("#000000"));
             getAllData();
         });
 
         btnSearchStudied.setOnClickListener(v -> {
             etSearch.setVisibility(View.INVISIBLE);
-            btnSearchStudied.setBackgroundColor(Color.BLACK);
-            btnSearchAll.setBackgroundColor(Color.parseColor("#38B6FF"));
-            btnSearchCreated.setBackgroundColor(Color.parseColor("#38B6FF"));
+            btnSearchStudied.setBackgroundColor(Color.parseColor("#38B6FF"));
+            btnSearchStudied.setTextColor(Color.parseColor("#ffffff"));
+            btnSearchCreated.setBackgroundColor(Color.parseColor("#ffffff"));
+            btnSearchCreated.setTextColor(Color.parseColor("#000000"));
+            btnSearchAll.setBackgroundColor(Color.parseColor("#ffffff"));
+            btnSearchAll.setTextColor(Color.parseColor("#000000"));
             getStudiedSets();
 
         });
 
         btnSearchCreated.setOnClickListener(v -> {
             etSearch.setVisibility(View.INVISIBLE);
-            btnSearchCreated.setBackgroundColor(Color.BLACK);
-            btnSearchAll.setBackgroundColor(Color.parseColor("#38B6FF"));
-            btnSearchStudied.setBackgroundColor(Color.parseColor("#38B6FF"));
+            btnSearchCreated.setBackgroundColor(Color.parseColor("#38B6FF"));
+            btnSearchCreated.setTextColor(Color.parseColor("#ffffff"));
+            btnSearchStudied.setBackgroundColor(Color.parseColor("#ffffff"));
+            btnSearchStudied.setTextColor(Color.parseColor("#000000"));
+            btnSearchAll.setBackgroundColor(Color.parseColor("#ffffff"));
+            btnSearchAll.setTextColor(Color.parseColor("#000000"));
             getCreatedStudySets();
 
         });

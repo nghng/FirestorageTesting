@@ -53,27 +53,15 @@ public class StudySetVerticalAdapter extends RecyclerView.Adapter<StudySetVertic
             view.findViewById(R.id.cv_studyset_v).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
 
-        System.out.println("item " + viewType);
+//        View view2= LayoutInflater.from(mContext).inflate(R.layout.fragment_search, parent, false);
+
+//        System.out.println("item " + viewType);
         return new StudySetViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull StudySetViewHolder holder, int position) {
-        holder.bind(studySets.get(position), onItemClickedListener);
-        Drawable bg=holder.cardView.getBackground();;
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!studySets.get(holder.getAdapterPosition()).isSelected()){
 
-                    holder.cardView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.my_border));
-                }
-                else{
-                    holder.cardView.setBackground(bg);
-                }
-                onItemClickedListener.onItemClick(studySets.get(holder.getAdapterPosition()), holder.getAdapterPosition());
-            }
-        });
 //        holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
 //            @Override
 //            public boolean onLongClick(View v) {
@@ -81,10 +69,23 @@ public class StudySetVerticalAdapter extends RecyclerView.Adapter<StudySetVertic
 //                return false;
 //            }
 //        });
-        if (position < studySets.size())
+        if (position < studySets.size()) {
             holder.bind(studySets.get(position), onItemClickedListener);
+            Drawable bg = holder.cardView.getBackground();
+            ;
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!studySets.get(holder.getAdapterPosition()).isSelected()) {
 
-
+                        holder.cardView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.my_border));
+                    } else {
+                        holder.cardView.setBackground(bg);
+                    }
+                    onItemClickedListener.onItemClick(studySets.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+                }
+            });
+        }
     }
 
     @Override
@@ -112,7 +113,6 @@ public class StudySetVerticalAdapter extends RecyclerView.Adapter<StudySetVertic
 
                 }
             } else {
-
                 for (StudySet studySet : studySetsOld) {
                     if (studySet.getDisplayName() != null) {
                         if (studySet.getDisplayName().toLowerCase().contains(search.toLowerCase())
@@ -123,12 +123,9 @@ public class StudySetVerticalAdapter extends RecyclerView.Adapter<StudySetVertic
 
                 }
             }
-
             studySets = list;
-
-            notifyDataSetChanged();
+            // notifyDataSetChanged();
         }
-
         return studySets;
     }
 
@@ -150,8 +147,6 @@ public class StudySetVerticalAdapter extends RecyclerView.Adapter<StudySetVertic
             }
         };
     }
-
-    ;
 
     @Override
     public Filter getFilter() {
@@ -183,6 +178,7 @@ public class StudySetVerticalAdapter extends RecyclerView.Adapter<StudySetVertic
 
 
     public class StudySetViewHolder extends RecyclerView.ViewHolder {
+
         TextView tvStudySetName;
         TextView tvNumberOfTerms;
         ImageView imvAccountImage;
@@ -193,7 +189,7 @@ public class StudySetVerticalAdapter extends RecyclerView.Adapter<StudySetVertic
             super(itemView);
             tvAccountName = itemView.findViewById(R.id.tv_accountName_v);
             imvAccountImage = itemView.findViewById(R.id.imv_accountImage_v);
-            tvNumberOfTerms =itemView.findViewById(R.id.tv_numberOfTerms_v);
+            tvNumberOfTerms = itemView.findViewById(R.id.tv_numberOfTerms_v);
             tvStudySetName = itemView.findViewById(R.id.tv_studySetName_v);
             cardView = itemView.findViewById(R.id.cv_studyset_v);
         }

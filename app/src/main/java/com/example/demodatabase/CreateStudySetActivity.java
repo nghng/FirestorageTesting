@@ -148,7 +148,7 @@ public class CreateStudySetActivity extends AppCompatActivity {
         addingTerm.setOnClickListener(view -> {
             Term addingTerm = new Term("", "");
             terms.add(addingTerm);
-            createTermAdapter.notifyDataSetChanged();
+            createTermAdapter.notifyItemInserted(terms.size() - 1);
             scrollView.post(new Runnable() {
                 @Override
                 public void run() {

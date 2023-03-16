@@ -66,10 +66,11 @@ public class AddSetToFolderFragment extends Fragment {
         Bundle extras = getActivity().getIntent().getExtras();
         folderID = extras.getString("folderID");
         folderRef = database.collection("folders");
+        String email= currentUser.getEmail();
 
         CollectionReference collectionReference = database.collection("studySets");
         progressDialog.show();
-        collectionReference
+        collectionReference.whereEqualTo("user",email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

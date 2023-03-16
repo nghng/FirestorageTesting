@@ -40,7 +40,7 @@ public class CreateTermAdapter extends RecyclerView.Adapter<CreateTermAdapter.Cr
 
     @Override
     public void onBindViewHolder(@NonNull CreateStudySetViewHolder holder, int position) {
-        int pos = holder.getAdapterPosition();
+        int pos = holder.getBindingAdapterPosition();
         holder.bind(terms.get(pos), listener);
         holder.etTerm.addTextChangedListener(new TextWatcher() {
             @Override
@@ -88,7 +88,7 @@ public class CreateTermAdapter extends RecyclerView.Adapter<CreateTermAdapter.Cr
 
         holder.removeTerm.setOnClickListener(view ->{
             terms.remove(pos);
-            notifyDataSetChanged();
+            notifyItemRemoved(pos);
         });
 
     }

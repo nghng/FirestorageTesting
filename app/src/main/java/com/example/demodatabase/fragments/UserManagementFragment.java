@@ -104,17 +104,17 @@ public class UserManagementFragment extends Fragment {
             @Override
             public void disableAccount(User user, int pos) {
                 new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText(user.getBan() ? "Enable this account" : "Disable this account")
-                        .setTitleText(user.getBan() ? "This user will be able to login again" : "This user will no longer able to log in")
+                        .setTitleText(user.getIsBan() ? "Enable this account" : "Disable this account")
+                        .setTitleText(user.getIsBan() ? "This user will be able to login again" : "This user will no longer able to log in")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 database.collection("users")
                                         .document(user.getEmail())
-                                        .update("isBan" , !user.getBan()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        .update("isBan" , !user.getIsBan()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                user.setBan(!user.getBan());
+                                                user.setBan(!user.getIsBan());
                                                 itemUserManageAdapter.notifyDataSetChanged();
                                                 sweetAlertDialog.cancel();
                                             }

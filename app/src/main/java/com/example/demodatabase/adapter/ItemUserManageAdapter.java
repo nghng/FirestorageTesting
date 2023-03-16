@@ -52,7 +52,7 @@ public class ItemUserManageAdapter extends RecyclerView.Adapter<ItemUserManageAd
         String[] paths1 = {" ", "Reset password", "Enable account"};
         ArrayAdapter<String> adapter;
 
-        if (users.get(holder.getAdapterPosition()).getBan()) {
+        if (users.get(holder.getAdapterPosition()).getIsBan()) {
             adapter = new ArrayAdapter<String>(mContext,
                     android.R.layout.simple_spinner_item, paths1);
             holder.card.setBackgroundColor(Color.RED);

@@ -134,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
                                                 User user = task.getResult().toObject(User.class);
-                                                if (user.getBan()){
+                                                if (user.getIsBan()){
                                                     new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
                                                             .setTitleText("Banning notification")
                                                             .setContentText("You have been banned from the system, please contact our admin through: toiyeutaixiuvobeben@gmail.com")
@@ -184,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                                database.collection("users").document(currentUser.getEmail()).set(userFireStorage);
                            }else {
                                User user = task.getResult().toObject(User.class);
-                               if (user.getBan()){
+                               if (user.getIsBan()){
                                    new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
                                            .setTitleText("Banning notification")
                                            .setContentText("You have been banned from the system, please contact our admin through: toiyeutaixiuvobeben@gmail.com")

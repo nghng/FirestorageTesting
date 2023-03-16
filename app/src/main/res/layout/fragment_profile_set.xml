@@ -19,7 +19,33 @@
     <!--        android:layout_width="wrap_content"-->
     <!--        android:layout_height="194dp"-->
     <!--        android:text="Profile set view" />-->
+    <ImageView
+        android:id="@+id/noneStudySet"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:src="@drawable/add_new_studyset"
+        android:layout_height="200dp"/>
 
+    <ImageView
+        android:id="@+id/nonefolder"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:src="@drawable/add_new_folder"
+        android:layout_height="200dp"/>
     <androidx.recyclerview.widget.RecyclerView
 
         android:id="@+id/rv_studySetsProfile"

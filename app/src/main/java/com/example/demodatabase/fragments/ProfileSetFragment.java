@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.demodatabase.R;
 import com.example.demodatabase.StudySetDetailActivity;
@@ -43,11 +44,15 @@ public class ProfileSetFragment extends Fragment {
     ArrayList<StudySet> studySets = new ArrayList<>();
     ProgressDialog progressDialog;
     String studySetID;
-
+    ImageView imv_nonefolder;
+    ImageView imv_nonestudyset;
     public ProfileSetFragment(){
     }
 
     private void initUI(View view) {
+        imv_nonefolder=view.findViewById(R.id.nonefolder);
+        imv_nonestudyset=view.findViewById(R.id.noneStudySet);
+        imv_nonefolder.setVisibility(View.INVISIBLE);
         recyclerView = view.findViewById(R.id.rv_studySetsProfile);
         database = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
@@ -67,9 +72,8 @@ public class ProfileSetFragment extends Fragment {
                         ) {
                             StudySet studySet = d.toObject(StudySet.class);
                             studySet.setStudySetID(studySetID=d.getId());
-                            studySets.add(studySet);
                             database.collection("studySets")
-                                    .document(d.getId())
+                                    .document(studySet.getStudySetID())
                                     .collection("terms")
                                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
@@ -81,6 +85,10 @@ public class ProfileSetFragment extends Fragment {
                                                 terms.add(term);
                                             }
                                             studySet.setTerms(terms);
+                                            studySets.add(studySet);
+                                            onDataLoaded();
+
+
 
                                         }
                                     });
@@ -88,7 +96,6 @@ public class ProfileSetFragment extends Fragment {
                             Log.d("INFO", d.getData().toString());
                         }
                         progressDialog.dismiss();
-                        onDataLoaded();
 
                     }
                 });
@@ -97,25 +104,31 @@ public class ProfileSetFragment extends Fragment {
 
 
     void onDataLoaded() {
-        for (StudySet s: studySets){
-            System.out.println(s.getStudySetName());
+        if(studySets.size()==0){
+            recyclerView.setVisibility(View.INVISIBLE);
+            imv_nonestudyset.setVisibility(View.VISIBLE);
         }
-        studySetAdapter = new StudySetVerticalAdapter(studySets, getActivity(), new OnItemClickedListener() {
-            @Override
-            public void onItemClick(StudySet item, int pos) {
-                Intent intent = new Intent(getContext(), StudySetDetailActivity.class);
-                intent.putExtra("studySetID", item.getStudySetID());
-                startActivity(intent);;
-            }
+        else{
+            recyclerView.setVisibility(View.VISIBLE);
+            imv_nonestudyset.setVisibility(View.INVISIBLE);
+            studySetAdapter = new StudySetVerticalAdapter(studySets, getActivity(), new OnItemClickedListener() {
+                @Override
+                public void onItemClick(StudySet item, int pos) {
+                    Intent intent = new Intent(getContext(), StudySetDetailActivity.class);
+                    intent.putExtra("studySetID", item.getStudySetID());
+                    startActivity(intent);;
+                }
 
-        });
+            });
 
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+            LinearLayoutManager layoutManager
+                    = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(layoutManager);
 //        System.out.println("study set fragment");
 //       studySetAdapter.getItemViewType(1);
-        recyclerView.setAdapter(studySetAdapter);
+            recyclerView.setAdapter(studySetAdapter);
+        }
+
 
     }
 

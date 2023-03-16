@@ -1,35 +1,29 @@
 package com.example.demodatabase.fragments;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.demodatabase.AddSetToFolderActivity;
-import com.example.demodatabase.CreateStudySetActivity;
+import com.example.demodatabase.FolderDetailActivity;
+import com.example.demodatabase.MainActivity;
 import com.example.demodatabase.R;
 import com.example.demodatabase.StudySetDetailActivity;
 import com.example.demodatabase.adapter.StudySetAdapter;
@@ -41,6 +35,7 @@ import com.example.demodatabase.model.StudySet;
 import com.example.demodatabase.model.Term;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -68,6 +63,7 @@ public class FolderDetailFragment extends Fragment {
     int numberOfSets;
     Button btn_addset;
     StudySetVerticalAdapter studySetAdapter;
+    ItemTouchHelper itemTouchHelper;
 
     public FolderDetailFragment() {
         // Required empty public constructor
@@ -94,12 +90,20 @@ public class FolderDetailFragment extends Fragment {
             folderID = extras.getString("folderID");
             System.out.println(folderID);
             database = FirebaseFirestore.getInstance();
+            CollectionReference studySetRef = database.collection("studySets");
             CollectionReference folderRef = database.collection("folders");
             folderRef.document(folderID)
                     .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             currentFolder = task.getResult().toObject(Folder.class);
+
+                            tv_displayName.setText(currentUser.getDisplayName());
+                            tv_folderName.setText(currentFolder.getFolderName());
+                            tv_folderDescription.setText(currentFolder.getFolderDescription());
+                            Glide.with(getContext()).load(currentUser.getPhotoUrl()).error(R.drawable.default_user_image)
+                                    .into(img_AccountImage);
+
                             folderRef.document(folderID)
                                     .collection("studySets")
                                     .get()
@@ -108,26 +112,32 @@ public class FolderDetailFragment extends Fragment {
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             for (DocumentSnapshot d : task.getResult()
                                             ) {
-
-                                                StudySet set = d.toObject(StudySet.class);
                                                 ArrayList<Term> terms = new ArrayList<>();
-                                                set.setStudySetID(d.getId());
                                                 database.collection("studySets")
-                                                        .document(d.getId())
-                                                        .collection("terms")
-                                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        .document(d.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                             @Override
-                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                for (DocumentSnapshot d : task.getResult().getDocuments()
-                                                                ) {
-                                                                    Term t = d.toObject(Term.class);
-                                                                    terms.add(t);
-                                                                }
-                                                                set.setTerms(terms);
-                                                                studySets.add(set);
-                                                                onDataLoaded();
+                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                                                                StudySet studySet = task.getResult().toObject(StudySet.class);
+                                                                studySet.setStudySetID(task.getResult().getId());
+                                                                studySetRef.document(studySet.getStudySetID()).collection("terms")
+                                                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                                for (DocumentSnapshot d : task.getResult().getDocuments()
+                                                                                ) {
+                                                                                    Term t = d.toObject(Term.class);
+                                                                                    terms.add(t);
+                                                                                }
+
+                                                                                studySet.setTerms(terms);
+                                                                                studySets.add(studySet);
+                                                                                onDataLoaded();
+                                                                            }
+                                                                        });
                                                             }
                                                         });
+
                                             }
                                             // load data to UI
                                         }
@@ -145,11 +155,7 @@ public class FolderDetailFragment extends Fragment {
         numberOfSets = currentFolder.getStudysets().size();
 
         tv_numberOfSets.setText(numberOfSets + (numberOfSets <= 1 ? " set" : " sets"));
-        tv_displayName.setText(currentUser.getDisplayName());
-        tv_folderName.setText(currentFolder.getFolderName());
-        tv_folderDescription.setText(currentFolder.getFolderDescription());
-        Glide.with(getContext()).load(currentUser.getPhotoUrl()).error(R.drawable.default_user_image)
-                .into(img_AccountImage);
+
         if (numberOfSets == 0) {
             rv_studySets.setVisibility(View.INVISIBLE);
         } else {
@@ -170,10 +176,96 @@ public class FolderDetailFragment extends Fragment {
                     = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
             rv_studySets.setLayoutManager(layoutManager);
             rv_studySets.setAdapter(studySetAdapter);
+
+            ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    int position=viewHolder.getAdapterPosition();
+                    StudySet removingSet=studySets.get(position);
+                    CollectionReference folderRef = database.collection("folders");
+                            folderRef.document(folderID).collection("studySets").document(removingSet.getStudySetID()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                }
+                            });
+
+                    Snackbar snackbar = Snackbar
+                            .make(rv_studySets, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                    studySets.remove(position);
+                    studySetAdapter.notifyItemRemoved(position);
+                    tv_numberOfSets.setText(studySets.size() + (studySets.size() <= 1 ? " set" : " sets"));
+                    snackbar.setAction("UNDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            folderRef.document(folderID).collection("studySets").
+                                    document(removingSet.getStudySetID()).set(removingSet);
+                            Toast.makeText(getContext(), "Undo Successfully", Toast.LENGTH_LONG).show();
+//                                    Intent intent = new Intent(getContext(), FolderDetailActivity.class);
+//                                    intent.putExtra("folderID", folderID);
+//                                    startActivity(intent);
+                            studySets.add(position, removingSet);
+                            studySetAdapter.notifyItemInserted(position);
+                            tv_numberOfSets.setText(studySets.size() + (studySets.size() <= 1 ? " set" : " sets"));
+                        }
+                    });
+
+//                    snackbar.setActionTextColor(Color.YELLOW);
+                    snackbar.show();
+
+
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//                    builder.setTitle("");
+//                    builder.setMessage("Are you sure you want to remove this set from this folder permanently?");
+//
+//                    builder.setPositiveButton("REMOVE", new DialogInterface.OnClickListener() {
+//
+//                        public void onClick(DialogInterface dialog, int which) {
+//
+//                            CollectionReference folderRef = database.collection("folders");
+//                            folderRef.document(folderID).collection("studySets").document(removingSet.getStudySetID()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Void> task) {
+//                                    Toast.makeText(getContext(), "Removed Successfully", Toast.LENGTH_LONG).show();
+//                                    Intent intent = new Intent(getContext(), FolderDetailActivity.class);
+//                                    intent.putExtra("folderID", folderID);
+//                                    startActivity(intent);
+//                                }
+//                            });
+//                            dialog.dismiss();
+//
+//                        }
+//                    });
+//
+//                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+//
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//
+//                            // Do nothing
+//                            dialog.dismiss();
+//                        }
+//                    });
+//
+//                    AlertDialog alert = builder.create();
+//                    alert.show();
+//                    studySets.remove(position);
+//                    studySetAdapter.notifyItemRemoved(position);
+                }
+            };
+
+            itemTouchHelper=new ItemTouchHelper(simpleCallback);
+            itemTouchHelper.attachToRecyclerView(rv_studySets);
         }
     }
 
     void bindingAction() {
+
+
         btn_addset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -55,7 +55,6 @@ public class StudySetDetailActivity extends AppCompatActivity {
     ItemTermCardAdapter itemTermCardAdapter;
 
 
-
     void initUI() {
         getSupportActionBar().hide();
         imvBack = findViewById(R.id.imv_back);
@@ -142,7 +141,6 @@ public class StudySetDetailActivity extends AppCompatActivity {
     void bindingAction() {
 
 
-
         imvBack.setOnClickListener(view -> {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -155,69 +153,53 @@ public class StudySetDetailActivity extends AppCompatActivity {
         clTapOut.setOnClickListener(view -> {
             slideDown(wrapper);
         });
-        CollectionReference studySetsRef = database.collection("studySets");
+        CollectionReference termRef = database.collection("studySets").document(studySetID).collection("terms");
 
         originalCard.setOnClickListener(view -> {
+
             oriTick.setVisibility(View.VISIBLE);
             alphaTick.setVisibility(View.INVISIBLE);
-            studySetsRef.document(studySetID)
-                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            currentStudySet = task.getResult().toObject(StudySet.class);
-                            studySetsRef.document(studySetID)
-                                    .collection("terms")
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            ArrayList<Term> terms = new ArrayList<>();
-                                            for (DocumentSnapshot d : task.getResult()
-                                            ) {
-                                                Term term = d.toObject(Term.class);
-                                                terms.add(term);
-                                                term.setTermID(d.getId());
-                                            }
-                                            currentStudySet.setTerms(terms);
-                                            // load data to UI
-                                            onDataLoaded();
-                                            slideDown(wrapper);
-                                        }
-                                    });
-                        }
-                    });
+            termRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    ArrayList<Term> terms = new ArrayList<>();
+                    for (DocumentSnapshot d : task.getResult()
+                    ) {
+                        Term term = d.toObject(Term.class);
+                        terms.add(term);
+                        term.setTermID(d.getId());
+                    }
+                    currentStudySet.setTerms(terms);
+                    // load data to UI
+                    onDataLoaded();
+                    slideDown(wrapper);
+                }
+            });
+
+
         });
 
         alphaCard.setOnClickListener(view -> {
             oriTick.setVisibility(View.INVISIBLE);
             alphaTick.setVisibility(View.VISIBLE);
-            studySetsRef.document(studySetID)
-                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            termRef.orderBy("term")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            currentStudySet = task.getResult().toObject(StudySet.class);
-                            studySetsRef.document(studySetID)
-                                    .collection("terms")
-                                    .orderBy("term")
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            ArrayList<Term> terms = new ArrayList<>();
-                                            for (DocumentSnapshot d : task.getResult()
-                                            ) {
-                                                Term term = d.toObject(Term.class);
-                                                terms.add(term);
-                                                term.setTermID(d.getId());
-                                            }
-                                            currentStudySet.setTerms(terms);
-                                            // load data to UI
-                                            onDataLoaded();
-                                            slideDown(wrapper);
-                                        }
-                                    });
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            ArrayList<Term> terms = new ArrayList<>();
+                            for (DocumentSnapshot d : task.getResult()
+                            ) {
+                                Term term = d.toObject(Term.class);
+                                terms.add(term);
+                                term.setTermID(d.getId());
+                            }
+                            currentStudySet.setTerms(terms);
+                            // load data to UI
+                            onDataLoaded();
+                            slideDown(wrapper);
                         }
                     });
+
         });
 
         cardLearn.setOnClickListener(view -> {
@@ -229,14 +211,14 @@ public class StudySetDetailActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        imvSetting.setOnClickListener(view ->{
+        imvSetting.setOnClickListener(view -> {
             Log.d("test", "bindingAction: " + currentStudySet.getUser().equals(currentUser.getEmail().toString()));
-            if(!currentStudySet.getUser().equals(currentUser.getEmail().toString())){
+            if (!currentStudySet.getUser().equals(currentUser.getEmail().toString())) {
                 new SweetAlertDialog(StudySetDetailActivity.this, SweetAlertDialog.WARNING_TYPE)
                         .setContentText("You do not have permission to do this")
                         .show();
 
-            }else {
+            } else {
                 Intent intent = new Intent(this, StudySetSettingActivity.class);
                 intent.putExtra("studySetID", studySetID);
                 Bundle args = new Bundle();

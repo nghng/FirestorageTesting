@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.demodatabase.FolderDetailActivity;
 import com.example.demodatabase.R;
@@ -42,11 +43,16 @@ public class ProfileFolderFragment extends Fragment {
     FirebaseFirestore database;
     ArrayList<Folder> folders = new ArrayList<>();
     ProgressDialog progressDialog;
+    ImageView imv_nonefolder;
+    ImageView imv_nonestudyset;
 
     public ProfileFolderFragment(){
     }
 
     private void initUI(View view) {
+        imv_nonefolder=view.findViewById(R.id.nonefolder);
+        imv_nonestudyset=view.findViewById(R.id.noneStudySet);
+        imv_nonestudyset.setVisibility(View.INVISIBLE);
         recyclerView = view.findViewById(R.id.rv_studySetsProfile);
         database = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
@@ -97,21 +103,29 @@ public class ProfileFolderFragment extends Fragment {
 
 
     void onDataLoaded() {
-        System.out.println("on data loaded");
-        folderAdapter = new FolderAdapter(folders, getActivity(), new FolderItemClickListener() {
+        if(folders.size()==0){
+            recyclerView.setVisibility(View.INVISIBLE);
+            imv_nonefolder.setVisibility(View.VISIBLE);
+        }
+        else{
+            recyclerView.setVisibility(View.VISIBLE);
+            imv_nonefolder.setVisibility(View.INVISIBLE);
+            folderAdapter = new FolderAdapter(folders, getActivity(), new FolderItemClickListener() {
 
-            @Override
-            public void onItemFolderClick(Folder item, int pos) {
-                Intent intent = new Intent(getContext(), FolderDetailActivity.class);
-                intent.putExtra("folderID", item.getFolderID());
-                startActivity(intent);
-            }
-        });
+                @Override
+                public void onItemFolderClick(Folder item, int pos) {
+                    Intent intent = new Intent(getContext(), FolderDetailActivity.class);
+                    intent.putExtra("folderID", item.getFolderID());
+                    startActivity(intent);
+                }
+            });
 
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(folderAdapter);
+            LinearLayoutManager layoutManager
+                    = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setAdapter(folderAdapter);
+        }
+
     }
 
     @Override
@@ -121,6 +135,7 @@ public class ProfileFolderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_set, container, false);
         initUI(view);
         initData();
+
         return view;
 
     }
