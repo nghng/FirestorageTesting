@@ -220,8 +220,6 @@ public class SearchFragment extends Fragment {
                                                 studySet.setTerms(terms);
                                                 studySets.add(studySet);
                                                 onDataLoaded();
-
-
                                             }
                                         });
 
@@ -232,10 +230,6 @@ public class SearchFragment extends Fragment {
                         }
                     });
         }
-
-
-
-
     }
 
     void onDataLoaded() {
