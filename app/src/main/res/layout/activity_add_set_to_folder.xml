@@ -23,66 +23,77 @@
             android:src="@drawable/ic_baseline_arrow_back_24" />
 
         <TextView
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="20dp"
-            android:text="Add sets" />
+            android:layout_marginLeft="55dp"
+            android:layout_marginTop="23dp"
+            android:text="Back" />
 
 
         <Button
-            android:id="@+id/btn_addnewset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="80dp"
-            android:text="Create Set" />
-
-        <ImageView
             android:id="@+id/img_checkFinish"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="136dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/rounded_button"
+            app:backgroundTint="@null"
             android:layout_marginRight="20dp"
-            android:src="@drawable/fui_ic_check_circle_black_128dp" />
+            android:text="SAVE FOLDER"/>
+
         <Button
+            android:background="@drawable/my_border"
             android:id="@+id/btn_created"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="80dp"
+            app:backgroundTint="@null"
             android:text="Created"
-            android:layout_marginTop="50dp"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black" />
 
-            <Button
-                android:id="@+id/btn_searched"
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:text="SEARCHED"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="50dp"
-                android:backgroundTint="@color/white"
-                android:textColor="@color/black"
-                android:layout_alignParentEnd="true"/>
+        <Button
+            android:background="@drawable/my_border"
+
+            android:id="@+id/btn_searched"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="80dp"
+            android:layout_marginRight="10dp"
+            app:backgroundTint="@null"
+            android:text="SEARCHED"
+            android:textColor="@color/black" />
 
     </RelativeLayout>
+
     <FrameLayout
         android:id="@+id/create_folder"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="600dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rl_header"
-        app:layout_constraintVertical_bias="0.1">
+        app:layout_constraintVertical_bias="0.9">
 
     </FrameLayout>
 
-
-
+    <ImageView
+        android:id="@+id/btn_addnewset"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.926"
+        app:tint="@color/primary_1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

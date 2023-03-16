@@ -21,6 +21,7 @@ import com.example.demodatabase.AddSetToFolderActivity;
 import com.example.demodatabase.R;
 import com.example.demodatabase.StudySetDetailActivity;
 import com.example.demodatabase.adapter.StudySetAdapter;
+import com.example.demodatabase.adapter.StudySetVerticalAdapter;
 import com.example.demodatabase.clickinterface.OnItemClickedListener;
 import com.example.demodatabase.databinding.ActivityFolderDetailKebabMenuBinding;
 import com.example.demodatabase.model.Folder;
@@ -54,7 +55,7 @@ public class FolderDetailFragment extends Fragment {
     Folder currentFolder;
     int numberOfSets;
     Button btn_addset;
-    StudySetAdapter studySetAdapter;
+    StudySetVerticalAdapter studySetAdapter;
 
     public FolderDetailFragment() {
         // Required empty public constructor
@@ -150,7 +151,7 @@ public class FolderDetailFragment extends Fragment {
             noSet.setVisibility(View.INVISIBLE);
             rv_studySets.setVisibility(View.VISIBLE);
 
-            studySetAdapter = new StudySetAdapter(currentFolder.getStudysets(), getActivity(), new OnItemClickedListener() {
+            studySetAdapter = new StudySetVerticalAdapter(currentFolder.getStudysets(), getActivity(), new OnItemClickedListener() {
                 @Override
                 public void onItemClick(StudySet item, int pos) {
                     Intent intent = new Intent(getActivity(), StudySetDetailActivity.class);

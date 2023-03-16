@@ -67,7 +67,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/sv_createStudySetsView"
-            android:layout_width="409dp"
+            android:layout_width="match_parent"
             android:layout_height="669dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent">

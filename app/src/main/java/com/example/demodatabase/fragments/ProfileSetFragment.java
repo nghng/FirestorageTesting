@@ -37,7 +37,7 @@ import java.util.Arrays;
 
 public class ProfileSetFragment extends Fragment {
     RecyclerView recyclerView;
-    StudySetAdapter studySetAdapter;
+    StudySetVerticalAdapter studySetAdapter;
     FirebaseUser currentUser;
     FirebaseFirestore database;
     ArrayList<StudySet> studySets = new ArrayList<>();
@@ -102,7 +102,7 @@ public class ProfileSetFragment extends Fragment {
         for (StudySet s: studySets){
             System.out.println(s.getStudySetName());
         }
-        studySetAdapter = new StudySetAdapter(studySets, getActivity(), new OnItemClickedListener() {
+        studySetAdapter = new StudySetVerticalAdapter(studySets, getActivity(), new OnItemClickedListener() {
             @Override
             public void onItemClick(StudySet item, int pos) {
                 Intent intent = new Intent(getContext(), StudySetDetailActivity.class);

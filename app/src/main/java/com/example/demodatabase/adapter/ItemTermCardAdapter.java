@@ -88,7 +88,7 @@ public class ItemTermCardAdapter extends RecyclerView.Adapter<ItemTermCardAdapte
 
         popup_card_term.setText(term);
         popup_card_definition.setText(definition);
-
+        popupWindow.setAnimationStyle(R.style.popup_window_animation);
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);

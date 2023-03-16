@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_createfolder"
         android:layout_width="297dp"
         android:layout_height="241dp"
@@ -15,6 +15,9 @@
         android:layout_marginBottom="20dp"
         app:cardElevation="10dp"
         app:contentPadding="10dp"
+        app:strokeWidth="1dp"
+        app:cardCornerRadius="15dp"
+        app:strokeColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -24,21 +27,25 @@
 
         <TextView
             android:id="@+id/textView4"
+            android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Create folder"
             android:ems="10"
+            android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="25sp"
             />
 
         <EditText
             android:id="@+id/edt_foldername"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="60dp"
             android:ems="10"
+            android:paddingStart="15dp"
+            android:background="@drawable/edit_text_shape"
             android:hint="Folder name"
             android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,15 +54,19 @@
         <EditText
             android:id="@+id/edt_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="120dp"
             android:ems="10"
+            android:paddingStart="15dp"
+            android:background="@drawable/edit_text_shape"
             android:hint="Description (optional)"
             android:inputType="text"
 
             />
 
         <Button
+            android:background="@drawable/rounded_button"
+            app:backgroundTint="@null"
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,19 +78,21 @@
             app:layout_constraintStart_toStartOf="@+id/edt_description" />
 
         <Button
+            android:background="@drawable/rounded_button"
+            app:backgroundTint="@null"
             android:id="@+id/btn_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="180dp"
-            android:text="OK"
+            android:text="CREATE"
             app:layout_constraintEnd_toEndOf="@+id/edt_description"
             app:layout_constraintHorizontal_bias="0.281"
             app:layout_constraintStart_toEndOf="@+id/edt_description"
             app:layout_constraintTop_toBottomOf="@+id/edt_description" />
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
