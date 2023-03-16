@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.demodatabase.AddSetToFolderActivity;
@@ -56,10 +57,11 @@ public class SearchFragment extends Fragment {
     String currentSearch = "";
     String filter = "all";
     int white, blue, black;
-    String selectType="";
+    String selectType = "";
     String folderID;
     Folder currentFolder;
     CollectionReference folderRef;
+    ImageView imv_notfound;
 
     public SearchFragment(String selectType) {
         this.selectType = selectType;
@@ -70,6 +72,8 @@ public class SearchFragment extends Fragment {
     }
 
     void initUI(View view) {
+        imv_notfound = view.findViewById(R.id.imv_notfound);
+        imv_notfound.setVisibility(View.GONE);
         btn_all = view.findViewById(R.id.btn_allresult);
         btn_set = view.findViewById(R.id.btn_set);
         btn_user = view.findViewById(R.id.btn_user);
@@ -99,7 +103,7 @@ public class SearchFragment extends Fragment {
 
     void initData() {
         Bundle extras = getActivity().getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             folderID = extras.getString("folderID");
 
         }
@@ -113,7 +117,7 @@ public class SearchFragment extends Fragment {
 
         CollectionReference collectionReference = database.collection("studySets");
         progressDialog.show();
-        if(folderID != null){
+        if (folderID != null) {
             collectionReference
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -161,32 +165,34 @@ public class SearchFragment extends Fragment {
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                for (StudySet existedSet: existedStudySets){
-                                                    for (int i=0; i<studySets.size();i++){
-                                                        if(studySets.get(i).getStudySetID().equals(existedSet.getStudySetID())){
+                                                for (StudySet existedSet : existedStudySets) {
+                                                    for (int i = 0; i < studySets.size(); i++) {
+                                                        if (studySets.get(i).getStudySetID().equals(existedSet.getStudySetID())) {
                                                             studySets.remove(i);
                                                             i--;
                                                         }
                                                     }
                                                 }
-                                                if(existedStudySets.size()!=0){
+                                                if (existedStudySets.size() != 0) {
                                                     ListIterator<StudySet> iter = studySets.listIterator();
                                                     System.out.println("khac 0 nhe");
-                                                    for (StudySet existedSet: existedStudySets){
-                                                        while(iter.hasNext()){
-                                                            if(existedSet.getStudySetID().equals(iter.next().getStudySetID())){
+                                                    for (StudySet existedSet : existedStudySets) {
+                                                        while (iter.hasNext()) {
+                                                            if (existedSet.getStudySetID().equals(iter.next().getStudySetID())) {
                                                                 iter.remove();
                                                             }
                                                         }
                                                     }
                                                     System.out.println("studeys setttttttttttt");
-                                                    for(StudySet s: studySets){
-                                                        System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
-                                                    };
+                                                    for (StudySet s : studySets) {
+                                                        System.out.println(s.getStudySetName() + " |id : " + s.getStudySetID());
+                                                    }
+                                                    ;
                                                     System.out.println("existed setttt");
-                                                    for(StudySet s: existedStudySets){
-                                                        System.out.println(s.getStudySetName()+" |id : "+s.getStudySetID());
-                                                    };
+                                                    for (StudySet s : existedStudySets) {
+                                                        System.out.println(s.getStudySetName() + " |id : " + s.getStudySetID());
+                                                    }
+                                                    ;
 
                                                 }
                                                 onDataLoaded();
@@ -196,7 +202,7 @@ public class SearchFragment extends Fragment {
                         });
             }
 
-        }else{
+        } else {
             collectionReference
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -271,6 +277,14 @@ public class SearchFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 studySetAdapter.getFilter(filter).filter(query);
                 currentSearch = query;
+                if(studySetAdapter.getItemCount()<=0){
+                    imv_notfound.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+                else{
+                    imv_notfound.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
                 return false;
             }
 
@@ -278,6 +292,14 @@ public class SearchFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 studySetAdapter.getFilter(filter).filter(newText);
                 currentSearch = newText;
+                if(studySetAdapter.getItemCount()<=0){
+                    imv_notfound.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+                else{
+                    imv_notfound.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
                 return false;
             }
 
@@ -290,7 +312,15 @@ public class SearchFragment extends Fragment {
                 unselectAll();
                 lookSelected(btn_set);
                 filter = "set";
-                studySetAdapter.getResult(currentSearch, filter);
+                if (studySetAdapter.getResult(currentSearch, filter).size() == 0) {
+                    imv_notfound.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+                else{
+                    imv_notfound.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+                studySetAdapter.notifyDataSetChanged();
             }
 
         });
@@ -302,7 +332,16 @@ public class SearchFragment extends Fragment {
                 unselectAll();
                 lookSelected(btn_user);
                 filter = "user";
-                studySetAdapter.getResult(currentSearch, filter);
+                if (studySetAdapter.getResult(currentSearch, filter).size() == 0) {
+                    imv_notfound.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+                else{
+                    imv_notfound.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+
+                studySetAdapter.notifyDataSetChanged();
             }
 
         });
@@ -314,7 +353,15 @@ public class SearchFragment extends Fragment {
                 unselectAll();
                 lookSelected(btn_all);
                 filter = "all";
-                studySetAdapter.getResult(currentSearch, filter);
+                if (studySetAdapter.getResult(currentSearch, filter).size() == 0) {
+                    imv_notfound.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+                else{
+                    imv_notfound.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+                studySetAdapter.notifyDataSetChanged();
             }
         });
 
