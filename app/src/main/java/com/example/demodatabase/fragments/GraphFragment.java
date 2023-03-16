@@ -133,6 +133,7 @@ public class GraphFragment extends Fragment {
                     }
                 };
                 monthDatePickerDialog.setTitle("Select Year");
+                monthDatePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 monthDatePickerDialog.show();
             }
         });
