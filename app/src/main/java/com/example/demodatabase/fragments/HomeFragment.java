@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,7 @@ public class HomeFragment extends Fragment {
     ArrayList<Folder> folders = new ArrayList<>();
     ProgressDialog progressDialog;
     TextView viewAll;
+    ImageView noneStudySet, nonFolder;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -61,6 +63,10 @@ public class HomeFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser(); // get current user (session)
         progressDialog = new ProgressDialog(getContext());
         viewAll = view.findViewById(R.id.tv_viewAllStudySet);
+        noneStudySet = view.findViewById(R.id.noneStudySet);
+        nonFolder = view.findViewById(R.id.nonFolder);
+        noneStudySet.setVisibility(View.INVISIBLE);
+        nonFolder.setVisibility(View.INVISIBLE);
     }
 
     private void initData() {
@@ -128,6 +134,10 @@ public class HomeFragment extends Fragment {
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(studySetAdapter);
+        if(studySets.size() == 0){
+            noneStudySet.setVisibility(View.VISIBLE);
+            nonFolder.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initDataFolder() {
