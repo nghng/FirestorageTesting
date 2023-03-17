@@ -304,11 +304,7 @@ public class SearchOwnStudySetFragment extends Fragment {
             studySets.clear();
             studySetAdapter.notifyDataSetChanged();
         }
-        SweetAlertDialog pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        pDialog.setTitleText("Loading");
-        pDialog.setCancelable(false);
-        pDialog.show();
+
 
 
         Log.d("hash", "getAllData: " + studySetHashMap.size());
@@ -317,7 +313,6 @@ public class SearchOwnStudySetFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.getResult().isEmpty()) {
-                            pDialog.cancel();
                             return;
                         }
                         for (DocumentSnapshot d : task.getResult()
